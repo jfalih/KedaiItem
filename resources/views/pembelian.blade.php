@@ -32,24 +32,26 @@
                   </div>
                   <!-- Products list-->
                   <!-- Product-->
-                  @foreach($items as $item)
-                  <div class="d-block d-sm-flex align-items-center py-4 border-bottom"><a class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" href="marketplace-single.html" style="width: 12.5rem;"><img class="rounded-3" src="img/marketplace/products/th01.jpg" alt="Product"></a>
-                    <div class="text-center text-sm-start">
-                      <h3 class="h6 product-title mb-2"><a href="marketplace-single.html">{{}}</a></h3>
-                      <div class="text-accent fs-sm mb-1">Standard license</div>
-                      <div class="form-check d-table text-start mx-auto mx-sm-0">
-                        <input class="form-check-input" type="checkbox" id="update-info-1" checked>
-                        <label class="form-check-label fs-ms" for="update-info-1">Notify me when this product is updated</label>
-                      </div>
-                      <div class="d-flex align-items-center justify-content-center justify-content-sm-start pt-2">
-                        <div class="my-2">
-                          <button class="btn btn-primary btn-sm me-3" type="button"><i class="ci-download me-1"></i>Download</button>
-                        </div><a class="d-block text-muted text-center my-2" href="#">
-                          <div class="star-rating"><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i>
-                          </div>
-                          <div class="fs-xs">Reate this product</div></a>
-                      </div>
-                    </div>
+                  @foreach(Auth::user()->items as $item)
+                  <div class="d-block d-sm-flex align-items-center py-4 border-bottom">
+                    <a class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" href="marketplace-single.html" style="width: 12.5rem;">
+                        <img class="rounded-3" src="{{Storage::url($item->images[0]->name)}}" alt="{{$item->images[0]->caption}}"></a>
+                        <div class="text-center text-sm-start">
+                        <h3 class="h6 product-title mb-2"><a href="marketplace-single.html">{{$item->name}}</a></h3>
+                        <div class="text-accent fs-sm mb-1">Standard license</div>
+                        <div class="form-check d-table text-start mx-auto mx-sm-0">
+                            <input class="form-check-input" type="checkbox" id="update-info-1" checked>
+                            <label class="form-check-label fs-ms" for="update-info-1">Notify me when this product is updated</label>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center justify-content-sm-start pt-2">
+                            <div class="my-2">
+                            <button class="btn btn-primary btn-sm me-3" type="button"><i class="ci-download me-1"></i>Download</button>
+                            </div><a class="d-block text-muted text-center my-2" href="#">
+                            <div class="star-rating"><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i>
+                            </div>
+                            <div class="fs-xs">Reate this product</div></a>
+                        </div>
+                        </div>
                   </div>
                   @endforeach
                   <!-- Pagination-->

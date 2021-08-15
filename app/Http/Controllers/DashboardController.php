@@ -27,6 +27,22 @@ class DashboardController extends Controller
         Auth::user()->images()->attach($image->id);
         return redirect()->back()->with('success', 'Berhasil menambahkan gambar!');
     }
+    public function change_password(Request $request)
+    {
+        $validate = $request->validate([
+            'password' => 'required|min:10|max:255',
+            'new_password' => 'required|min:10|max:255',
+            'c_password' => 'required|min:10|max:255|same:new_password'
+        ]);
+        if($validate->fails()){
+            return redirect()->back()->withErrors($validate);
+        }
+        $user = User::find(Auth::user()->id);
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+        return redirect()->back()->->with('success', 'Berhasil merubah password!');
+        
+    }
     public function change_profile(Request $request)
     {
         $user = User::findOrFail(Auth::user()->id);
@@ -38,6 +54,10 @@ class DashboardController extends Controller
         } else {
             return redirect()->back()->with('error', 'User tidak ditemukan!');
         }
+    }
+    public function chat()
+    {
+        return view('chat');
     }
     public function pembelian()
     {

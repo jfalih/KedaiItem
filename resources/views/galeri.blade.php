@@ -22,7 +22,7 @@
                     @foreach (Auth::user()->images as $img)
                     <!-- Item -->
                     <div class="col-6 col-sm-3 mb-grid-gutter">
-                        <a href="path-to-large-image" class="gallery-item rounded-3" data-sub-html='<h6 class="fs-sm text-light">Gallery image caption</h6>'>
+                        <a href="{{Storage::url($img->name)}}" class="gallery-item rounded-3" data-sub-html='<h6 class="fs-sm text-light">Gallery image caption</h6>'>
                             <img src="{{Storage::url($img->name)}}" alt="{{url($img->name)}}">
                             <span class="gallery-item-caption">{{url($img->name)}}</span>
                         </a>
@@ -43,4 +43,7 @@
         </div>
       </div>
     </main>
+@endsection
+@section('js')
+    @parent
 @endsection

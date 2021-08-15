@@ -29,11 +29,11 @@ Route::get('/login', [AuthController::class, 'login']);
 Route::get('/logout', function(){
     Auth::logout();
     return redirect()->route('welcome');
-});
+})->name('logout');
 
 Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
 Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
-
+Route::get('/chat', [DashboardController::class, 'chat'])->name('chat');
 Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
 Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
 Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');

@@ -8,13 +8,43 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           @if (Auth::user())
-          <div class="navbar-tool dropdown ms-2"><a class="navbar-tool-icon-box border dropdown-toggle" href="dashboard-sales.html"><img src="{{url('assets/img/marketplace/account/avatar-sm.png')}}" width="32" alt="{{Auth::user()->name}}"></a><a class="navbar-tool-text ms-n1" href="dashboard-sales.html"><small>{{Auth::user()->name}}</small>Rp{{Auth::user()->balance}}</a>
+          <div class="navbar-tool dropdown ms-2">
+            <a class="navbar-tool-icon-box border dropdown-toggle" href="{{route('pengaturan')}}">
+              <img src="{{url('assets/img/marketplace/account/avatar-sm.png')}}" width="32" alt="{{Auth::user()->name}}">
+            </a>
+            <a class="navbar-tool-text ms-n1" href="{{route('pengaturan')}}">
+              <small>{{Auth::user()->name}}</small>
+              Rp{{Auth::user()->balance}}
+            </a>
             <div class="dropdown-menu dropdown-menu-end">
               <div style="min-width: 14rem;">
-                <h6 class="dropdown-header">Account</h6><a class="dropdown-item d-flex align-items-center" href="dashboard-settings.html"><i class="ci-settings opacity-60 me-2"></i>Settings</a><a class="dropdown-item d-flex align-items-center" href="dashboard-purchases.html"><i class="ci-basket opacity-60 me-2"></i>Purchases</a><a class="dropdown-item d-flex align-items-center" href="dashboard-favorites.html"><i class="ci-heart opacity-60 me-2"></i>Favorites<span class="fs-xs text-muted ms-auto">4</span></a>
-                <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Seller Dashboard</h6><a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html"><i class="ci-dollar opacity-60 me-2"></i>Sales<span class="fs-xs text-muted ms-auto">$1,375.00</span></a><a class="dropdown-item d-flex align-items-center" href="dashboard-products.html"><i class="ci-package opacity-60 me-2"></i>Products<span class="fs-xs text-muted ms-auto">5</span></a><a class="dropdown-item d-flex align-items-center" href="dashboard-add-new-product.html"><i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a><a class="dropdown-item d-flex align-items-center" href="dashboard-payouts.html"><i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a>
-                <div class="dropdown-divider"></div><a class="dropdown-item d-flex align-items-center" href="account-signin.html"><i class="ci-sign-out opacity-60 me-2"></i>Sign Out</a>
+                <h6 class="dropdown-header">Akun</h6>
+                <a class="dropdown-item d-flex align-items-center" href="{{route('pengaturan')}}">
+                  <i class="ci-settings opacity-60 me-2"></i>Pengaturan
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="{{route('pengaturan')}}">
+                  <i class="ci-basket opacity-60 me-2"></i>Pembelian
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="{{route('login')}}">
+                  <i class="ci-heart opacity-60 me-2"></i>Favorit
+                  <span class="fs-xs text-muted ms-auto">4</span>
+                </a>
+                @if(in_array('reseller',Auth::user()->role_name))
+                  <div class="dropdown-divider"></div>
+                  <h6 class="dropdown-header">Seller Dashboard</h6>
+                  <a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html">
+                    <i class="ci-dollar opacity-60 me-2"></i>Sales<span class="fs-xs text-muted ms-auto">$1,375.00</span>
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="dashboard-products.html">
+                    <i class="ci-package opacity-60 me-2"></i>Products<span class="fs-xs text-muted ms-auto">5</span>
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href="dashboard-add-new-product.html">
+                    <i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a>
+                    <a class="dropdown-item d-flex align-items-center" href="dashboard-payouts.html">
+                      <i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a>
+                @endif
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item d-flex align-items-center" href="{{route('logout')}}"><i class="ci-sign-out opacity-60 me-2"></i>Sign Out</a>
               </div>
             </div>
           </div>
