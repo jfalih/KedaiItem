@@ -44,7 +44,10 @@
     </noscript>
     <!-- Sign in / sign up modal-->
     @include('components.modals.auth')
-    @include('components.modals.imagepicker')
+    @include('components.modals.upload')
+    @auth
+     @include('components.modals.imagepicker')   
+    @endauth
     @yield('main')
     <!-- Footer-->
     @include('components.footers.default')
@@ -65,7 +68,7 @@
               <span class="handheld-toolbar-icon"><i class="ci-user"></i></span><span class="handheld-toolbar-label">Profil</span>
           </a>
           @else
-          <a class="d-table-cell handheld-toolbar-item"  href="#signin-modal" data-bs-toggle="modal" >
+          <a class="d-table-cell handheld-toolbar-item"  href="{{route('pengaturan')}}">
             <span class="handheld-toolbar-icon"><i class="ci-sign-in"></i></span><span class="handheld-toolbar-label">Masuk</span>
           </a>
           @endif
@@ -84,13 +87,6 @@
     <!-- Main theme script -->
     <script src="{{asset('assets/js/theme.min.js')}}"></script>
     
-    @if(session('error_login'))
-    <script type="text/javascript">
-      $(window).on('load', function() {
-        $('#signin-modal').modal('show');
-      });
-    </script>
-    @endif
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
       $(document).ready(function(){

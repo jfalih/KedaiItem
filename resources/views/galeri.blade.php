@@ -18,17 +18,48 @@
                 </div>
                 <!-- Products list-->
                 <!-- Gallery grid with gutters -->
-                <div class="row gallery">
-                    @foreach (Auth::user()->images as $img)
-                    <!-- Item -->
-                    <div class="col-6 col-sm-3 mb-grid-gutter">
-                        <a href="{{Storage::url($img->name)}}" class="gallery-item rounded-3" data-sub-html='<h6 class="fs-sm text-light">Gallery image caption</h6>'>
-                            <img src="{{Storage::url($img->name)}}" alt="{{url($img->name)}}">
-                            <span class="gallery-item-caption">{{url($img->name)}}</span>
-                        </a>
-                    </div>
-                    @endforeach
-                    <!-- Add as many columns with gallery item inside as you need -->
+                <div class="table-responsive fs-md mb-4">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>Ticket Subject</th>
+                            <th>Date Submitted | Updated</th>
+                            <th>Type</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">My new ticket</a></td>
+                            <td class="py-3">09/27/2019 | 09/30/2019</td>
+                            <td class="py-3">Website problem</td>
+                            <td class="py-3"><span class="badge bg-warning m-0">High</span></td>
+                            <td class="py-3"><span class="badge bg-success m-0">Open</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">Another ticket</a></td>
+                            <td class="py-3">08/21/2019 | 08/23/2019</td>
+                            <td class="py-3">Partner request</td>
+                            <td class="py-3"><span class="badge bg-info m-0">Medium</span></td>
+                            <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">Yet another ticket</a></td>
+                            <td class="py-3">11/19/2018 | 11/20/2018</td>
+                            <td class="py-3">Complaint</td>
+                            <td class="py-3"><span class="badge bg-danger m-0">Urgent</span></td>
+                            <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">My old ticket</a></td>
+                            <td class="py-3">06/19/2018 | 06/20/2018</td>
+                            <td class="py-3">Info inquiry</td>
+                            <td class="py-3"><span class="badge bg-success m-0">Low</span></td>
+                            <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <!-- Pagination-->
                 <div class="col-12">

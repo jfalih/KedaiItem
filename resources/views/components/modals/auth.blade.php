@@ -4,7 +4,11 @@
           <div class="modal-content">
             <div class="modal-header bg-secondary">
               <ul class="nav nav-tabs card-header-tabs" role="tablist">
-                <li class="nav-item"><a class="nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="ci-unlocked me-2 mt-n1"></i>Masuk</a></li>
+                <li class="nav-item">
+                  <a class="nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true">
+                    <i class="ci-unlocked me-2 mt-n1"></i>Masuk
+                  </a>
+                </li>
                 <li class="nav-item"><a class="nav-link fw-medium" href="#signup-tab" data-bs-toggle="tab" role="tab" aria-selected="false"><i class="ci-user me-2 mt-n1"></i>Daftar</a></li>
               </ul>
               <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -40,25 +44,33 @@
                 </div>
                 <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
               </form>
-              <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
+              <form method="POST" action="{{route('register')}}" class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
+                @csrf
                 <div class="mb-3">
                   <label class="form-label" for="su-name">Nama Lengkap</label>
-                  <input class="form-control" type="text" id="su-name" placeholder="Nama Lengkap" required>
+                  <input class="form-control" type="text" id="su-name" name="name" placeholder="Nama Lengkap" required>
                   @error('name')
                     <div class="invalid-feedback">{{$message}}</div>
                   @enderror
                 </div>
                 <div class="mb-3">
                   <label for="su-email">Email address</label>
-                  <input class="form-control" type="email" id="su-email" placeholder="email@contoh.com" required>
+                  <input class="form-control" type="email" id="su-email" name="email" placeholder="email@contoh.com" required>
                   @error('email')
+                    <div class="invalid-feedback">{{$message}}.</div>
+                  @enderror
+                </div>
+                <div class="mb-3">
+                  <label for="su-nomor">Nomor Handphone</label>
+                  <input class="form-control" type="number" id="su-nomor" name="nomorhp" placeholder="08XXXXXXXXXX" required>
+                  @error('nomorhp')
                     <div class="invalid-feedback">{{$message}}.</div>
                   @enderror
                 </div>
                 <div class="mb-3">
                   <label class="form-label" for="su-password">Password</label>
                   <div class="password-toggle">
-                    <input class="form-control" type="password" id="su-password" required>
+                    <input class="form-control" type="password" name="password" id="su-password" required>
                     <label class="password-toggle-btn" aria-label="Show/hide password">
                       <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                     </label>
@@ -70,7 +82,7 @@
                 <div class="mb-3">
                   <label class="form-label" for="su-password-confirm">Confirm password</label>
                   <div class="password-toggle">
-                    <input class="form-control" type="password" id="su-password-confirm" required>
+                    <input class="form-control" type="password" name="c_password" id="su-password-confirm" required>
                     <label class="password-toggle-btn" aria-label="Show/hide password">
                       <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                     </label>

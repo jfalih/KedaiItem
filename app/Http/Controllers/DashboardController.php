@@ -29,18 +29,15 @@ class DashboardController extends Controller
     }
     public function change_password(Request $request)
     {
-        $validate = $request->validate([
+        $request->validate([
             'password' => 'required|min:10|max:255',
             'new_password' => 'required|min:10|max:255',
             'c_password' => 'required|min:10|max:255|same:new_password'
         ]);
-        if($validate->fails()){
-            return redirect()->back()->withErrors($validate);
-        }
         $user = User::find(Auth::user()->id);
         $user->password = Hash::make($request->new_password);
         $user->save();
-        return redirect()->back()->->with('success', 'Berhasil merubah password!');
+        return redirect()->back()->with('success', 'Berhasil merubah password!');
         
     }
     public function change_profile(Request $request)
@@ -50,10 +47,14 @@ class DashboardController extends Controller
             $user->name = $request->name;
             $user->username = $request->username;
             $user->save();
-            return redirect()->back()->with('success', 'Berhasil merubah');
+            return redirect()->back()->with('success', 'Berhasil merubah pengaturan profil!');
         } else {
             return redirect()->back()->with('error', 'User tidak ditemukan!');
         }
+    }
+    public function change_avatar(Request $request)
+    {
+        
     }
     public function chat()
     {

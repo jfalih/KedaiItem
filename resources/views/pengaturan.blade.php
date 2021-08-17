@@ -29,7 +29,7 @@
                     <div class="bg-secondary rounded-3 p-4 mb-4">
                       <div class="d-flex align-items-center"><img class="rounded" src="{{url('assets/img/marketplace/account/avatar.png')}}" width="90" alt="Createx Studio">
                         <div class="ps-3">
-                          <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change <span class='d-none d-sm-inline'>avatar</span></button>
+                          <button href="#imagepicker-modal" data-bs-toggle="modal" class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Ganti <span class='d-none d-sm-inline'>foto profil</span></button>
                           <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
                         </div>
                       </div>
@@ -82,7 +82,8 @@
                   </div>
                   
                   <div class="tab-pane fade" id="notifications" role="tabpanel">
-                    <div class="row gx-4 gy-3">
+                    <form method="POST" action="{{route('change_password')}}" class="row gx-4 gy-3">
+                      @csrf
                       <div class="col-sm-12">
                         <label class="form-label" for="dashboard-fn">Password Lama</label>
                         <input class="form-control" type="text" id="dashboard-fn" placeholder="Password Lama">
@@ -103,7 +104,7 @@
                           <button class="btn btn-primary mt-3 mt-sm-0" type="button">Simpan Perubahan</button>
                         </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>

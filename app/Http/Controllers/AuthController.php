@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use App\Models\User;
+use Validator;
+use Hash;
 use Auth;
 class AuthController extends Controller
 {
@@ -21,6 +25,21 @@ class AuthController extends Controller
     public function login()
     {
         return view('auth.login');
+    }
+    public function registerUser(Request $request)
+    {
+       $validated = $request->validate([
+            'name' => 'required|min:10|max:255',
+            'nomorhp' => 'required|numeric|unique:users',
+            'email' => 'unique:users|required|email',
+            'password' => 'min:10|max:255',
+            'c_password' => 'same:password'
+        ]);
+        if($validated){
+        return dd($validated);
+        } else {
+            return dd($request->all());
+        }
     }
     public function register()
     {
