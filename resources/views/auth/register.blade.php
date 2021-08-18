@@ -22,6 +22,16 @@
                 <div class="form-text text-danger">{{$message}}</div>
                 @enderror
             </div>
+            <div class="col-sm-12">
+              <label class="form-label" for="reg-fn">Username</label>
+              <div class="input-group">
+                  <i class="ci-globe position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
+                  <input class="form-control rounded-start" name="username" id="reg-fn" type="text" placeholder="Username" required="">
+              </div>
+              @error('username')
+              <div class="form-text text-danger">{{$message}}</div>
+              @enderror
+            </div>
               <div class="col-sm-12">
                 <label class="form-label" for="reg-fn">Alamat email</label>
                 <div class="input-group">
@@ -36,7 +46,7 @@
                 <label class="form-label" for="reg-hp">Nomor Handphone</label>
                 <div class="input-group">
                     <i class="ci-phone position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-                    <input class="form-control rounded-start" id="reg-hp" type="number" placeholder="Nomor Handphone" required="">
+                    <input class="form-control rounded-start" id="reg-hp" name="nomorhp" type="number" placeholder="Nomor Handphone" required="">
                 </div>
                 @error('nomorhp')
                 <div class="form-text text-danger">{{$message}}</div>
