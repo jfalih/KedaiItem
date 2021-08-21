@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     ProductController,
     ReviewController,
     CartController,
+    VerificationController
 };
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::get('/logout', function(){
     Auth::logout();
     return redirect()->route('welcome');
 })->name('logout');
+Route::post('/phone/verification-notification', [VerificationController::class, 'phone']);
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/pengaturan');
