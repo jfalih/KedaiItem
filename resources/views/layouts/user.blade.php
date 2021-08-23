@@ -19,6 +19,17 @@
                 @if(session('error'))
                     @include('components.alerts.danger',['message' => session('error')])
                 @endif
+                
+                @if(count($errors) > 0)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul style="margin-bottom: 0px">
+                        @foreach($errors->all() as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 @yield('content')
               </div>
             </section>

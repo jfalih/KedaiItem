@@ -1,7 +1,7 @@
 
     <div class="modal fade" id="imagepicker-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-fullscreen" role="document">
-          <form method="POST" enctype="multipart/form-data" action="{{route('galeri.addImage')}}" class="modal-content">
+          <form method="POST" action="{{route('change_avatar')}}" class="modal-content">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Pilih Gambar</h5>
@@ -27,7 +27,10 @@
                     </div>
                     <div class="col-sm-9">
                         <div class="row">    
-                            @foreach (Auth::user()->images as $id => $image)
+                            @forelse (Auth::user()->images as $id => $image)
+                            <div class="col-sm-12">                            
+                                <h4 class="pt-3">Pilih Gambar</h4>
+                            </div>
                             <div class="col-sm-3">        
                                 <label for="{{$id}}" style="cursor: pointer" class="card gallery">
                                     <a data-sub-html='<h6 class="fs-sm text-light">Gallery image caption</h6>'>
@@ -35,14 +38,18 @@
                                     </a>
                                     <div class="card-body">                                        
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="{{$id}}" name="radio">
+                                            <input class="form-check-input" type="radio" id="{{$id}}" value="{{$image->id}}" name="imagepicker">
                                             <label class="form-check-label" for="{{$id}}">{{$image->caption}}</label>
                                         </div>
 
                                     </div>
                                 </label>
                             </div>
-                            @endforeach
+                            @empty
+                            <div class="col-sm-12 text-center">
+                                <h3>Galeri masih kosong.</h3>
+                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>

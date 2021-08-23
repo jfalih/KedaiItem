@@ -33,7 +33,7 @@
         </div>
         <ul class="list-unstyled mb-0">
             <li class="border-bottom mb-0">
-                <a class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-sales.html">
+                <a href="{{route('upgrade')}}" class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-sales.html">
                     <i class="ci-rocket opacity-60 me-2"></i> Upgrade akun ke penjual
                 </a>
             </li>

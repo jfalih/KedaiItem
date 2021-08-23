@@ -50,6 +50,8 @@ Route::post('/login', [AuthController::class,'authenticate'])->name('login');
 Route::post('/register', [AuthController::class,'registerUser'])->name('register');
 //Setting
 Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
+Route::get('/upgrade', [DashboardController::class,'upgrade'])->name('upgrade');
+Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
 Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
 Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
 Route::get('/chat', [DashboardController::class, 'chat'])->name('chat');

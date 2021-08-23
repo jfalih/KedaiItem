@@ -68,6 +68,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Image::class);
     }
+    /**
+     * Get the profile associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(Image::class, 'id', 'profile_id');
+    }
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
