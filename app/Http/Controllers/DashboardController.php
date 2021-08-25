@@ -102,6 +102,11 @@ class DashboardController extends Controller
     }
     public function galeri()
     {
-        return view('galeri');
+        $images = Image::whereHas('users', function($q){
+            $q->where('user_id', Auth::user()->id);
+        })->get();
+        return view('galeri', [
+            'images' => $images
+        ]);
     }
 }

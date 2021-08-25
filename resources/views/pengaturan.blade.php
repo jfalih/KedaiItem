@@ -15,10 +15,10 @@
     <!-- Profile-->
     <div class="tab-pane fade show active" id="profile" role="tabpanel">
       <div class="bg-secondary rounded-3 p-4 mb-4">
-        <div class="d-flex align-items-center"><img class="rounded" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif" width="90" alt="Createx Studio">
+        <div class="d-flex align-items-center"><img class="rounded" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif" width="90" alt="@if(Auth::user()->profile != null) {{Auth::user()->profile->caption}} @else @endif">
           <div class="ps-3">
             <button href="#imagepicker-modal" data-bs-toggle="modal" class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Ganti <span class='d-none d-sm-inline'>foto profil</span></button>
-            <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
+            <div class="p mb-0 fs-ms text-muted">Upload dengan format JPG, JPEG dan PNG.</div>
           </div>
         </div>
       </div>

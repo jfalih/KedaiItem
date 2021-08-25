@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\{
     AuthController,
     CategoryController,
+    ChatController,
     DashboardController,
     WelcomeController,
     VendorController,
@@ -54,9 +55,13 @@ Route::get('/upgrade', [DashboardController::class,'upgrade'])->name('upgrade');
 Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
 Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
 Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
+
 Route::get('/chat', [DashboardController::class, 'chat'])->name('chat');
+Route::get('/chat/{user}',[ChatController::class, 'index'])->name('chat.detail');
+
 Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
 Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
+
 
 //User
 Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');

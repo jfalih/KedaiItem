@@ -5,48 +5,24 @@
     </div>
     <!-- Products list-->
     <!-- Gallery grid with gutters -->
-    <div class="table-responsive fs-md mb-4">
-        <table class="table table-hover mb-0">
-            <thead>
-            <tr>
-                <th>Ticket Subject</th>
-                <th>Date Submitted | Updated</th>
-                <th>Type</th>
-                <th>Priority</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">My new ticket</a></td>
-                <td class="py-3">09/27/2019 | 09/30/2019</td>
-                <td class="py-3">Website problem</td>
-                <td class="py-3"><span class="badge bg-warning m-0">High</span></td>
-                <td class="py-3"><span class="badge bg-success m-0">Open</span></td>
-            </tr>
-            <tr>
-                <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">Another ticket</a></td>
-                <td class="py-3">08/21/2019 | 08/23/2019</td>
-                <td class="py-3">Partner request</td>
-                <td class="py-3"><span class="badge bg-info m-0">Medium</span></td>
-                <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
-            </tr>
-            <tr>
-                <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">Yet another ticket</a></td>
-                <td class="py-3">11/19/2018 | 11/20/2018</td>
-                <td class="py-3">Complaint</td>
-                <td class="py-3"><span class="badge bg-danger m-0">Urgent</span></td>
-                <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
-            </tr>
-            <tr>
-                <td class="py-3"><a class="nav-link-style fw-medium" href="account-single-ticket.html">My old ticket</a></td>
-                <td class="py-3">06/19/2018 | 06/20/2018</td>
-                <td class="py-3">Info inquiry</td>
-                <td class="py-3"><span class="badge bg-success m-0">Low</span></td>
-                <td class="py-3"><span class="badge bg-secondary m-0">Closed</span></td>
-            </tr>
-            </tbody>
-        </table>
+
+    <!-- Gallery grid with gutters -->
+    <div class="row gallery">
+        @foreach ($images as $item)    
+        <!-- Item -->
+            <div class="col-xl-4 col-sm-6 mb-grid-gutter">
+                <button type="button" class="btn btn-danger btn-icon position-absolute" style="z-index: 100 !important;">
+                    <i class="ci-trash"></i>
+                </button>
+
+                <a href="path-to-large-image" class="gallery-item rounded-3" data-sub-html='<h6 class="fs-sm text-light">Gallery image caption</h6>'>
+                    <!-- Danger outline icon button -->
+                    <img src="{{Storage::url($item->name)}}" alt="{{$item->caption}}">
+                    <span class="gallery-item-caption">{{$item->caption}}</span>    
+                </a>
+            </div>
+        @endforeach
+    <!-- Add as many columns with gallery item inside as you need -->
     </div>
     <!-- Pagination-->
     <div class="col-12">

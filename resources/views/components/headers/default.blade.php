@@ -49,7 +49,7 @@
             </div>
           </div>
           @else
-          <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" href="#signin-modal" data-bs-toggle="modal">
+          <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" href="{{route('login')}}">
             <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
             <div class="navbar-tool-text ms-n3"><small>Hello, Sign in</small>My Account</div>
           </a>

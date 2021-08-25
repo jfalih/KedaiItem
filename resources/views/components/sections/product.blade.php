@@ -57,7 +57,7 @@
                     </div>
                   <hr>
                   <button class="btn btn-primary btn-shadow d-block w-100 mt-4" type="button" data-id="{{$item->id}}" id="tambah_keranjang_belanja"><i class="ci-cart fs-lg me-2"></i>Tambahkan Ke Keranjang</button>
-                  <button class="btn btn-success btn-shadow d-block w-100 mt-4" type="button"><i class="ci-chat fs-lg me-2"></i>Hubungi Penjual</button>
+                  <a href="{{url('chat/'.$item->user->username)}}" class="btn btn-success btn-shadow d-block w-100 mt-4"><i class="ci-chat fs-lg me-2"></i>Hubungi Penjual</a>
                   <div class="bg-secondary rounded p-3 mt-4 mb-2"><a class="d-flex align-items-center" href="{{url($item->user->username)}}"><img class="rounded-circle" src="{{url('assets/img/testimonials/01.jpg')}}" width="50" alt="{{$item->user->name}}">
                       <div class="ps-2"><span class="fs-ms text-muted">Created by</span>
                         <h6 class="fs-sm mb-0">{{$item->user->name}}</h6>
