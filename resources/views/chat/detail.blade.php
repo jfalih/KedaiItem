@@ -29,18 +29,23 @@
     <!-- Accent card -->
     <!-- Secondary card -->
     <div style="height: 400px" class="bg-secondary rounded-3 flex-column p-4 overflow-auto w-100">
+        @foreach ($messages as $msg)
+        @if($msg->from_id === Auth::user()->id)
         <div style="float: right" class="card text-white mb-3 w-75 bg-dark">
             <div class="card-body">
-                <p class="card-text fs-sm">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-text fs-sm">2018-09-09</p>
+                <p class="card-text fs-sm">{{$msg->message}}</p>
+                <p class="card-text fs-sm">{{$msg->created_at}}</p>
             </div>
         </div>
+        @else
         <div style="float: left" class="card text-black mb-3 w-75 bg-secondary">
             <div class="card-body">
-                <p class="card-text fs-sm">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-text fs-sm">2018-09-09</p>
+                <p class="card-text fs-sm">{{$msg->message}}</p>
+                <p class="card-text fs-sm">{{$msg->created_at}}</p>
             </div>
         </div>
+        @endif
+        @endforeach
     
     </div>
     <!-- Leave message-->
@@ -55,4 +60,22 @@
         </div>
     </form>
     <!-- Products list-->
+@endsection
+@section('extra-js')
+    
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+
+  // Enable pusher logging - don't include this in production
+  Pusher.logToConsole = true;
+
+  var pusher = new Pusher('5e511233887873c74a68', {
+    cluster: 'mt1'
+  });
+
+  var channel = pusher.subscribe('my-channel');
+  channel.bind('my-event', function(data) {
+    alert(JSON.stringify(data));
+  });
+</script>
 @endsection

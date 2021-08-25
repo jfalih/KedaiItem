@@ -38,3 +38,7 @@
       </div>
     </main>
 @endsection
+@section('js')
+    @parent
+    @yield('extra-js')
+@endsection

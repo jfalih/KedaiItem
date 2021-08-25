@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->integer('balance')->unsigned()->default(0);
             $table->string('email')->unique();
             $table->string('password');
-           
+            $table->timestamp('last_seen')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('nomorhp')->unique();
             $table->timestamp('nomorhp_verified_at')->nullable();
@@ -33,7 +33,6 @@ class CreateUsersTable extends Migration
             $table->foreign('profile_id')->references('id')->on('images');
             $table->foreignId('status_id');
             $table->foreign('status_id')->references('id')->on('statuses');
-           
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
