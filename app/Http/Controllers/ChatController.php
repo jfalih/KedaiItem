@@ -12,7 +12,10 @@ class ChatController extends Controller
 {
     public function index($user)
     {
-        $user = User::where('username', $user)->firstOrFail();
+        $user = User::where([
+            ['username', '=', $user],
+            ['username', '!=', Auth::user()->username]
+        ])->firstOrFail();
         $messages = Message::where([
             ['to_id', '=',$user->id],
             ['from_id', '=', Auth::user()->id]
@@ -21,11 +24,26 @@ class ChatController extends Controller
             ['to_id','=', Auth::user()->id]
         ])->get();
         return view('chat.detail', [
-            'messages' => $messages
+            'messages' => $messages,
+            'seller' => $user
         ]);
     }
-    public function create(Request $request)
+    public function create(Request $request, $user)
     {
-
+        $request->validate([
+            'message' => 'required'
+        ],[
+            'message.required' => 'Silahkan isi pesan..',
+        ]);
+        $user = User::where([
+            ['username', '=', $user],
+            ['username', '!=', Auth::user()->username]
+        ])->firstOrFail();
+        $message = Message::create([
+            'message' => $request->message,
+            'from_id' => Auth::user()->id,
+            'to_id' => $user->id,
+        ]);
+        return response()->json(['success' => 'Berhasil menambahkan pesan!', 'data' => view('components.chats.default',['message' => $message])->render()], 200);
     }
 }

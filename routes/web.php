@@ -58,6 +58,7 @@ Route::post('/pengaturan/change_profile', [DashboardController::class,'change_pr
 
 Route::get('/chat', [DashboardController::class, 'chat'])->name('chat');
 Route::get('/chat/{user}',[ChatController::class, 'index'])->name('chat.detail');
+Route::post('/chat/{user}',[ChatController::class, 'create'])->name('chat.create');
 
 Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
 Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
