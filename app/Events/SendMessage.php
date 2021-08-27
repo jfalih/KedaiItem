@@ -19,22 +19,15 @@ class SendMessage
      *
      * @return void
      */
+    public $message;
+
     public function __construct($message)
     {
-        
+        $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
-        return ['message'];
-    }  
-    public function broadcastAs()
-    {
-        return 'message-event';
+        return new Channel('my-channel');
     }
 }

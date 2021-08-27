@@ -46,6 +46,9 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('success', 'Link verifikasi telah dikirim!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::get('test', function () {
+    return "Event has been sent!";
+});
 
 Route::post('/login', [AuthController::class,'authenticate'])->name('login');
 Route::post('/register', [AuthController::class,'registerUser'])->name('register');

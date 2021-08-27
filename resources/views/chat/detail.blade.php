@@ -1,4 +1,5 @@
 @extends('layouts.user')
+
 @section('content')
     <!-- Toolbar-->
     <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-4">
@@ -75,6 +76,7 @@
     </form>
     <!-- Products list-->
 @endsection
+
 @section('extra-js')
 <script type="text/javascript">
    
@@ -116,18 +118,25 @@
         });
   
     });
+    
 </script>
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-  // Enable pusher logging - don't include this in production
-  Pusher.logToConsole = true;
 
-  var pusher = new Pusher('5e511233887873c74a68', {
-    cluster: 'mt1'
-  });
-  var channel = pusher.subscribe('my-channel');
-  channel.bind('my-event', function(data) {
-    alert(JSON.stringify(data));
-  });
+@auth   
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script type="text/javascript">
+  // Enable pusher logging - don't include this in production
+  
+    // Enable pusher logging - don't include this in production
+    var pusher = new Pusher('5e511233887873c74a68', {
+        cluster: 'mt1'
+    });
+    var seller = {!! json_encode($seller()) !!};
+    var channel = pusher.subscribe('my-channel.{{Auth::user()->id}}');
+    channel.bind('receive', function(data) {
+      if(seller.id == data.from_id){
+        $('#chat').append(data.data);
+      }
+    });
 </script>
+@endauth
 @endsection
