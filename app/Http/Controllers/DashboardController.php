@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User, Image, Status};
+use App\Models\{User, Image, Status, Message};
 use Auth;
 use Storage;
 class DashboardController extends Controller
@@ -90,7 +90,8 @@ class DashboardController extends Controller
     }
     public function chat()
     {
-        return view('chat');
+        $message = Message::where('from_id', Auth::user()->id)->orWhere('to_id', Auth::user()->id)->first();
+        return dd($message);
     }
     public function pembelian()
     {

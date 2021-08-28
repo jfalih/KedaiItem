@@ -130,7 +130,7 @@
     var pusher = new Pusher('5e511233887873c74a68', {
         cluster: 'mt1'
     });
-    var seller = {!! json_encode($seller()) !!};
+    var seller = {!! json_encode($seller) !!};
     var channel = pusher.subscribe('my-channel.{{Auth::user()->id}}');
     channel.bind('receive', function(data) {
       if(seller.id == data.from_id){
