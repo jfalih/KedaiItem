@@ -40,7 +40,7 @@ class DashboardController extends Controller
         ],[
             'imagepicker.required' => 'Silahkan pilih gambar terlebih dahulu.'
         ]);
-        $user = User::find(Auth::user()->id);
+        $user = User::findOrFail(Auth::user()->id);
         $user->profile_id = $request->imagepicker;
         $user->save();
         return redirect()->back()->withSuccess('Berhasil mengganti foto profil!');
@@ -63,7 +63,7 @@ class DashboardController extends Controller
             'c_password.max' => 'Maximal panjang karakter password harus :max karakter.',
             
         ]);
-        $user = User::find(Auth::user()->id);
+        $user = User::findOrFail(Auth::user()->id);
         if(Hash::check($request->password, $user->password)){
             $user->password = Hash::make($request->new_password);
             $user->save();
@@ -83,10 +83,6 @@ class DashboardController extends Controller
         } else {
             return redirect()->back()->with('error', 'User tidak ditemukan!');
         }
-    }
-    public function upgrade()
-    {
-        return view('upgrade');
     }
     public function chat()
     {

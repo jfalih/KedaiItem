@@ -29,6 +29,9 @@ class CreateUsersTable extends Migration
             $table->foreignId('selfie_id')->nullable();
             $table->foreign('selfie_id')->references('id')->on('images');
             $table->timestamp('ktp_selfie_verified_at')->nullable();
+            $table->foreignId('tabungan_id')->nullable();
+            $table->foreign('tabungan_id')->references('id')->on('images');
+            $table->timestamp('tabungan_verified_at')->nullable();
             $table->foreignId('profile_id')->nullable();
             $table->foreign('profile_id')->references('id')->on('images');
             $table->foreignId('status_id');

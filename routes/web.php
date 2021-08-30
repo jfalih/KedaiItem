@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     DashboardController,
     WelcomeController,
     VendorController,
+    UpgradeController,
     ProductController,
     ReviewController,
     CartController,
@@ -42,19 +43,19 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/pengaturan');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('success', 'Link verifikasi telah dikirim!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-Route::get('test', function () {
-    return "Event has been sent!";
-});
 
 Route::post('/login', [AuthController::class,'authenticate'])->name('login');
 Route::post('/register', [AuthController::class,'registerUser'])->name('register');
 //Setting
 Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
-Route::get('/upgrade', [DashboardController::class,'upgrade'])->name('upgrade');
+Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
+Route::post('/upgrade/tabungan', [UpgradeController::class,'tabungan'])->name('tabungan.verif');
+Route::post('/upgrade/ktp', [UpgradeController::class,'ktp'])->name('ktp.verif');
 Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
 Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
 Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
