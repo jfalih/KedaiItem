@@ -14,7 +14,11 @@ use App\Http\Controllers\{
     ProductController,
     ReviewController,
     CartController,
-    VerificationController
+    VerificationController,
+};
+use App\Http\Controllers\Admin\{
+    DashboardController as AdminDashboardController,
+    CategoryController as AdminCategoryController,
 };
 /*
 |--------------------------------------------------------------------------
@@ -75,3 +79,8 @@ Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.re
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/category/{category}', [CategoryController::class,'index'])->name('categories');
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
+
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('kategori', AdminCategoryController::class);
+});

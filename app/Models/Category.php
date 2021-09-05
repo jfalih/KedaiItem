@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name', 'slug', 'status_id'
+    ];
     /**
      * The subcategories that belong to the Category
      *
