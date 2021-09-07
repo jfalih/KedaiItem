@@ -336,7 +336,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{route('kategori.index')}}">
+                                <a href="{{route('admin.kategori.index')}}">
                                     <i class="uil-window-section"></i>
                                     <span>Kategori</span>
                                 </a>

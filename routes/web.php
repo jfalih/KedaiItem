@@ -80,7 +80,7 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/category/{category}', [CategoryController::class,'index'])->name('categories');
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
 
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('kategori', AdminCategoryController::class);
 });

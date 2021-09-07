@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DataTables;
-use App\Models\Category;
+use Illuminate\Support\Str;
+use App\Models\{
+    Category,
+    Status
+};
 class CategoryController extends Controller
 {
     /**
@@ -26,28 +30,10 @@ class CategoryController extends Controller
             })
             ->make(true);
         }
-        return view('admin.category');
+        $statuses = Status::all();
+        return view('admin.category', ['statuses' => $statuses]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'slug' => 'required',
-            'status' => 'required'
-        ]);
-        Category::create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'status' => $request->status
-        ]);
-        return redirect()->back()->with('success','Berhasil menambahkan kategori!');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -57,7 +43,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'status' => 'required'
+        ], [
+            'required' => ':attribute harus diisi.'
+        ]);
+        Category::create([
+            'name' => $request->name,
+            'status_id' => $request->status,
+            'slug' => Str::slug($request->name)
+        ]);
+        return redirect()->back()->with('success', 'Berhasil menambahkan category!');
     }
 
     /**
@@ -79,7 +76,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return redirect()->back()->with('category-edit', $category);
     }
 
     /**
