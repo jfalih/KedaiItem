@@ -19,6 +19,7 @@ use App\Http\Controllers\{
 use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
     CategoryController as AdminCategoryController,
+    SubcategoryController as AdminSubcategoryController,
 };
 /*
 |--------------------------------------------------------------------------
@@ -83,4 +84,5 @@ Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('kategori', AdminCategoryController::class);
+    Route::resource('subcategory', AdminSubcategoryController::class);
 });

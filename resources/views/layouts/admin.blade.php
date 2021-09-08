@@ -342,7 +342,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{route('welcome')}}">
+                                <a href="{{route('admin.subcategory.index')}}">
                                     <i class="uil-window-section"></i>
                                     <span>Subkategori</span>
                                 </a>

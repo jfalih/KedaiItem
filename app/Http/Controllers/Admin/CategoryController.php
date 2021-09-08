@@ -23,6 +23,11 @@ class CategoryController extends Controller
             $category = Category::all();
             return DataTables::of($category)
             ->addIndexColumn()
+            ->addColumn('status', function (Category $category) {
+                return view('admin.status.default', [
+                    'data' => $category
+                ]);
+            })
             ->addColumn('action', function (Category $category) {
                 return view('admin.category.action', [
                     'data' => $category
@@ -89,7 +94,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'status' => 'required'
+        ]);
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->status_id = $request->status;
+        $category->slug = Str::slug($request->name);
+        $category->save();
+        return redirect()->back()->with('success', 'Berhasil merubah category!');
     }
 
     /**
