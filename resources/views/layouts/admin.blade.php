@@ -347,6 +347,12 @@
                                     <span>Subkategori</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{route('admin.user.index')}}">
+                                    <i class="uil-user"></i>
+                                    <span>User</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- Sidebar -->

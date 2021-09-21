@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{User, Image, Status, Message};
 use Auth;
+use Hash;
 use Storage;
 class DashboardController extends Controller
 {
@@ -48,9 +49,9 @@ class DashboardController extends Controller
     public function change_password(Request $request)
     {
         $request->validate([
-            'password' => 'required|min:10|max:255',
-            'new_password' => 'required|min:10|max:255',
-            'c_password' => 'required|min:10|max:255|same:new_password'
+            'password' => 'required|max:255',
+            'new_password' => 'required|min:6|max:255',
+            'c_password' => 'required|min:6|max:255|same:new_password'
         ],[
             'password.required' => 'Password harus diisi.',
             'password.min' => 'Minimal panjang karakter password harus :min karakter.',

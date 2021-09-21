@@ -77,16 +77,16 @@
         @csrf
         <div class="col-sm-12">
           <label class="form-label" for="dashboard-fn">Password Lama</label>
-          <input class="form-control" type="text" id="dashboard-fn" placeholder="Password Lama">
+          <input class="form-control" name="password" type="password" id="dashboard-fn" placeholder="Password Lama">
           <div class="form-text"><a href="">Lupa password?</a></div>
         </div>
         <div class="col-sm-12">
           <label class="form-label" for="dashboard-profile-name">Password Baru</label>
-          <input class="form-control" type="text" id="dashboard-profile-name" placeholder="Password Baru"">
+          <input class="form-control" name="new_password" type="password" id="dashboard-profile-name" placeholder="Password Baru"">
         </div>
         <div class="col-sm-12">
           <label class="form-label" for="dashboard-email">Konfirmasi Password Baru</label>
-          <input class="form-control" type="text" id="dashboard-email" placeholder="Konfirmasi Password Baru">
+          <input class="form-control" name="c_password" type="password" id="dashboard-email" placeholder="Konfirmasi Password Baru">
         </div>
         
         <div class="col-12">

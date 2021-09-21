@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
     CategoryController as AdminCategoryController,
     SubcategoryController as AdminSubcategoryController,
+    UserController as AdminUserController
 };
 /*
 |--------------------------------------------------------------------------
@@ -85,4 +86,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('kategori', AdminCategoryController::class);
     Route::resource('subcategory', AdminSubcategoryController::class);
+    Route::resource('user', AdminUserController::class);
 });
