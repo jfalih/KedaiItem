@@ -48,12 +48,33 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mt-4">
-                                    <form method="POST" enctype="multipart/form-data" action="{{route('admin.subcategory.store')}}">
+                                    <form method="POST" enctype="multipart/form-data" action="{{route('admin.user.store')}}">
                                         @csrf
                                         <div class="mb-3">
-                                            <label class="form-label" for="name">Nama subcategory</label>
-                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name">
+                                            <label class="form-label" for="name">Nama</label>
+                                            <input type="text" name="name" placeholder="Nama" class="form-control @error('name') is-invalid @enderror" id="name">
                                             @error('name')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="username">Username</label>
+                                            <input type="text" name="username" placeholder="Username" class="form-control @error('username') is-invalid @enderror" id="username">
+                                            @error('username')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="nomorhp">Nomorhp</label>
+                                            <input type="number" name="nomorhp" placeholder="Nomor Handphone" class="form-control @error('nomorhp') is-invalid @enderror" id="nomorhp">
+                                            @error('nomorhp')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="email">Email</label>
+                                            <input type="text" name="email" placeholder="E-mail" class="form-control @error('email') is-invalid @enderror" id="email">
+                                            @error('email')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
@@ -70,17 +91,15 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Kategori</label>
-                                            <select name="category[]" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ...">
-                                                @foreach($statuses as $status)
-                                                <optgroup label="Status {{$status->name}}">
-                                                    @foreach ($status->categories as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>   
+                                            <label class="form-label">Role</label>
+                                            <select name="roles[]" class="select2 form-control select2-multiple  @error('roles') is-invalid @enderror" multiple="multiple" data-placeholder="Choose ...">
+                                                <optgroup label="Role">
+                                                    @foreach($roles as $role)
+                                                    <option value="{{$role->id}}">{{$role->name}}</option>   
                                                     @endforeach
                                                 </optgroup>
-                                                @endforeach
                                             </select>
-                                            @error('category')
+                                            @error('roles')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>

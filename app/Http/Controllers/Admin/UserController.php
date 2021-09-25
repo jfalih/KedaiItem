@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\{
     Status,
-    User
+    User,
+    Role
 };
+use Hash;
 use DataTables;
 class UserController extends Controller
 {
@@ -40,7 +42,12 @@ class UserController extends Controller
             ->make(true);
         }
         $statuses = Status::all();
-        return view('admin.user', ['statuses' => $statuses]);
+        $roles = Role::all();
+
+        return view('admin.user', [
+            'statuses' => $statuses,
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -48,9 +55,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -61,7 +68,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required|unique:users',
+            'nomorhp' => 'required|unique:users',
+            'email' => 'required|unique:users',
+            'status' => 'required',
+            'roles' => 'required',
+        ],[
+            'required' => ':attribute harus diisi.'
+        ]);
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'nomorhp' => $request->nomorhp,
+            'email' => $request->email,
+            'status_id' => $request->status,
+        ]);
+        $user->roles()->attach($request->roles);
+        return redirect()->back()->with('success','Berhasil menambahkan user!');
     }
 
     /**
