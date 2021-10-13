@@ -14,18 +14,17 @@
             <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 @if(Request::segments()[0] === 'galeri') active @endif" href="{{route('galeri')}}"><i class="ci-image opacity-60 me-2"></i>Galeri</a></li>
             <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 @if(Request::segments()[0] === 'chat') active @endif" href="{{route('chat')}}"><i class="ci-chat opacity-60 me-2"></i>Chat</a></li>
             <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 @if(Request::segments()[0] === 'pembelian') active @endif" href="{{route('pembelian')}}"><i class="ci-basket opacity-60 me-2"></i>Pembelian</a></li>
-            <li class="mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 @if(Request::segments()[0] === 'favorit') active @endif" href="dashboard-favorites.html"><i class="ci-heart opacity-60 me-2"></i>Favorit<span class="fs-sm text-muted ms-auto">4</span></a></li>
         </ul>
         @if(in_array('reseller',Auth::user()->role_name))
         <div class="bg-secondary p-4">
             <h3 class="fs-sm mb-0 text-muted">Dashboard Penjual</h3>
         </div>
         <ul class="list-unstyled mb-0">
-            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-sales.html"><i class="ci-dollar opacity-60 me-2"></i>Sales<span class="fs-sm text-muted ms-auto">$1,375.00</span></a></li>
-            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-products.html"><i class="ci-package opacity-60 me-2"></i>Products<span class="fs-sm text-muted ms-auto">5</span></a></li>
-            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-add-new-product.html"><i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a></li>
-            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="dashboard-payouts.html"><i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a></li>
-            <li class="mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="account-signin.html"><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a></li>
+            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('reseller.penjualan')}}"><i class="ci-dollar opacity-60 me-2"></i>Penjualan<span class="fs-sm text-muted ms-auto">Rp{{Auth::user()->balance}}</span></a></li>
+            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('reseller.product')}}"><i class="ci-package opacity-60 me-2"></i>Products<span class="fs-sm text-muted ms-auto">{{\App\Models\Item::where('user_id', Auth::user()->id)->count()}}</span></a></li>
+            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('reseller.product.add')}}"><i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a></li>
+            <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('reseller.product.add')}}"><i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a></li>
+            <li class="mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('logout')}}"><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a></li>
         </ul>
         @else
         <div class="bg-secondary p-4">

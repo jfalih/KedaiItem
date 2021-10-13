@@ -121,6 +121,7 @@ class SubcategoryController extends Controller
         $subcategory->status_id = $request->status;
         $subcategory->slug = Str::slug($request->name);
         $subcategory->save();
+        $subcategory->categories()->detach();
         $subcategory->categories()->attach($request->category);
         return redirect()->back()->with('success', 'Berhasil merubah subcategory!');
     }

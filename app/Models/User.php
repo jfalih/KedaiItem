@@ -103,4 +103,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Status::class);
     }
+    public function ktp()
+    {
+        return $this->belongsTo(Image::class,'ktp_id', 'id');
+    }
+    public function selfie()
+    {
+        return $this->belongsTo(Image::class,'selfie_id', 'id');
+    }
 }

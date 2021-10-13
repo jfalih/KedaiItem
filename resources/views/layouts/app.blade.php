@@ -26,6 +26,7 @@
     @section('css')
     <link rel="stylesheet" media="screen" href="{{asset('assets/vendor/simplebar/dist/simplebar.min.css')}}"/>
     <link rel="stylesheet" media="screen" href="{{asset('assets/vendor/tiny-slider/dist/tiny-slider.css')}}"/>
+    <link rel="stylesheet" media="screen" href="{{asset('assets/vendor/chartist/dist/chartist.min.css')}}"/>
     @show
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{{asset('assets/css/theme.min.css')}}">
@@ -83,6 +84,7 @@
     <script src="{{asset('assets/vendor/simplebar/dist/simplebar.min.js')}}"></script>
     <script src="{{asset('assets/vendor/tiny-slider/dist/min/tiny-slider.js')}}"></script>
     <script src="{{asset('assets/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/chartist/dist/chartist.min.js')}}"></script>
     @show
     <!-- Main theme script -->
     <script src="{{asset('assets/js/theme.min.js')}}"></script>

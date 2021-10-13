@@ -55,14 +55,6 @@
                   </div>
                   @endforeach
                   <!-- Pagination-->
-                  <nav class="d-md-flex justify-content-between align-items-center text-center text-md-start mt-4" aria-label="Page navigation">
-                    <div class="d-md-flex align-items-center w-100"><span class="fs-sm text-muted me-md-3">Showing 5 of 9 products</span>
-                      <div class="progress w-100 my-3 mx-auto mx-md-0" style="max-width: 10rem; height: 4px;">
-                        <div class="progress-bar" role="progressbar" style="width: 56%;" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                    <button class="btn btn-outline-primary btn-sm" type="button">More products</button>
-                  </nav>
                 </div>
               </section>
           </div>

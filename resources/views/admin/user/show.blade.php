@@ -23,14 +23,10 @@
                             </div>
                             <div class="clearfix"></div>
                             <div>
-                                <img src="@if($user->profile_id !== null) {{Storage::url($user->profile->name)}} @else {{'coba.png'}} @endif" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                                <img src="@if($user->profile_id !== null){{Storage::url($user->profile->name)}}@else{{'https://www.google.com/search?q=profile+png&sxsrf=AOaemvLaXv_yifNzFyy5UN7mVEAild-q5A:1634049261263&tbm=isch&source=iu&ictx=1&fir=oqlrsbY6kGHuQM%252COoHGa2rRcpXlrM%252C_%253BqiFWYtrCF3sw-M%252ChUpySpsDj3TidM%252C_%253BQk95hvMUrzdm6M%252CeaghkSZ2vQjCRM%252C_%253BXNS-LAznprJJrM%252ChUpySpsDj3TidM%252C_%253BOmyLfgFTjuk_qM%252CBJb3ZNagGqc-9M%252C_%253B9LkVqS2WL5niHM%252Cw05Qtdu6TE0FDM%252C_%253BpExwfCYw8yAAIM%252Ck1nVRByA6KuzNM%252C_%253BqMOfNJ2kOc2SnM%252CF3arEREJqkgGJM%252C_%253B8OoAPK0RLlNylM%252Ci9KcRQcE4SLwsM%252C_%253Bqmg2zwmd-29vVM%252ChUpySpsDj3TidM%252C_%253BZ4fJuoUjDPIm7M%252ChUpySpsDj3TidM%252C_%253Bpa4S8eCqrTb7wM%252CH7iXytjKhDzVhM%252C_%253BCBLAkmp1KQeK8M%252ClZHI4n3UDccsYM%252C_%253BJjbH37oOL2B1hM%252CCjYcMtb1Y12irM%252C_%253BScRGRFGMiXHWfM%252Cwg0CyFWNfK7o5M%252C_&vet=1&usg=AI4_-kRxspA2FtVsGc2lnNpfgU1McwK9cA&sa=X&ved=2ahUKEwiN8ozui8XzAhX9uksFHd7lC-8Q9QF6BAgVEAE#imgrc=oqlrsbY6kGHuQM'}}@endif" alt="" class="avatar-lg rounded-circle img-thumbnail">
                             </div>
                             <h5 class="mt-3 mb-1">{{$user->name}}</h5>
                             <p class="text-muted">{{implode(',',$user->role_name)}}</p>
-
-                            <div class="mt-4">
-                                <button type="button" class="btn btn-light btn-sm"><i class="uil uil-envelope-alt me-2"></i> Message</button>
-                            </div>
                         </div>
 
                         <hr class="my-4">
@@ -88,31 +84,7 @@
                         <div class="tab-pane active" id="about" role="tabpanel">
                             <div>
                                 <div>
-                                    <h5 class="font-size-16 mb-4">Experience</h5>
-
-                                    <ul class="activity-feed mb-0 ps-2">
-                                        <li class="feed-item">
-                                            <div class="feed-item-list">
-                                                <p class="text-muted mb-1">2019 - 2020</p>
-                                                <h5 class="font-size-16">UI/UX Designer</h5>
-                                                <p>Abc Company</p>
-                                                <p class="text-muted">To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words. If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual</p>
-                                            </div>
-                                        </li>
-                                        <li class="feed-item">
-                                            <div class="feed-item-list">
-                                                <p class="text-muted mb-1">2017 - 2019</p>
-                                                <h5 class="font-size-16">Graphic Designer</h5>
-                                                <p>xyz Company</p>
-                                                <p class="text-muted">It will be as simple as occidental in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental </p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div>
-                                    <h5 class="font-size-16 mb-4">Projects</h5>
-
+                                    <h5 class="font-size-16 mb-4">Pembelian</h5>
                                     <div class="table-responsive">
                                         <table class="table table-nowrap table-hover mb-0">
                                             <thead>

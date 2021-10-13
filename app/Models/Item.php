@@ -9,6 +9,9 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name','slug','description','sold','views','price','status_id','user_id' 
+    ];
     /**
      * Get all of the reviews for the Item
      *
@@ -22,11 +25,6 @@ class Item extends Model
     {
         return $this->belongsToMany(Image::class);
     }
-    /**
-     * The subcategories that belong to the Item
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
     public function subcategories()
     {
         return $this->belongsToMany(Subcategory::class,'subcategory_item', 'sub_id', 'item_id');
@@ -50,5 +48,9 @@ class Item extends Model
     public function getAverageRatingAttribute()
     {
         return $this->reviews->avg('rating');
+    }
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
     }
 }

@@ -49,7 +49,53 @@ class UserController extends Controller
             'roles' => $roles
         ]);
     }
-
+    public function verified(Request $request){
+        if($request->ajax()){
+            $user = User::where([
+                ['ktp_id', '!=', null],
+                ['selfie_id', '!=', null],
+                ['nomorhp_verified_at','!=', null],
+                ['email_verified_at','!=', null],
+                ['ktp_selfie_verified_at','=', null],
+            ])->get();
+            return DataTables::of($user)
+            ->addIndexColumn()
+            ->addColumn('selfie', function (User $user) {
+                return view('admin.verified.download', [
+                    'data' => $user->selfie->name
+                ]);
+            })
+            ->addColumn('ktp', function (User $user) {
+                return view('admin.verified.download', [
+                    'data' => $user->ktp->name
+                ]);
+            })
+            ->addColumn('action', function (User $user) {
+                return view('admin.verified.action', [
+                    'data' => $user
+                ]);
+            })
+            ->make(true);
+        }
+        $statuses = Status::all();
+        return view('admin.verified');
+    }
+    public function verified_declined($user){
+        $user = User::findOrFail($user);
+        $role = Role::where('name', 'reseller')->first();
+        $user->selfie_id = null;
+        $user->ktp_id = null;
+        $user->save();
+        return redirect()->back()->with('success', 'Berhasil menolak verifikasi user!');
+    }
+    public function verified_add($user){
+        $user = User::findOrFail($user);
+        $role = Role::where('name', 'reseller')->first();
+        $user->roles()->attach([$role->id]);
+        $user->ktp_selfie_verified_at = \Carbon\Carbon::now();
+        $user->save();
+        return redirect()->back()->with('success', 'Berhasil memverifikasi user!');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -110,8 +156,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        $statuses = Status::all();
         $user = User::findOrFail($id);
-        return view('admin.user.edit', ['user' => $user]);
+        $roles = Role::all();
+        return view('admin.user.edit', ['user' => $user, 'roles' => $roles, 'statuses' => $statuses]);
     }
 
     /**
@@ -123,7 +171,26 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'nomorhp' => 'required',
+            'email' => 'required',
+            'status' => 'required',
+            'roles' => 'required',
+        ],[
+            'required' => ':attribute harus diisi.'
+        ]);
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->nomorhp = $request->nomorhp;
+        $user->email = $request->email;
+        $user->status_id =  $request->status;
+        $user->save();
+        $subcategory->categories()->detach();
+        $user->roles()->attach($request->roles);
+        return redirect()->back()->with('success', 'Berhasil merubah user!');
     }
 
     /**

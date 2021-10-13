@@ -15,12 +15,16 @@ use App\Http\Controllers\{
     ReviewController,
     CartController,
     VerificationController,
+    ResellerController
 };
 use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
+    ItemController as AdminItemController,
     CategoryController as AdminCategoryController,
     SubcategoryController as AdminSubcategoryController,
-    UserController as AdminUserController
+    UserController as AdminUserController,
+    PembelianController as AdminPembelianController,
+    ChatController as AdminChatController
 };
 /*
 |--------------------------------------------------------------------------
@@ -82,9 +86,24 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/category/{category}', [CategoryController::class,'index'])->name('categories');
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
 
+//Reseller
+Route::middleware('reseller')->name('reseller.')->group(function () {
+    Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan'); 
+    Route::get('/product', [ResellerController::class, 'product'])->name('product');
+    Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
+    Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
+    Route::post('/product/add', [ResellerController::class, 'store_product'])->name('product.store');
+});
+Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('kategori', AdminCategoryController::class);
     Route::resource('subcategory', AdminSubcategoryController::class);
+    Route::get('/user/verified', [AdminUserController::class, 'verified'])->name('user.verified');
+    Route::post('/user/verified/{user}/add', [AdminUserController::class, 'verified_add'])->name('user.verified.add');
+    Route::post('/user/verified/{user}/declined', [AdminUserController::class, 'verified_declined'])->name('user.verified.declined');
     Route::resource('user', AdminUserController::class);
+    Route::resource('pembelian', AdminPembelianController::class);
+    Route::resource('item', AdminItemController::class);
+    Route::resource('chat', AdminChatController::class);
 });
