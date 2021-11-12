@@ -5,8 +5,9 @@
     <div class="py-2">
     </div>
   </div>
-  <form method="POST" action="{{route('reseller.product.store')}}" enctype="multipart/form-data">
+  <form method="POST" action="{{route('reseller.product.update',['item'=> $item])}}" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     <div class="mb-3 pb-2">
       <label class="form-label" for="unp-product-name">Judul Produk</label>
       <input class="form-control" value="{{$item->name}}" name="title" type="text" id="unp-product-name">
@@ -14,7 +15,7 @@
     </div>
     <div class="mb-3 pb-2">
       <label class="form-label" for="unp-category">Kategori Produk</label>  
-      <select class="form-select" name="category" id="unp-category">
+      <select class="form-select" name="category" id="category">
         <option>Pilih Kategori</option>
           @foreach ($categories as $cat)
             <option value="{{$cat->id}}">{{$cat->name}}</option>
@@ -23,7 +24,7 @@
     </div>
     <div class="mb-3 pb-2">
       <label class="form-label" for="unp-category">Subkategori Produk</label>  
-      <select class="form-select" name="category" id="unp-category">
+      <select class="form-select" name="subcategory" id="subcategory">
         <option>Pilih Subkategori</option>
       </select>
     </div>
@@ -103,6 +104,32 @@
         cancelButton.addEventListener("click", function(){
             document.getElementById("list-img").style.display = "flex";        
             document.getElementById("list-upload").style.display = "none";
+        });
+
+        $('select[name="category"]').on('change', function() {
+            var categoryID = $(this).val();
+            var url = '{{route("category.subcategory",["category" =>":id"])}}';
+            url = url.replace(':id', categoryID );
+            if(categoryID){
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success:function(data) {
+                        $('select[name="subcategory"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="subcategory"]').append('<option value="'+ key +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            }else{
+                $('select[name="subcategory"]').empty();
+                $('select[name="subcategory"]').append('<option>Pilih Category Dahulu</option>');
+                        
+            }
         });
     })
 </script>

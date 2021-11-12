@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\{
     AuthController,
     CategoryController,
@@ -24,7 +25,8 @@ use App\Http\Controllers\Admin\{
     SubcategoryController as AdminSubcategoryController,
     UserController as AdminUserController,
     PembelianController as AdminPembelianController,
-    ChatController as AdminChatController
+    ChatController as AdminChatController,
+    PengaturanWebsiteController as AdminPengaturanWebsiteController
 };
 /*
 |--------------------------------------------------------------------------
@@ -85,14 +87,16 @@ Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.re
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/category/{category}', [CategoryController::class,'index'])->name('categories');
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
-
+Route::post('/category/{category}/subcategory',[CategoryController::class,'subcategories'])->name('category.subcategory');
 //Reseller
 Route::middleware('reseller')->name('reseller.')->group(function () {
     Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan'); 
     Route::get('/product', [ResellerController::class, 'product'])->name('product');
     Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
+    Route::delete('/product/{item}/delete', [ResellerController::class, 'destroy'])->name('product.delete');
     Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
     Route::post('/product/add', [ResellerController::class, 'store_product'])->name('product.store');
+    Route::put('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
 });
 Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -106,4 +110,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('pembelian', AdminPembelianController::class);
     Route::resource('item', AdminItemController::class);
     Route::resource('chat', AdminChatController::class);
+    Route::resource('pengaturan', AdminPengaturanWebsiteController::class);
 });

@@ -4,9 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+// Facades Init
 use Illuminate\Support\Facades\Storage;
 
-class PembelianController extends Controller
+// Model Init
+use App\Models\{
+    Setting,
+    Image
+};
+
+class PengaturanWebsiteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +23,8 @@ class PembelianController extends Controller
      */
     public function index()
     {
-        return view('admin.pembelian');
+        $setting = Setting::first();
+        return view('admin.pengaturan',['setting' => $setting]);
     }
 
     /**
@@ -36,7 +45,28 @@ class PembelianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'title' => 'required'
+        ], [
+            'required' => ':attribute harus diisi.'
+        ]);
+        $setting = Setting::first();
+        $setting->name = $request->name;
+        $setting->title = $request->title;
+        $setting->description = $request->description;
+        if($request->file('files')){
+            Image::destroy($setting->logo_id);
+            $path = Storage::putFile('public/website/', $request->file('files'));
+            $setting->logo()->create([
+                'caption' => 'logo website '.$request->name,
+                'name' => $path,
+                'status_id' => 1
+            ]);
+        }
+        $setting->save();
+        return redirect()->back()->with('success', 'Berhasil mengubah pengaturan website!');
     }
 
     /**

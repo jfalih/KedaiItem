@@ -116,6 +116,15 @@
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="uil-cog"></i>
+                                    <span>Pengaturan</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('admin.pengaturan.index')}}">Pengaturan Website</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="uil-database"></i>
                                     <span>Item</span>
                                 </a>

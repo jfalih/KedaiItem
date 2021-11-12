@@ -2,17 +2,24 @@
 @section('content')
 <div class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2">
     <h2 class="h3 py-2 me-2 text-center text-sm-start">Tambah Produk Baru</h2>
-    <div class="py-2">
-      <select class="form-select me-2" name="" id="unp-category">
-        <option>Pilih Kategori</option>
-          @foreach ($categories as $cat)
-            <option>{{$cat->name}}</option>
-          @endforeach
-      </select>
-    </div>
   </div>
   <form method="POST" action="{{route('reseller.product.store')}}" enctype="multipart/form-data">
     @csrf
+    <div class="mb-3 pb-2">
+      <label class="form-label" for="unp-category">Kategori Produk</label>  
+      <select class="form-select" name="category" id="category">
+        <option value="">Pilih Kategori</option>
+          @foreach ($categories as $cat)
+            <option value="{{$cat->id}}">{{$cat->name}}</option>
+          @endforeach
+      </select>
+    </div>
+    <div class="mb-3 pb-2">
+      <label class="form-label" for="unp-category">Subkategori Produk</label>  
+      <select class="form-select" name="subcategory" id="subcategory">
+        <option>Pilih Category Dahulu</option>
+      </select>
+    </div>
     <div class="mb-3 pb-2">
       <label class="form-label" for="unp-product-name">Judul Produk</label>
       <input class="form-control" name="title" type="text" id="unp-product-name">
@@ -73,26 +80,29 @@
 @section('extra-js')
 <script type="text/javascript">
     $(document).ready(function() {
-        $('select[name="state"]').on('change', function() {
-            var stateID = $(this).val();
-            if(stateID) {
+        $('select[name="category"]').on('change', function() {
+            var categoryID = $(this).val();
+            var url = '{{route("category.subcategory",["category" =>":id"])}}';
+            url = url.replace(':id', categoryID );
+            if(categoryID){
                 $.ajax({
-                    url: '/myform/ajax/'+stateID,
-                    type: "GET",
+                    url: url,
+                    type: "POST",
                     dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     success:function(data) {
-
-                        
-                        $('select[name="city"]').empty();
+                        $('select[name="subcategory"]').empty();
                         $.each(data, function(key, value) {
-                            $('select[name="city"]').append('<option value="'+ key +'">'+ value +'</option>');
+                            $('select[name="subcategory"]').append('<option value="'+ key +'">'+ value.name +'</option>');
                         });
-
-
                     }
                 });
             }else{
-                $('select[name="city"]').empty();
+                $('select[name="subcategory"]').empty();
+                $('select[name="subcategory"]').append('<option>Pilih Category Dahulu</option>');
+                        
             }
         });
     });
