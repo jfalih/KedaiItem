@@ -54,7 +54,6 @@ class UserController extends Controller
             $user = User::where([
                 ['ktp_id', '!=', null],
                 ['selfie_id', '!=', null],
-                ['nomorhp_verified_at','!=', null],
                 ['email_verified_at','!=', null],
                 ['ktp_selfie_verified_at','=', null],
             ])->get();

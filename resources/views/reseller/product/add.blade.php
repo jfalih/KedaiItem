@@ -69,11 +69,6 @@
         <div class="form-text">Average marketplace price for this category is $15.</div>
       </div>
     </div>
-    <div class="mb-3 py-2">
-      <label class="form-label" for="unp-product-tags">Tags Produk</label>
-      <textarea class="form-control" name="tags" rows="4" id="unp-product-tags"></textarea>
-      <div class="form-text">Tidak lebih dari 10, pisahkan kata kunci dengan koma (,).</div>
-    </div>
     <button class="btn btn-primary d-block w-100" type="submit"><i class="ci-cloud-upload fs-lg me-2"></i>Tambah Produk</button>
   </form>
 @endsection

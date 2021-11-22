@@ -6,7 +6,7 @@
         <div class="d-flex w-100 text-dark text-center me-3">
         
         <div class="d-flex justify-content-center align-items-center px-3">
-            <img class="rounded" width="50" src="{{($seller->profile == null) ? Storage::url('public/images/user.png') : Storage::url($seller->profile->name)}}" alt="Mary Grant"/>
+            <img class="rounded" width="50" src="@if($seller->profile == null){{ url('assets/img/marketplace/account/avatar.png') }}@else{{ Storage::url($seller->profile->name) }}@endif" alt="Mary Grant"/>
             <div class="px-3">
                 <h6 class="fs-sm mb-n1">{{$seller->name}}</h6>
                 <span class="fs-ms text-muted">{{$seller->username}}</span>
@@ -26,7 +26,7 @@
     <div class="d-flex d-lg-none flex-wrap bg-secondary text-center rounded-3 pt-4 px-4 pb-1 mb-4">
         
         <div class="d-flex fs-ms justify-content-center align-items-center px-3 pb-3">
-            <img class="rounded" width="50" src="{{($seller->profile == null) ? Storage::url('public/images/user.png') : Storage::url($seller->profile->name)}}" alt="Mary Grant"/>
+            <img class="rounded" width="50" src="@if($seller->profile == null){{ url('assets/img/marketplace/account/avatar.png') }}@else{{ Storage::url($seller->profile->name) }}@endif" alt="Mary Grant"/>
             <div class="px-3">
                 <h6 class="fs-sm mb-n1">{{$seller->name}}</h6>
                 <span class="fs-ms text-muted">{{$seller->username}}</span>
@@ -130,10 +130,9 @@
     var pusher = new Pusher('5e511233887873c74a68', {
         cluster: 'mt1'
     });
-    var seller = {!! json_encode($seller) !!};
-    var channel = pusher.subscribe('my-channel.{{Auth::user()->id}}');
+    var channel = pusher.subscribe('my-channel.@if($convertation !==null){{$convertation->id}}@else{{0}}@endif');
     channel.bind('receive', function(data) {
-      if(seller.id == data.from_id){
+      if({{Auth::user()->id}} != data.from_id){
         $('#chat').append(data.data);
       }
     });

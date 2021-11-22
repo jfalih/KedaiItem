@@ -4,21 +4,8 @@
   <!-- Title-->
   <div class="d-sm-flex flex-wrap justify-content-between align-items-center border-bottom">
     <h2 class="h3 py-2 me-2 text-center text-sm-start">Produk Kamu<span class="badge bg-faded-accent fs-sm text-body align-middle ms-2">{{\App\Models\Item::where('user_id', Auth::user()->id)->count()}}</span></h2>
-    <div class="py-2">
-      <div class="d-flex flex-nowrap align-items-center pb-3">
-        <label class="form-label fw-normal text-nowrap mb-0 me-2" for="sorting">Sort by:</label>
-        <select class="form-select form-select-sm me-2" id="sorting">
-          <option>Date Created</option>
-          <option>Product Name</option>
-          <option>Price</option>
-          <option>Your Rating</option>
-          <option>Updates</option>
-        </select>
-        <button class="btn btn-outline-secondary btn-sm px-2" type="button"><i class="ci-arrow-up"></i></button>
-      </div>
-    </div>
   </div>
-  @foreach($items as $item)
+  @forelse($items as $item)
   
   <!-- Product-->
   <div class="d-block d-sm-flex align-items-center py-4 border-bottom">
@@ -39,7 +26,16 @@
       </div>
     </div>
   </div>
-  @endforeach
+  @empty
+  <div class="row justify-content-center pt-lg-4 text-center">
+    <div class="col-12">
+      <img class="d-block mx-auto mb-5" src="{{Storage::url('public/website/illustration/sad.png')}}" width="340" alt="404 Error">
+      <h1 class="h3">Kemu belum menjual apapun :(</h1>
+      <h3 class="h5 fw-normal mb-4">Kami tidak dapat menemukan barang yang kamu jual.</h3>
+      <a href="{{route('reseller.product.add')}}" class="btn btn-primary">Mulai Berjualan</a>
+    </div>
+  </div>
+  @endforelse
 </div>
 @endsection
 @section('extra-js')

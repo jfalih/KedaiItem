@@ -20,15 +20,21 @@ class ChatController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            
             $chat = Message::all();
             return DataTables::of($chat)
             ->addIndexColumn()
             ->addColumn('from', function (Message $chat) {
-                return $chat->conversation->sender->name;
+                return $chat->from->name;
+            })
+            ->addColumn('created_at', function (Message $chat) {
+                return $chat->created_at;
             })
             ->addColumn('to', function(Message $chat){
-                return $chat->conversation->receiver->name;
+                if($chat->from->name == $chat->conversation->receiver->name){
+                    return $chat->conversation->sender->name;
+                } else {
+                    return $chat->conversation->receiver->name;
+                }
             })
             ->addColumn('action', function (Message $chat) {
                 return view('admin.chat.action', [

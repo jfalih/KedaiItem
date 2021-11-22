@@ -5,10 +5,9 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard | Minible - Admin & Dashboard Template</title>
+        <title>Admin | Kedai Item Admin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesbrand" name="author" />
+        <meta content="janfalih" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{asset('assets_admin/images/favicon.ico')}}">
         @section('css')
@@ -38,19 +37,19 @@
                 <div class="navbar-brand-box">
                     <a href="index.html" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="assets/images/logo-dark.png" alt="" height="20">
+                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="20">
                         </span>
                     </a>
 
                     <a href="index.html" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="assets/images/logo-light.png" alt="" height="20">
+                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="20">
                         </span>
                     </a>
                 </div>
@@ -67,25 +66,25 @@
                             <li class="menu-title">Menu</li>
                             <li>
                                 <a href="{{route('admin.dashboard')}}">
-                                    <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>
+                                    <i class="fas fa-home"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{route('admin.kategori.index')}}">
-                                    <i class="uil-window-section"></i>
+                                    <i class="fas fa-database"></i>
                                     <span>Kategori</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{route('admin.subcategory.index')}}">
-                                    <i class="uil-window-section"></i>
+                                    <i class="fas fa-database"></i>
                                     <span>Subkategori</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-user"></i>
+                                    <i class="fas fa-user"></i>
                                     <span>User</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -96,7 +95,7 @@
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-chat"></i>
+                                    <i class="fas fa-comment"></i>
                                     <span>Chat</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -106,7 +105,7 @@
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-shopping-cart"></i>
+                                    <i class="fas fa-shopping-cart"></i>
                                     <span>Pembelian</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -116,21 +115,21 @@
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-cog"></i>
-                                    <span>Pengaturan</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{{route('admin.pengaturan.index')}}">Pengaturan Website</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-database"></i>
+                                    <i class="fas fa-shopping-cart"></i>
                                     <span>Item</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('admin.item.index')}}">List Item</a></li>
                                     <li><a href="{{route('admin.user.verified')}}">List Laporan Item</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Pengaturan</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('admin.pengaturan.index')}}">Pengaturan Website</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -236,6 +235,7 @@
         <script src="{{asset('assets_admin/libs/node-waves/waves.min.js')}}"></script>
         <script src="{{asset('assets_admin/libs/waypoints/lib/jquery.waypoints.min.js')}}"></script>
         <script src="{{asset('assets_admin/libs/jquery.counterup/jquery.counterup.min.js')}}"></script>
+        <script src="https://kit.fontawesome.com/ef0a0f3999.js" crossorigin="anonymous"></script>
 
         <!-- apexcharts -->
         <script src="{{asset('assets_admin/libs/apexcharts/apexcharts.min.js')}}"></script>

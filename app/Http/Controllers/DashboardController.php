@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User, Image, Status, Message};
+use App\Models\{
+    Convertation,
+    User, 
+    Image, 
+    Status, 
+    Message,
+    Purchase
+};
 use Auth;
 use Hash;
 use Storage;
@@ -87,12 +94,17 @@ class DashboardController extends Controller
     }
     public function chat()
     {
-        $message = Message::where('from_id', Auth::user()->id)->orWhere('to_id', Auth::user()->id)->first();
-        return dd($message);
+        $convertations = Convertation::where('from_id', Auth::user()->id)->orWhere('to_id', Auth::user()->id)->orderBy('created_at','DESC')->paginate(5);        
+        return view('chat', [
+            'convertations' => $convertations
+        ]);
     }
     public function pembelian()
     {
-        return view('pembelian');
+        $pembelian = Purchase::where('user_id', Auth::user()->id)->paginate(5);
+        return view('pembelian',[
+            'pembelian' => $pembelian
+        ]);
     }
     public function pengaturan()
     {

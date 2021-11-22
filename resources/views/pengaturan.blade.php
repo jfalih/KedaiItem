@@ -22,10 +22,9 @@
           </div>
         </div>
       </div>
-      @if(Auth::user()->email_verified_at == null || Auth::user()->nomorhp_verified_at == null)
       <div class="row">
       @if(Auth::user()->email_verified_at == null)
-      <div class="@if(Auth::user()->nomorhp_verified_at != null) col-sm-12 @else col-sm-6 @endif">
+      <div class="@if(Auth::user()->nomorhp_verified_at != null) col-sm-12 @endif">
         <div class="bg-danger rounded-3 p-4 mb-4">
           <p class="fs-sm text-white mb-2">Alamat email kamu belum terverifikasi.</p>
           <form method="POST" action="{{route('verification.send')}}">
@@ -35,16 +34,7 @@
         </div>
       </div>
       @endif
-      @if(Auth::user()->nomorhp_verified_at == null)
-      <div class="@if(Auth::user()->email_verified_at != null) col-sm-12 @else col-sm-6 @endif">
-        <div class="bg-warning rounded-3 p-4 mb-4">
-          <p class="fs-sm text-white mb-2">Nomor handphone kamu belum terverifikasi.</p>
-          <button class="btn btn-light btn-shadow btn-sm" type="button"><i class="ci-phone me-2"></i>Kirim verifikasi sms</span></button>
-        </div>
       </div>
-      @endif
-      </div>
-      @endif
       <form method="POST" action="{{route('change_profile')}}" class="row gx-4 gy-3">
         @csrf
         <div class="col-sm-6">

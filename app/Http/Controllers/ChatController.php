@@ -9,7 +9,7 @@ use App\Models\{
     Message
 };
 use App\Events\SendMessage;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Pusher\Pusher;
 
 class ChatController extends Controller
@@ -22,17 +22,22 @@ class ChatController extends Controller
         $convertation = Convertation::where([
             ['from_id', '=', Auth::user()->id],
             ['to_id', '=', $seller->id]
-        ])->exist();
+        ])->orWhere([
+            ['from_id', '=', $seller->id],
+            ['to_id', '=', Auth::user()->id]
+        ])->first();
         if($convertation){
-            $messages = Message::where('convertation_id', $convertation->first()->id)->get();
+            $messages = Message::where('convertation_id', $convertation->id)->get();
             return view('chat.detail', [
                 'messages' => $messages,
-                'seller' => $seller
+                'seller' => $seller,
+                'convertation' => $convertation
             ]);
         } else {
             return view('chat.detail', [
                 'messages' => [],
-                'seller' => $seller
+                'seller' => $seller,
+                'convertation' => null
             ]);
         }
     }   
@@ -44,11 +49,13 @@ class ChatController extends Controller
             'message.required' => 'Silahkan isi pesan..',
         ]);
         $seller = User::where('username', $user)->firstOrFail();
-        $check_convertation = Convertation::whereHas('sender', function($q){
-            $q->where('id', Auth::user()->id);
-        })->whereHas('receiver', function($q) use ($seller){
-            $q->where('id', $seller->id);
-        });
+        $check_convertation =  Convertation::where([
+            ['from_id', '=', Auth::user()->id],
+            ['to_id', '=', $seller->id]
+        ])->orWhere([
+            ['from_id', '=', $seller->id],
+            ['to_id', '=', Auth::user()->id]
+        ]);
         if($check_convertation->count() == 0){
             $convertation = Convertation::create([
                 'from_id' => Auth::user()->id,
@@ -70,7 +77,7 @@ class ChatController extends Controller
                 env('PUSHER_APP_ID'),
                 $options
             );
-            $pusher->trigger('my-channel.'.Auth::user()->id, 'receive', $message);
+            $pusher->trigger('my-channel.'.$convertation->id, 'receive', $message);
             return response()->json(['success' => 'Berhasil menambahkan pesan!', 'data' => view('components.chats.default',['message' => $message])->render()], 200);    
         } else {
             $message = Message::create([
@@ -89,7 +96,7 @@ class ChatController extends Controller
                 env('PUSHER_APP_ID'),
                 $options
             );
-            $pusher->trigger('my-channel.'.Auth::user()->id, 'receive', $message);
+            $pusher->trigger('my-channel.'.$check_convertation->first()->id, 'receive', $message);
             return response()->json(['success' => 'Berhasil menambahkan pesan!', 'data' => view('components.chats.default',['message' => $message])->render()], 200);    
         }
     }

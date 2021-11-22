@@ -8,7 +8,7 @@
       <div class="page-title-overlap bg-accent pt-4">
         <div class="container d-flex flex-wrap flex-sm-nowrap justify-content-center justify-content-sm-between align-items-center pt-2">
           <div class="d-flex align-items-center pb-3">
-            <div class="img-thumbnail rounded-circle flex-shrink-0" style="width: 6.375rem;"><img class="rounded-circle" src="{{url('assets/img/marketplace/account/avatar.png')}}" alt="Createx Studio"></div>
+            <div class="img-thumbnail rounded-circle flex-shrink-0" ><img style="width: 6.375rem; height: 6.375rem; object-fit:cover;" class="rounded-circle" style="" src="{{Storage::url($user->profile->name)}}" alt="{{$user->profile->caption}}"></div>
             <div class="ps-3">
               <h3 class="text-light fs-lg mb-0">{{$user->username}}</h3><span class="d-block text-light fs-ms opacity-60 py-1">Member sejak {{$user->created_at}}</span><span class="badge bg-success"><i class="ci-check me-1"></i>Penjual Terverifikasi</span>
             </div>

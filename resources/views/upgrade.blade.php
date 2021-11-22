@@ -26,20 +26,6 @@
         @endif
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        @if(Auth::user()->nomorhp_verified_at === null)
-        <span>
-          <i class="ci-close-circle text-danger me-2"></i>
-          Verifikasi nomor handphone
-        </span>
-        <button type="button" class="btn btn-primary">Verifikasi</button>
-        @else
-        <span>
-          <i class="ci-check-circle text-danger me-2"></i>
-          Verifikasi nomor handphone
-        </span>
-        @endif
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
         @if(Auth::user()->ktp_id != null && Auth::user()->selfie_id != null && Auth::user()->tabungan_verified_at == null)       
         <span>
           <i class="ci-announcement text-warning me-2"></i>

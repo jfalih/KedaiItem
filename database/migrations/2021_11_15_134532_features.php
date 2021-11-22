@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingsTable extends Migration
+class Features extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('logo_id')->nullable();
-            $table->foreign('logo_id')->references('id')->on('images');
-            $table->foreignId('favicon_id')->nullable();
-            $table->foreign('favicon_id')->references('id')->on('images');
-            $table->string('name');
+            $table->foreignId('img_id')->nullable();
+            $table->foreign('img_id')->references('id')->on('images');
             $table->string('title');
             $table->text('description');
             $table->timestamps();
@@ -33,6 +30,6 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('features');
     }
 }

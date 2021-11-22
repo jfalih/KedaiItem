@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use Cart;
+
 class CartController extends Controller
 {
     public function add(Request $request)
@@ -47,6 +48,16 @@ class CartController extends Controller
                 }
             }
         }
+    }
+    public function update(Request $request)
+    {
+        $cart = Cart::update($request->id,[
+            'quantity' => $request->quantity
+        ]);
+        return response()->json([
+            'item'=> Cart::getContent(),
+            'total' => Cart::getTotal()
+        ]);
     }
     public function destroy(Request $request)
     {

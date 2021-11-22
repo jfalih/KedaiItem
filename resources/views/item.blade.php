@@ -15,7 +15,7 @@
     <!-- Product description + Reviews + Comments-->
     @include('components.sections.product.description', ['item' => $item])
     <!-- Related products carousel-->
-    @include('components.sections.related',['item' => $item])
+    @include('components.sections.related',['related' => $related, 'seller' => $item->user])
   </main>
 @endsection
 @section('js')

@@ -25,9 +25,13 @@ class Item extends Model
     {
         return $this->belongsToMany(Image::class);
     }
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
     public function subcategories()
     {
-        return $this->belongsToMany(Subcategory::class,'subcategory_item', 'sub_id', 'item_id');
+        return $this->belongsToMany(Subcategory::class,'subcategory_item', 'item_id', 'sub_id');
     }
     public function user()
     {

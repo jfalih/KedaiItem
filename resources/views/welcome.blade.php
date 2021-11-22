@@ -6,7 +6,7 @@
     <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
     @include('components.headers.default')
     <!-- Hero section-->
-    @include('components.sections.hero')
+    @include('components.sections.hero', ['title' => $setting->title, 'subtitle' => $setting->description])
     <!-- Featured products (Carousel)-->
     @include('components.sections.recomended',['items' => $items])
     <!-- Recent products grid-->
@@ -295,82 +295,30 @@
     <!-- Marketplace features-->
     <section class="bg-accent bg-size-cover bg-position-center pt-5 pb-4 pb-lg-5" style="background-image: url(img/marketplace/features/features-bg.jpg);">
       <div class="container pt-lg-3">
-        <h2 class="h3 mb-3 pb-4 text-light text-center">Why our marketplace?</h2>
+        <h2 class="h3 mb-3 pb-4 text-light text-center">Fitur Kami</h2>
         <div class="row pt-lg-2 text-center">
-          <div class="col-lg-3 col-sm-6 mb-grid-gutter">
-            <div class="d-inline-flex align-items-center text-start"><img src="img/marketplace/features/quality.png" width="52" alt="Quality Guarantee">
-              <div class="ps-3">
-                <h6 class="text-light fs-base mb-1">Quality Guarantee</h6>
-                <p class="text-light fs-ms opacity-70 mb-0">Quality checked by our team</p>
+          @forelse ($features as $feature)
+            <div class="col-lg-3 col-sm-6 mb-grid-gutter">
+              <div class="d-inline-flex align-items-center text-start"><img src="{{Storage::url($feature->image->name)}}" width="52" alt="{{$feature->image->caption}}">
+                <div class="ps-3">
+                  <h6 class="text-light fs-base mb-1">{{$feature->title}}</h6>
+                  <p class="text-light fs-ms opacity-70 mb-0">{{$feature->description}}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-3 col-sm-6 mb-grid-gutter">
-            <div class="d-inline-flex align-items-center text-start"><img src="img/marketplace/features/support.png" width="52" alt="Customer Support">
-              <div class="ps-3">
-                <h6 class="text-light fs-base mb-1">Customer Support</h6>
-                <p class="text-light fs-ms opacity-70 mb-0">Friendly 24/7 customer support</p>
+          @empty
+            <div class="col-lg-12 col-sm-6 mb-grid-gutter">
+              <div class="d-inline-flex align-items-center text-start">
+                <div class="ps-3">
+                  <h6 class="text-light fs-base mb-1">Tidak Ada</h6>
+                  <p class="text-light fs-ms opacity-70 mb-0">Tidak ada feature yang ditambahkan</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-3 col-sm-6 mb-grid-gutter">
-            <div class="d-inline-flex align-items-center text-start"><img src="img/marketplace/features/updates.png" width="52" alt="Free Updates">
-              <div class="ps-3">
-                <h6 class="text-light fs-base mb-1">Lifetime Free Updates</h6>
-                <p class="text-light fs-ms opacity-70 mb-0">Never pay for an update</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-sm-6 mb-grid-gutter">
-            <div class="d-inline-flex align-items-center text-start"><img src="img/marketplace/features/secure.png" width="52" alt="Secure Payments">
-              <div class="ps-3">
-                <h6 class="text-light fs-base mb-1">Secure Payments</h6>
-                <p class="text-light fs-ms opacity-70 mb-0">We posess SSL / Secure сertificate</p>
-              </div>
-            </div>
-          </div>
+          @endforelse
         </div>
       </div>
     </section>
     <!-- Blog posts carousel-->
-    <section class="py-5">
-      <div class="container py-lg-3">
-        <h2 class="h3 text-center">From the blog</h2>
-        <p class="text-muted text-center mb-3 pb-4">Latest marketplace news, success stories and tutorials</p>
-        <div class="tns-carousel">
-          <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;gutter&quot;: 15, &quot;controls&quot;: false, &quot;nav&quot;: true, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3}, &quot;992&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 30}}}">
-            <div>
-              <div class="card"><a class="blog-entry-thumb" href="blog-single.html"><img class="card-img-top" src="img/blog/05.jpg" alt="Post"></a>
-                <div class="card-body">
-                  <h2 class="h6 blog-entry-title"><a href="blog-single.html">We start selling WordPress themes soon</a></h2>
-                  <p class="fs-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim...</p>
-                  <div class="fs-xs text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="#">Nov 23</a><span class="blog-entry-meta-divider mx-2"></span><a class="blog-entry-meta-link text-nowrap" href="blog-single.html#comments"><i class="ci-message"></i>19</a></div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="card"><a class="blog-entry-thumb" href="blog-single.html"><img class="card-img-top" src="img/blog/06.jpg" alt="Post"></a>
-                <div class="card-body">
-                  <h2 class="h6 blog-entry-title"><a href="blog-single.html">Shoot like a pro. Tips &amp; tricks</a></h2>
-                  <p class="fs-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim...</p>
-                  <div class="fs-xs text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="#">Oct 10</a><span class="blog-entry-meta-divider mx-2"></span><a class="blog-entry-meta-link text-nowrap" href="blog-single.html#comments"><i class="ci-message"></i>28</a></div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="card"><a class="blog-entry-thumb" href="blog-single.html"><img class="card-img-top" src="img/blog/07.jpg" alt="Post"></a>
-                <div class="card-body">
-                  <h2 class="h6 blog-entry-title"><a href="blog-single.html">Designing engaging mobile experiences</a></h2>
-                  <p class="fs-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim...</p>
-                  <div class="fs-xs text-nowrap"><a class="blog-entry-meta-link text-nowrap" href="#">Sep 15</a><span class="blog-entry-meta-divider mx-2"></span><a class="blog-entry-meta-link text-nowrap" href="blog-single.html#comments"><i class="ci-message"></i>46</a></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- More button-->
-        <div class="text-center pt-4 mt-md-2"><a class="btn btn-outline-accent" href="blog-grid-sidebar.html">Ream more posts<i class="ci-arrow-right fs-ms ms-1"></i></a></div>
-      </div>
-    </section>
   </main>
 @endsection

@@ -14,15 +14,10 @@
                 <div>
                   <div class="card product-card-alt">
                     <div class="product-thumb">
-                      <button class="btn-wishlist btn-sm" type="button"><i class="ci-heart"></i></button>
-                      <div class="product-card-actions"><a class="btn btn-light btn-icon btn-shadow fs-base mx-2" href="marketplace-single.html"><i class="ci-eye"></i></a>
-                        <button class="btn btn-light btn-icon btn-shadow fs-base mx-2" type="button"><i class="ci-cart"></i></button>
-                      </div><a class="product-thumb-overlay" href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}"></a><img src="{{url('assets/img/marketplace/products/02.jpg')}}" alt="Product">
+                      <a class="product-thumb-overlay" href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}"></a><img src="{{Storage::url($item->images->first()->name)}}" alt="{{Storage::url($item->images->first()->caption)}}">
                     </div>
                     <div class="card-body">
                       <div class="d-flex flex-wrap justify-content-between align-items-start pb-2">
-                        <div class="text-muted fs-xs me-1">by <a class="product-meta fw-medium" href="{{url('penjual/'.$item->user->username)}}">{{$item->user->name}}</a> in <a class="product-meta fw-medium" href="#">Graphics</a></div>
-                       
                         <div class="star-rating">
                           @php
                            $i = 0;
@@ -44,10 +39,9 @@
                           
                         </div>
                       </div>
-                      <h3 class="product-title fs-sm mb-2"><a href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}">
-                          {{$item->name}}</a></a></h3>
+                      <h3 class="product-title fs-sm mb-2"><a href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}">{{$item->name}}</a></h3>
                       <div class="d-flex flex-wrap justify-content-between align-items-center">
-                        <div class="fs-sm me-2"><i class="ci-download text-muted me-1"></i>{{$item->sold}}<span class="fs-xs ms-1">Sales</span></div>
+                        <div class="fs-sm me-2"><i class="ci-download text-muted me-1"></i>{{$item->sold}}<span class="fs-xs ms-1">Terjual</span></div>
                         <div class="bg-faded-accent text-accent rounded-1 py-1 px-2">
                             {{$item->price_format}}
                         </div>

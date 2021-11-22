@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Storage;
 // Model Init
 use App\Models\{
     Setting,
-    Image
+    Image,
+    Status
 };
 
 class PengaturanWebsiteController extends Controller
@@ -24,7 +25,11 @@ class PengaturanWebsiteController extends Controller
     public function index()
     {
         $setting = Setting::first();
-        return view('admin.pengaturan',['setting' => $setting]);
+        $statuses = Status::all();
+        return view('admin.pengaturan',[
+            'setting' => $setting,
+            'statuses' => $statuses
+        ]);
     }
 
     /**
@@ -47,6 +52,7 @@ class PengaturanWebsiteController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'required',
             'title' => 'required'
         ], [
@@ -56,14 +62,25 @@ class PengaturanWebsiteController extends Controller
         $setting->name = $request->name;
         $setting->title = $request->title;
         $setting->description = $request->description;
-        if($request->file('files')){
+        if($request->file('logo')){
             Image::destroy($setting->logo_id);
-            $path = Storage::putFile('public/website/', $request->file('files'));
-            $setting->logo()->create([
+            $path = Storage::putFile('public/website/', $request->file('logo'));
+            $logo = Image::create([
                 'caption' => 'logo website '.$request->name,
                 'name' => $path,
                 'status_id' => 1
             ]);
+            $setting->logo_id = $logo->id;
+        }
+        if($request->file('favicon')){
+            Image::destroy($setting->favicon_id);
+            $path = Storage::putFile('public/website/', $request->file('favicon'));
+            $fav = Image::create([
+                'caption' => 'Favicon icon '.$request->name,
+                'name' => $path,
+                'status_id' => 1
+            ]);
+            $setting->favicon_id = $fav->id;
         }
         $setting->save();
         return redirect()->back()->with('success', 'Berhasil mengubah pengaturan website!');

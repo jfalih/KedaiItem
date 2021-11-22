@@ -10,7 +10,7 @@
           @if (Auth::user())
           <div class="navbar-tool dropdown ms-2">
             <a class="navbar-tool-icon-box border dropdown-toggle" href="{{route('pengaturan')}}">
-              <img src="{{url('assets/img/marketplace/account/avatar-sm.png')}}" width="32" alt="{{Auth::user()->name}}">
+              <img class="rounded-circle" style="width:32px;height:32px;object-fit: cover" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif"alt="@if(Auth::user()->profile != null) {{Auth::user()->profile->caption}} @else Caption @endif">
             </a>
             <a class="navbar-tool-text ms-n1" href="{{route('pengaturan')}}">
               <small>{{Auth::user()->name}}</small>
@@ -22,23 +22,26 @@
                 <a class="dropdown-item d-flex align-items-center" href="{{route('pengaturan')}}">
                   <i class="ci-settings opacity-60 me-2"></i>Pengaturan
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="{{route('pengaturan')}}">
+                <a class="dropdown-item d-flex align-items-center" href="{{route('pembelian')}}">
                   <i class="ci-basket opacity-60 me-2"></i>Pembelian
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="{{route('login')}}">
-                  <i class="ci-heart opacity-60 me-2"></i>Favorit
+                <a class="dropdown-item d-flex align-items-center" href="{{route('galeri')}}">
+                  <i class="ci-image opacity-60 me-2"></i>Galeri
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="{{route('chat')}}">
+                  <i class="ci-chat opacity-60 me-2"></i>Chat
                   <span class="fs-xs text-muted ms-auto">4</span>
                 </a>
                 @if(in_array('reseller',Auth::user()->role_name))
                   <div class="dropdown-divider"></div>
                   <h6 class="dropdown-header">Seller Dashboard</h6>
-                  <a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html">
-                    <i class="ci-dollar opacity-60 me-2"></i>Sales<span class="fs-xs text-muted ms-auto">$1,375.00</span>
+                  <a class="dropdown-item d-flex align-items-center" href="{{route('reseller.penjualan')}}">
+                    <i class="ci-dollar opacity-60 me-2"></i>Penjualan<span class="fs-xs text-muted ms-auto">Rp0</span>
                   </a>
-                  <a class="dropdown-item d-flex align-items-center" href="dashboard-products.html">
-                    <i class="ci-package opacity-60 me-2"></i>Products<span class="fs-xs text-muted ms-auto">5</span>
+                  <a class="dropdown-item d-flex align-items-center" href="{{route('reseller.product')}}">
+                    <i class="ci-package opacity-60 me-2"></i>Produk<span class="fs-xs text-muted ms-auto">{{Auth::user()->items->count()}}</span>
                   </a>
-                  <a class="dropdown-item d-flex align-items-center" href="dashboard-add-new-product.html">
+                  <a class="dropdown-item d-flex align-items-center" href="{{route('reseller.product.add')}}">
                     <i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a>
                     <a class="dropdown-item d-flex align-items-center" href="dashboard-payouts.html">
                       <i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a>
@@ -59,9 +62,10 @@
         </div>
         <div class="collapse navbar-collapse me-auto order-lg-2" id="navbarCollapse">
           <!-- Search-->
-          <div class="input-group d-lg-none my-3"><i class="ci-search position-absolute top-50 start-0 translate-middle-y text-muted fs-base ms-3"></i>
-            <input class="form-control rounded-start" type="text" placeholder="Search marketplace">
-          </div>
+          <form class="input-group d-lg-none my-3"><i class="ci-search position-absolute top-50 start-0 translate-middle-y text-muted fs-base ms-3"></i>
+            @csrf
+            <input class="form-control rounded-start" name="search" type="text" placeholder="Cari Disini..">
+          </form>
           <!-- Categories dropdown-->
           <ul class="navbar-nav navbar-mega-nav pe-lg-2 me-lg-2">
             <li class="nav-item dropdown">
@@ -75,13 +79,11 @@
                 @endphp
                 @forelse ($categories as $category)
                 <li class="dropdown">
-                  <a class="dropdown-item dropdown-toggle" href="{{url('category/'.$category->slug)}}" data-bs-toggle="dropdown">
+                  <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown">
                     {{$category->name}}
                   </a>
                   @if ($category->subcategories()->count() !== 0)
-                  <ul class="dropdown-menu">                   
-                      <li class="dropdown-item product-title fw-medium"><a href="{{url('category/'.$category->slug)}}">Semua {{$category->name}}<i class="ci-arrow-right fs-xs ms-1"></i></a></li>
-                      <li class="dropdown-divider"></li>
+                  <ul class="dropdown-menu">
                     @foreach ($category->subcategories as $item)     
                     <li><a class="dropdown-item" href="{{url('category/'.$category->slug.'/subcategory/'.$item->slug)}}">{{$item->name}}</a></li>
                     @endforeach
@@ -94,10 +96,10 @@
             </li>
           </ul>
           
-            
-          <div class="input-group d-none d-lg-flex mx-4">
-            <input class="form-control rounded-end pe-5" type="text" placeholder="Search for products"><i class="ci-search position-absolute top-50 end-0 translate-middle-y text-muted fs-base me-3"></i>
-          </div>
+            <form class="input-group d-none d-lg-flex mx-4" method="POST" action="{{route('welcome.search')}}">
+              @csrf
+              <input class="form-control rounded-end pe-5" name="search" type="text" placeholder="Cari Disini.."><i class="ci-search position-absolute top-50 end-0 translate-middle-y text-muted fs-base me-3"></i>
+            </form>
           <!-- Primary menu-->
         </div>
       </div>

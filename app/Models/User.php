@@ -59,6 +59,23 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $level;
     }
+    public function getSoldAttribute()
+    {
+        $sold = 0;
+        foreach($this->items as $item){
+            $sold += $item->sold;
+        }
+        return $sold;
+    }
+    public function getPendapatanAttribute(){
+        $pendapatan = 0;
+        foreach($this->items as $item){
+            foreach($item->purchases as $purchase){
+                $pendapatan += $purchase->quantity * $item->price;
+            }
+        }
+        return $pendapatan;
+    }
     /**
      * Get all of the reviews for the User
      *
@@ -98,7 +115,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Item::class);
     }
-    
+    public function pembelian()
+    {
+        return $this->hasMany(Purchase::class);
+    }
     public function status()
     {
         return $this->belongsTo(Status::class);

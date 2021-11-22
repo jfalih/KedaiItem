@@ -29,5 +29,8 @@ class Convertation extends Model
     {
         return $this->belongsTo(User::class, 'to_id');
     }
-
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

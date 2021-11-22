@@ -6,11 +6,10 @@
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8">
-    <title>Cartzilla | Multi-vendor Marketplace</title>
+    <title>@if(App\Models\Setting::first()->name) {{App\Models\Setting::first()->name}} @else Demo @endif | @if(App\Models\Setting::first()->description) {{App\Models\Setting::first()->description}} @else Demo @endif</title>
     <!-- SEO Meta Tags-->
-    <meta name="description" content="Cartzilla - Bootstrap E-commerce Template">
-    <meta name="keywords" content="bootstrap, shop, e-commerce, market, modern, responsive,  business, mobile, bootstrap, html5, css3, js, gallery, slider, touch, creative, clean">
-    <meta name="author" content="Createx Studio">
+    <meta name="description" content="@yield('description')">
+    <meta name="author" content="@yield('author')">
     <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />

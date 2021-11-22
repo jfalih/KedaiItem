@@ -11,24 +11,46 @@
                   <tr>
                       <th>Nama</th>
                       <th>Pesan</th>
+                      <th>Terakhir Dilihat</th>
                   </tr>
                   </thead>
                   <tbody>
+                  @forelse($convertations as $chat)
+                  @php
+                    $message = $chat->messages()->orderBy('created_at','DESC')->first();
+                    $from = $message->from;  
+                    if($chat->receiver->username == Auth::user()->username){
+                      $toUsername = $from->username;
+                      $toImg = $from->profile;
+                      $toName = $from->name;
+                      $toLastSeen = $from->last_seen;
+                    } else {
+                      $toUsername = $chat->receiver->username;
+                      $toImg = $chat->receiver->profile;
+                      $toName = $chat->receiver->name;
+                      $toLastSeen = $chat->receiver->last_seen;
+                    }
+                  @endphp
                   <tr>
                     <td class="py-3">
-                        <img src="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/app-assets/images/icons/angular.svg" class="me-2" height="20" width="20" alt="Angular">
-                        <a class="nav-link-style fw-medium" href="account-single-ticket.html">My new ticket</a>
+                        <img src="@if($toImg != null) {{Storage::url($toImg->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif"alt="@if($toImg != null) {{$toImg->caption}} @else Caption @endif" class="me-2" height="20" width="20">
+                        <a class="nav-link-style fw-medium" href="{{url('http://127.0.0.1:8000/chat/'.$toUsername)}}">{{$toName}}</a>
                     </td>
-                    <td class="py-3">Lorem ipsum dolor sit amet, qui minim labore.</td>
+                    <td class="py-3">
+                      {{$message->message}}
+                    </td>
+                    <td class="py-3">
+                      {{$toLastSeen}}
+                    </td>
                   </tr>
+                  @empty
+
+                  @endforelse
                   </tbody>
               </table>
           </div>
     </div>
     <!-- Pagination-->
-    <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center">
-          <button class="btn btn-primary mt-3 mt-sm-0" href="#upload-modal" data-bs-toggle="modal" type="button"><i class="ci-add-circle me-2"></i> Tambah Gambar</button>
-        </div>
-    </div>
+    {{$convertations->links('components.paginations.default')}}
+
 @endsection

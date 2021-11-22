@@ -29,4 +29,8 @@ class Subcategory extends Model
     {
         return $this->belongsTo(Status::class);
     }
+    public function items()
+    {
+        return $this->belongsToMany(Item::class,'subcategory_item','item_id','sub_id');
+    }
 }

@@ -9,11 +9,15 @@ class Setting extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'logo_id', 'title', 'description'
+        'name', 'logo_id', 'favicon_id', 'title', 'description'
     ];
-
+    
     public function logo()
     {
         return $this->hasOne(Image::class, 'id', 'logo_id');
+    }
+    public function favicon()
+    {
+        return $this->hasOne(Image::class, 'id', 'favicon_id');
     }
 }

@@ -7,42 +7,22 @@
               <div class="pt-3 px-4 pe-lg-0 ps-xl-5">
                 <!-- Product gallery-->
                 <div class="gallery">
-                  <a class="gallery-item rounded-3 mb-grid-gutter" href="{{url('assets/img/marketplace/single/01.jpg')}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;Simple iPhone X Mockups&lt;/h6&gt;">
-                    <img src="{{url('assets/img/marketplace/single/01.jpg')}}" alt="Gallery preview">
-                    <span class="gallery-item-caption">Simple iPhone X Mockups</span>
+                  <a class="gallery-item rounded-3 mb-grid-gutter" href="{{Storage::url($item->images()->first()->name)}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;{{Storage::url($item->images()->first()->caption)}}&lt;/h6&gt;">
+                    <img src="{{Storage::url($item->images()->first()->name)}}" alt="{{Storage::url($item->images()->first()->caption)}}">
+                    <span class="gallery-item-caption">{{Storage::url($item->images()->first()->caption)}}</span>
                   </a>
                   <div class="row">
-                    @foreach ($item->images() as $image)
+                    @foreach ($item->images as $image)
                     <div class="col-4">
-                        <a class="gallery-item rounded-3 mb-grid-gutter" href="{{url('assets/img/marketplace/single/02.jpg')}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;UI Psd iPhone X Monochrome&lt;/h6&gt;">
-                            <img src="{{url('assets/img/marketplace/single/02.jpg')}}" alt="Gallery preview">
-                            <span class="gallery-item-caption">UI Psd iPhone X Monochrome</span>
+                        <a class="gallery-item rounded-3 mb-grid-gutter" href="{{Storage::url($image->name)}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;{{$image->caption}}&lt;/h6&gt;">
+                            <img src="{{Storage::url($image->name)}}" alt="{{$image->caption}}">
+                            <span class="gallery-item-caption">{{$image->caption}}</span>
                         </a>
-                    </div>    
-                    
-                    <div class="col-4">
-                        <a class="gallery-item rounded-3 mb-grid-gutter" href="{{url('assets/img/marketplace/single/02.jpg')}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;UI Psd iPhone X Monochrome&lt;/h6&gt;">
-                            <img src="{{url('assets/img/marketplace/single/02.jpg')}}" alt="Gallery preview">
-                            <span class="gallery-item-caption">UI Psd iPhone X Monochrome</span>
-                        </a>
-                    </div>    
-                    
-                    <div class="col-4">
-                        <a class="gallery-item rounded-3 mb-grid-gutter" href="{{url('assets/img/marketplace/single/02.jpg')}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;UI Psd iPhone X Monochrome&lt;/h6&gt;">
-                            <img src="{{url('assets/img/marketplace/single/02.jpg')}}" alt="Gallery preview">
-                            <span class="gallery-item-caption">UI Psd iPhone X Monochrome</span>
-                        </a>
-                    </div>    
+                    </div>
                     @endforeach
                 </div>
                 </div>
                 <!-- Wishlist + Sharing-->
-                <div class="d-flex flex-wrap justify-content-between align-items-center border-top pt-3">
-                  <div class="py-2 me-2">
-                    <button class="btn btn-outline-accent" type="button"><i class="ci-heart fs-lg me-2"></i>Add to Favorites</button>
-                  </div>
-                  <div class="py-2"><i class="ci-share-alt fs-lg align-middle text-muted me-2"></i><a class="btn-social bs-outline bs-facebook bs-sm ms-2" href="#"><i class="ci-facebook"></i></a><a class="btn-social bs-outline bs-twitter bs-sm ms-2" href="#"><i class="ci-twitter"></i></a><a class="btn-social bs-outline bs-pinterest bs-sm ms-2" href="#"><i class="ci-pinterest"></i></a><a class="btn-social bs-outline bs-instagram bs-sm ms-2" href="#"><i class="ci-instagram"></i></a></div>
-                </div>
               </div>
             </section>
             <!-- Sidebar-->
@@ -58,8 +38,9 @@
                   <hr>
                   <button class="btn btn-primary btn-shadow d-block w-100 mt-4" type="button" data-id="{{$item->id}}" id="tambah_keranjang_belanja"><i class="ci-cart fs-lg me-2"></i>Tambahkan Ke Keranjang</button>
                   <a href="{{url('chat/'.$item->user->username)}}" class="btn btn-success btn-shadow d-block w-100 mt-4"><i class="ci-chat fs-lg me-2"></i>Hubungi Penjual</a>
-                  <div class="bg-secondary rounded p-3 mt-4 mb-2"><a class="d-flex align-items-center" href="{{url($item->user->username)}}"><img class="rounded-circle" src="{{url('assets/img/testimonials/01.jpg')}}" width="50" alt="{{$item->user->name}}">
-                      <div class="ps-2"><span class="fs-ms text-muted">Created by</span>
+                  <div class="bg-secondary rounded p-3 mt-4 mb-2"><a class="d-flex align-items-center" href="{{url($item->user->username)}}">
+                    <img class="rounded-circle" src="{{url('assets/img/testimonials/01.jpg')}}" width="50" alt="{{$item->user->name}}">
+                      <div class="ps-2"><span class="fs-ms text-muted">Penjual</span>
                         <h6 class="fs-sm mb-0">{{$item->user->name}}</h6>
                       </div></a></div>
                   <div class="bg-secondary rounded p-3 mb-2"><i class="ci-download h5 text-muted align-middle mb-0 mt-n1 me-2"></i><span class="d-inline-block h6 mb-0 me-1">715</span><span class="fs-sm">Terjual</span></div>

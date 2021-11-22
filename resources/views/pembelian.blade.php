@@ -14,47 +14,43 @@
             <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
                 <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
                   <!-- Title-->
-                  <div class="d-sm-flex flex-wrap justify-content-between align-items-center border-bottom">
+                  <div class="d-sm-flex mb-4 flex-wrap justify-content-between align-items-center border-bottom">
                     <h2 class="h3 py-2 me-2 text-center text-sm-start">Pembelian</h2>
-                    <div class="py-2">
-                      <div class="d-flex flex-nowrap align-items-center pb-3">
-                        <label class="form-label fw-normal text-nowrap mb-0 me-2" for="sorting">Sort by:</label>
-                        <select class="form-select form-select-sm me-2" id="sorting">
-                          <option>Date Purchased</option>
-                          <option>Product Name</option>
-                          <option>Price</option>
-                          <option>Your Rating</option>
-                          <option>Updates</option>
-                        </select>
-                        <button class="btn btn-outline-secondary btn-sm px-2" type="button"><i class="ci-arrow-up"></i></button>
-                      </div>
-                    </div>
                   </div>
                   <!-- Products list-->
                   <!-- Product-->
-                  @foreach(Auth::user()->items as $item)
-                  <div class="d-block d-sm-flex align-items-center py-4 border-bottom">
-                    <a class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" href="marketplace-single.html" style="width: 12.5rem;">
-                        <img class="rounded-3" src="{{Storage::url($item->images[0]->name)}}" alt="{{$item->images[0]->caption}}"></a>
-                        <div class="text-center text-sm-start">
-                        <h3 class="h6 product-title mb-2"><a href="marketplace-single.html">{{$item->name}}</a></h3>
-                        <div class="text-accent fs-sm mb-1">Standard license</div>
-                        <div class="form-check d-table text-start mx-auto mx-sm-0">
-                            <input class="form-check-input" type="checkbox" id="update-info-1" checked>
-                            <label class="form-check-label fs-ms" for="update-info-1">Notify me when this product is updated</label>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center justify-content-sm-start pt-2">
-                            <div class="my-2">
-                            <button class="btn btn-primary btn-sm me-3" type="button"><i class="ci-download me-1"></i>Download</button>
-                            </div><a class="d-block text-muted text-center my-2" href="#">
-                            <div class="star-rating"><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i>
-                            </div>
-                            <div class="fs-xs">Reate this product</div></a>
-                        </div>
-                        </div>
+                  <div class="table-responsive fs-md mb-4">
+                    <table class="table table-hover mb-0">
+                      <thead>
+                        <tr>
+                          <th>Order ID #</th>
+                          <th>Tanggal Pembelian</th>
+                          <th>Status</th>
+                          <th>Total</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @forelse($pembelian as $pembeli)
+                        <tr>
+                          <td class="py-3"><a class="nav-link-style fw-medium fs-sm" href="#order-details" data-bs-toggle="modal">{{$pembeli->id}}</a></td>
+                          <td class="py-3">{{$pembeli->created_at}}</td>
+                          <td class="py-3"></td>
+                          <td class="py-3">Rp{{number_format($pembeli->quantity*$pembeli->item->price,2,',','.')}}</td>
+                          <td class="py-3">
+                            @include('pembelian.action')
+                          </td>
+                        </tr>
+                        @empty
+                        <tr>
+                          <td colspan="5">Pembelian Masih Kosong</td>
+                        </tr>
+                        @endforelse
+                      </tbody>
+                    </table>
                   </div>
-                  @endforeach
                   <!-- Pagination-->
+                  {{$pembelian->links('components.paginations.default')}}
                 </div>
               </section>
           </div>

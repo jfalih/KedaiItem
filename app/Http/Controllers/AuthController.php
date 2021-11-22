@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use App\Rules\AlphaSpace;
-use App\Models\{User, Status};
+use App\Models\{User, Role, Status};
 use Validator;
 use Hash;
 use Auth;
@@ -44,6 +44,7 @@ class AuthController extends Controller
             'same' => ':attribute tidak sama dengan :same'
         ]);
         if($validated){
+            $role = Role::where('name', 'member')->first();
             $user = User::create([
                 'name' => $request->name,
                 'username' => $request->username,
@@ -52,6 +53,7 @@ class AuthController extends Controller
                 'status_id' => Status::first()->id,
                 'password' => Hash::make($request->password)
             ]);
+            $user->roles()->attach([$role->id]);
             event(new Registered($user));
             Auth::loginUsingId($user->id);
             return redirect()->route('pengaturan')->with('success','Berhasil mendaftar, silahkan verifikasi alamat email!');
