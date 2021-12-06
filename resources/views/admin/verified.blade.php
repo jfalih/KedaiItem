@@ -59,6 +59,8 @@
                                 <th>Nama</th>
                                 <th>Selfie</th>
                                 <th>Ktp</th>
+                                <th>Tabungan</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -182,6 +184,8 @@
                       {data: 'name', name: 'name'},
                       {data: 'selfie', name: 'selfie'},
                       {data: 'ktp', name: 'ktp'},
+                      {data: 'tabungan', name: 'tabungan'},
+                      {data: 'status', name: 'status'},
                       {data: 'action', name: 'action'},
                   ]
               });

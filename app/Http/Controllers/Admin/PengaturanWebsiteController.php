@@ -59,30 +59,59 @@ class PengaturanWebsiteController extends Controller
             'required' => ':attribute harus diisi.'
         ]);
         $setting = Setting::first();
-        $setting->name = $request->name;
-        $setting->title = $request->title;
-        $setting->description = $request->description;
-        if($request->file('logo')){
-            Image::destroy($setting->logo_id);
-            $path = Storage::putFile('public/website/', $request->file('logo'));
-            $logo = Image::create([
-                'caption' => 'logo website '.$request->name,
-                'name' => $path,
-                'status_id' => 1
+        if($setting){
+            $setting->name = $request->name;
+            $setting->title = $request->title;
+            $setting->description = $request->description;
+            if($request->file('logo')){
+                Image::destroy($setting->logo_id);
+                $path = Storage::putFile('public/website/', $request->file('logo'));
+                $logo = Image::create([
+                    'caption' => 'logo website '.$request->name,
+                    'name' => $path,
+                    'status_id' => 1
+                ]);
+                $setting->logo_id = $logo->id;
+            }
+            if($request->file('favicon')){
+                Image::destroy($setting->favicon_id);
+                $path = Storage::putFile('public/website/', $request->file('favicon'));
+                $fav = Image::create([
+                    'caption' => 'Favicon icon '.$request->name,
+                    'name' => $path,
+                    'status_id' => 1
+                ]);
+                $setting->favicon_id = $fav->id;
+            }
+            $setting->save();
+        } else {
+            $setting = Setting::create([
+                'name' => $request->name,
+                'title' => $request->title,
+                'description' => $request->description,
             ]);
-            $setting->logo_id = $logo->id;
+            if($request->file('logo')){
+                Image::destroy($setting->logo_id);
+                $path = Storage::putFile('public/website/', $request->file('logo'));
+                $logo = Image::create([
+                    'caption' => 'logo website '.$request->name,
+                    'name' => $path,
+                    'status_id' => 1
+                ]);
+                $setting->logo_id = $logo->id;
+            }
+            if($request->file('favicon')){
+                Image::destroy($setting->favicon_id);
+                $path = Storage::putFile('public/website/', $request->file('favicon'));
+                $fav = Image::create([
+                    'caption' => 'Favicon icon '.$request->name,
+                    'name' => $path,
+                    'status_id' => 1
+                ]);
+                $setting->favicon_id = $fav->id;
+            }
+            $setting->save();
         }
-        if($request->file('favicon')){
-            Image::destroy($setting->favicon_id);
-            $path = Storage::putFile('public/website/', $request->file('favicon'));
-            $fav = Image::create([
-                'caption' => 'Favicon icon '.$request->name,
-                'name' => $path,
-                'status_id' => 1
-            ]);
-            $setting->favicon_id = $fav->id;
-        }
-        $setting->save();
         return redirect()->back()->with('success', 'Berhasil mengubah pengaturan website!');
     }
 

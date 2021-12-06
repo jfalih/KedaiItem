@@ -32,7 +32,6 @@ class AuthController extends Controller
        $validated = $request->validate([
             'name' => ['required','max:255', new AlphaSpace],
             'nomorhp' => ['required','numeric','unique:users'],
-            'username' => ['required','min:4','max:20','unique:users','alpha_dash'],
             'email' => ['unique:users','required','email'],
             'password' => ['required','min:6','max:255'],
             'c_password' => ['required','same:password']
@@ -47,7 +46,6 @@ class AuthController extends Controller
             $role = Role::where('name', 'member')->first();
             $user = User::create([
                 'name' => $request->name,
-                'username' => $request->username,
                 'nomorhp' => $request->nomorhp,
                 'email' => $request->email,
                 'status_id' => Status::first()->id,

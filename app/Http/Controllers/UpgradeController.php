@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Image, User, Status};
+use App\Models\{Image, User, Status, Upgrade};
 use Auth;
 use Storage;
 
@@ -11,57 +11,69 @@ class UpgradeController extends Controller
 {
     public function index()
     {
-        return view('upgrade');
+        $upgrade = Upgrade::where('user_id', Auth::user()->id)->first();
+        return view('upgrade',[
+            'upgrade' => $upgrade
+        ]);
     }
-    public function tabungan(Request $request)
+    public function upgrade(Request $request)
     {
         $request->validate([
-            'image' => 'required|mimes:jpg,png,jpeg|max:3024',
+            'ktp' => 'required|mimes:jpg,png,jpeg|max:3024',
+            'tabungan' => 'required|mimes:jpg,png,jpeg|max:3024',
+            'selfie' => 'required|mimes:jpg,png,jpeg|max:3024',            
+            'nama_toko' => 'required',
+            'atas_nama' => 'required',
+            'nomor_rekening' => 'required',
         ],[
-            'image.required' => 'Gambar harus diupload.',
-            'image.mimes' => 'File harus berupa jpg, png, dan jpeg.',
-            'image.max' => 'Maximal ukuran file adalah 3MB.'
+            'required' => ':attribute harus diisi.',
+            'ktp.required' => 'Ktp harus diupload.',
+            'ktp.mimes' => 'File harus berupa jpg, png, dan jpeg.',
+            'ktp.max' => 'Maximal ukuran file adalah 3MB.',
+            'tabungan.required' => 'Tabungan harus diupload.',
+            'tabungan.mimes' => 'File harus berupa jpg, png, dan jpeg.',
+            'tabungan.max' => 'Maximal ukuran file adalah 3MB.',
+            'selfie.required' => 'Selfie harus diupload.',
+            'selfie.mimes' => 'File harus berupa jpg, png, dan jpeg.',
+            'selfie.max' => 'Maximal ukuran file adalah 3MB.'
         ]);
-        $path = Storage::putFile('public/verification', $request->file('image'));
-        $image = Image::create([
-            'name' => $path,
+        $check_up = Upgrade::where([
+            ['user_id', '=', Auth::user()->id],
+            ['status', '=', 'pending']
+        ])->first();
+        if($check_up){
+            return redirect()->back()->withErrors('Sudah dalam proses verifikasi..');
+        }
+        $req_tabungan = Storage::putFile('public/verification', $request->file('tabungan'));
+        $tabungan = Image::create([
+            'name' => $req_tabungan,
             'caption' => 'Verifikasi Buku Tabungan '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
-        $user = User::findOrFail(Auth::user()->id);
-        $user->tabungan_id = $image->id;
-        $user->save();
-        return redirect()->back()->with('success','Berhasil mengirim permintaan verifikasi!');
-    }
-    public function ktp(Request $request)
-    {
-        $request->validate([
-            'imagektp' => 'required|mimes:jpg,png,jpeg|max:3024',
-            'imageselfie' => 'required|mimes:jpg,png,jpeg|max:3024'
-        ],[
-            'imagektp.required' => 'Gambar harus diupload.',
-            'imagektp.mimes' => 'File harus berupa jpg, png, dan jpeg.',
-            'imagektp.max' => 'Maximal ukuran file adalah 3MB.',
-            'imageselfie.required' => 'Gambar harus diupload.',
-            'imageselfie.mimes' => 'File harus berupa jpg, png, dan jpeg.',
-            'imageselfie.max' => 'Maximal ukuran file adalah 3MB.'
-        ]);
-        $pathktp = Storage::putFile('public/verification', $request->file('imagektp'));
-        $pathselfie = Storage::putFile('public/verification', $request->file('imageselfie'));
-        $image_ktp = Image::create([
-            'name' => $pathktp,
+        $req_ktp = Storage::putFile('public/verification', $request->file('ktp'));
+        $ktp = Image::create([
+            'name' => $req_ktp,
             'caption' => 'Verifikasi Ktp '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
-        $image_selfie = Image::create([
-            'name' => $pathselfie,
+        $req_selfie = Storage::putFile('public/verification', $request->file('selfie'));
+        $selfie = Image::create([
+            'name' => $req_selfie,
             'caption' => 'Verifikasi Ktp + Selfie '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
         $user = User::findOrFail(Auth::user()->id);
-        $user->ktp_id = $image_ktp->id;
-        $user->selfie_id = $image_selfie->id;
+        Upgrade::create([
+            'user_id' => $user->id,
+            'status' => 'pending'
+        ]);
+        $user->tabungan_id = $tabungan->id;
+        $user->ktp_id = $ktp->id;
+        $user->selfie_id = $selfie->id;
+        $user->nomor_rekening = $request->nomor_rekening;
+        $user->atas_nama = $request->atas_nama;
+        $user->username = $request->nama_toko;
         $user->save();
-        return redirect()->back()->with('success','Berhasil mengirim permintaan verifikasi!');
+        return redirect()->back()->withSuccess('Berhasil meminta verifikasi..');
     }
 }

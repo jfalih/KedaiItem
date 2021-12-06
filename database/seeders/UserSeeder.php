@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'name' => Str::random(10),
             'username' => Str::random(8),
             'status_id' => Status::first()->id,  
+            'profile_id' => 1,
             'nomorhp' => rand(20000,200000),
             'email' => Str::random(10).'@gmail.com',
             'password' => Hash::make('password'),

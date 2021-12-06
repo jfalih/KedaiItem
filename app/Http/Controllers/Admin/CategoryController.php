@@ -51,7 +51,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required',
             'status' => 'required'
-        ], [
+        ],[
             'required' => ':attribute harus diisi.'
         ]);
         Category::create([

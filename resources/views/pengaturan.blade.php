@@ -23,17 +23,17 @@
         </div>
       </div>
       <div class="row">
-      @if(Auth::user()->email_verified_at == null)
-      <div class="@if(Auth::user()->nomorhp_verified_at != null) col-sm-12 @endif">
-        <div class="bg-danger rounded-3 p-4 mb-4">
-          <p class="fs-sm text-white mb-2">Alamat email kamu belum terverifikasi.</p>
-          <form method="POST" action="{{route('verification.send')}}">
-            @csrf
-            <button class="btn btn-light btn-shadow btn-sm" type="submit"><i class="ci-mail me-2"></i>Kirim verifikasi email</span></button>
-          </form>
-        </div>
-      </div>
-      @endif
+        @if(Auth::user()->email_verified_at == null)
+          <div class="@if(Auth::user()->nomorhp_verified_at != null) col-sm-12 @endif">
+            <div class="bg-danger rounded-3 p-4 mb-4">
+              <p class="fs-sm text-white mb-2">Alamat email kamu belum terverifikasi.</p>
+              <form method="POST" action="{{route('verification.send')}}">
+                @csrf
+                <button class="btn btn-light btn-shadow btn-sm" type="submit"><i class="ci-mail me-2"></i>Kirim verifikasi email</span></button>
+              </form>
+            </div>
+          </div>
+        @endif
       </div>
       <form method="POST" action="{{route('change_profile')}}" class="row gx-4 gy-3">
         @csrf

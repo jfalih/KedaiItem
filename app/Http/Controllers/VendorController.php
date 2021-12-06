@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User, Item};
+use App\Models\{Category, User, Item};
 class VendorController extends Controller
 {
     public function index(Request $request, $seller){
@@ -17,9 +17,15 @@ class VendorController extends Controller
             })->paginate(12);
             return view('components.sections.shops.items.default',['items' => $items]);
         }
+        $categories = Category::whereHas('subcategories', function($q) use($user){
+            $q->whereHas('items', function($j) use($user){
+                $j->where('user_id', $user->id);
+            });
+        })->get();
         return view('vendor', [
             'user' => $user,
-            'items' => $items
+            'items' => $items,
+            'categories' => $categories
         ]);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{
     Status,
     User,
+    Upgrade,
     Role
 };
 use Hash;
@@ -51,48 +52,71 @@ class UserController extends Controller
     }
     public function verified(Request $request){
         if($request->ajax()){
-            $user = User::where([
-                ['ktp_id', '!=', null],
-                ['selfie_id', '!=', null],
-                ['email_verified_at','!=', null],
-                ['ktp_selfie_verified_at','=', null],
-            ])->get();
-            return DataTables::of($user)
+            $upgrade = Upgrade::all();
+            return DataTables::of($upgrade)
+            ->addColumn('name', function (Upgrade $upgrade) {
+                return $upgrade->user->name;
+            })
+            ->addColumn('ktp', function (Upgrade $upgrade) {
+                return view('admin.verified.download', [
+                    'data' => $upgrade->user->ktp->name
+                ]);
+            })
+            ->addColumn('selfie', function (Upgrade $upgrade) {
+                return view('admin.verified.download', [
+                    'data' => $upgrade->user->selfie->name
+                ]);
+            })
+            ->addColumn('tabungan', function (Upgrade $upgrade) {
+                return view('admin.verified.download', [
+                    'data' => $upgrade->user->tabungan->name
+                ]);
+            })
+            ->addColumn('status', function (Upgrade $upgrade) {
+                return view('admin.verified.status', [
+                    'data' => $upgrade->status
+                ]);
+            })
+            ->addColumn('action', function (Upgrade $upgrade) {
+                if($upgrade->status == 'pending'){
+                    return view('admin.verified.action', [
+                        'data' => $upgrade->user
+                    ]);
+                } else {
+                    return null;
+                }
+            })
             ->addIndexColumn()
-            ->addColumn('selfie', function (User $user) {
-                return view('admin.verified.download', [
-                    'data' => $user->selfie->name
-                ]);
-            })
-            ->addColumn('ktp', function (User $user) {
-                return view('admin.verified.download', [
-                    'data' => $user->ktp->name
-                ]);
-            })
-            ->addColumn('action', function (User $user) {
-                return view('admin.verified.action', [
-                    'data' => $user
-                ]);
-            })
             ->make(true);
         }
-        $statuses = Status::all();
         return view('admin.verified');
     }
     public function verified_declined($user){
         $user = User::findOrFail($user);
-        $role = Role::where('name', 'reseller')->first();
         $user->selfie_id = null;
         $user->ktp_id = null;
+        $user->tabungan_id = null;
         $user->save();
+        
+        $upgrade = Upgrade::where('user_id', $user->id)->first();
+        $upgrade->status = 'failed';
+        $upgrade->save();
+        
         return redirect()->back()->with('success', 'Berhasil menolak verifikasi user!');
     }
     public function verified_add($user){
         $user = User::findOrFail($user);
         $role = Role::where('name', 'reseller')->first();
+        
         $user->roles()->attach([$role->id]);
         $user->ktp_selfie_verified_at = \Carbon\Carbon::now();
+        $user->tabungan_verified_at = \Carbon\Carbon::now();
         $user->save();
+
+        $upgrade = Upgrade::where('user_id', $user->id)->first();
+        $upgrade->status = 'success';
+        $upgrade->save();
+        
         return redirect()->back()->with('success', 'Berhasil memverifikasi user!');
     }
     /**

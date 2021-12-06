@@ -32,24 +32,24 @@ class DashboardController extends Controller
             'image.mimes' => 'File harus berupa jpg, png, dan jpeg.',
             'image.max' => 'Maximal ukuran file adalah 3MB.'
         ]);
-        $path = Storage::putFile('public/images', $request->file('image'));
-        $image = Image::create([
-            'name' => $path,
-            'caption' => $request->caption,
-            'status_id' => Status::first()->id
-        ]);
         Auth::user()->images()->attach($image->id);
         return redirect()->back()->with('success', 'Berhasil menambahkan gambar!');
     }
     public function change_avatar(Request $request)
     {
         $request->validate([
-            'imagepicker' => 'required'
+            'profile' => 'required|mimes:jpg,png,jpeg|max:2024'
         ],[
-            'imagepicker.required' => 'Silahkan pilih gambar terlebih dahulu.'
+            'profile.required' => 'Silahkan upload gambar terlebih dahulu.'
         ]);
         $user = User::findOrFail(Auth::user()->id);
-        $user->profile_id = $request->imagepicker;
+        $path = Storage::putFile('public/images', $request->file('profile'));
+        $image = Image::create([
+            'name' => $path,
+            'caption' => $request->caption,
+            'status_id' => Status::first()->id
+        ]);
+        $user->profile_id = $image->id;
         $user->save();
         return redirect()->back()->withSuccess('Berhasil mengganti foto profil!');
     }
@@ -109,14 +109,5 @@ class DashboardController extends Controller
     public function pengaturan()
     {
         return view('pengaturan');
-    }
-    public function galeri()
-    {
-        $images = Image::whereHas('users', function($q){
-            $q->where('user_id', Auth::user()->id);
-        })->get();
-        return view('galeri', [
-            'images' => $images
-        ]);
     }
 }

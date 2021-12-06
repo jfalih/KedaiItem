@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\{
     Category,
     Status,
-    Image,
+    Purchase,
     Item
 };
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,12 @@ class ResellerController extends Controller
 {
     public function penjualan()
     {
-        return view('reseller.penjualan');
+        $penjualans = Purchase::where('status','!=','pending')->whereHas('item', function($q){
+          $q->where('user_id', Auth::user()->id);
+        })->paginate();
+        return view('reseller.penjualan',[
+            'penjualans' => $penjualans
+        ]);
     }
     public function new_product()
     {
@@ -39,6 +44,9 @@ class ResellerController extends Controller
             'category' => 'required',
             'subcategory' => 'required',
             'title' => 'required',
+            'price' => 'required',
+            'stok' => 'required|min:1',
+            'min' => 'required|min:1',
             'description' => 'required',
             'files' => 'required',
             'files.*' => 'required|mimes:jpg,jpeg,png'
@@ -55,6 +63,8 @@ class ResellerController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'slug' => $slug,
+            'min' => $request->min,
+            'stok' => $request->stok,
             'user_id' => Auth::user()->id,
             'status_id' => Status::first()->id
         ]);
@@ -76,9 +86,14 @@ class ResellerController extends Controller
         $request->validate([
             'category' => 'required',
             'subcategory' => 'required',
+            'price' => 'required',
+            'stok' => 'required',
+            'min' => 'required',
             'title' => 'required',
             'description' => 'required',
             'files.*' => 'mimes:jpg,jpeg,png'
+        ],[
+            'required' => ':attribute harus diisi.'
         ]);
         $check_slug = Item::where('slug', Str::slug($request->title))->count();
         if ($check_slug > 0) {
@@ -90,6 +105,8 @@ class ResellerController extends Controller
         $item = Item::where('user_id', Auth::user()->id)->find($id);
         $item->update([
             'name' => $request->title,
+            'stok' => $request->stok,
+            'min' => $request->min,
             'description' => $request->description,
             'price' => $request->price,
             'slug' => $slug,
@@ -109,10 +126,20 @@ class ResellerController extends Controller
         }
         return redirect()->back()->with('success', 'Berhasil menambahkan produk!');
     }
-    public function product()
+    public function product(Request $request)
     {
-        $items = Item::where('user_id', Auth::user()->id)->paginate(5);
-        return view('reseller.product', ['items' => $items]);
+        $categories = Category::where('status_id', 1)->get();
+        $items = Item::where('user_id', Auth::user()->id)->when($request->nama_barang !== null, function($q) use($request){
+            $q->where('name', 'like',"%{$request->nama_barang}%");
+        })->when($request->stok !== null, function($q) use($request){
+            $q->where('stok', $request->stok);
+        })->when($request->min !== null, function($q) use($request){
+            $q->where('min', $request->min);    
+        })->paginate(5);
+        return view('reseller.product', [
+            'items' => $items,
+            'categories' => $categories
+        ]);
     }
     public function edit($item)
     {

@@ -15,10 +15,12 @@ class WelcomeController extends Controller
     {
         $items = Item::inRandomOrder()->limit(5)->get();
         $features = Feature::limit(4)->get();
+        $new_item = Item::orderBy('created_at', 'ASC')->limit(8)->get();
         $recomended_categories = Category::limit(4)->get();       
-        $setting = Setting::first();  
+        $setting = Setting::first();
         return view('welcome', [
             'items' => $items,
+            'newitem' => $new_item,
             'setting' => $setting,
             'features' => $features,
             'recomended_categories' => $recomended_categories

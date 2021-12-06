@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Item;
+use App\Models\{
+    Item,
+    Purchase
+};
 use Cart;
+use Auth;
 
 class CartController extends Controller
 {
@@ -59,6 +63,22 @@ class CartController extends Controller
             'total' => Cart::getTotal()
         ]);
     }
+    public function checkout(Request $request)
+    {
+        if(Auth::check()){
+            foreach(Cart::getContent() as $cart){
+                Purchase::create([
+                    'item_id' => $cart->id,
+                    'user_id' => Auth::user()->id,
+                    'quantity' => $cart->quantity,
+                    'status' => 'pending'
+                ]);
+            }
+            return redirect()->route('payment');
+        } else {
+            return redirect()->route('login');
+        }
+    }
     public function destroy(Request $request)
     {
         Cart::remove($request->id);
@@ -66,6 +86,21 @@ class CartController extends Controller
     }
     public function index()
     {
-        return view('cart');
+        
+        $apiKey = 'LqR9FsmjGCqj6ahtQyyI666Rtiie1bEiur8xwThv';
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_FRESH_CONNECT  => true,
+        CURLOPT_URL            => 'https://tripay.co.id/api/merchant/payment-channel',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HEADER         => false,
+        CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+        CURLOPT_FAILONERROR    => false
+        ));
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+        $res = json_decode($response, true);
+        return view('cart', ['data_pembayaran' => $res['data']]);
     }
 }

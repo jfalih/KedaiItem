@@ -18,6 +18,8 @@ class ItemSeeder extends Seeder
         $name = Str::random(10);
         $item = Item::create([
             'name' => $name,
+            'stok'=>1,
+            'min'=>1,
             'slug'=> Str::slug($name,'-'),
             'description' => Str::random(10), 
             'price' => rand(2000,2000000),

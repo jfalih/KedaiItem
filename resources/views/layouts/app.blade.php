@@ -6,7 +6,6 @@
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8">
-    <title>@if(App\Models\Setting::first()->name) {{App\Models\Setting::first()->name}} @else Demo @endif | @if(App\Models\Setting::first()->description) {{App\Models\Setting::first()->description}} @else Demo @endif</title>
     <!-- SEO Meta Tags-->
     <meta name="description" content="@yield('description')">
     <meta name="author" content="@yield('author')">
@@ -15,8 +14,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Favicon and Touch Icons-->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    @if(App\Models\Setting::first())
+    <title>{{App\Models\Setting::first()->name}}</title>    
+      @if(App\Models\Setting::first()->favicon)
+      <link rel="icon" type="image/png" href={{App\Models\Setting::first()->favicon}}>
+      @else
+      <link rel="icon" type="image/png" href="{{url('assets/favicon-32x32.png')}}">
+      @endif
+    @else
+      <title>{{'Demo | Demo'}}</title>        
+    @endif
     <link rel="manifest" href="site.webmanifest">
     <link rel="mask-icon" color="#fe6a6a" href="safari-pinned-tab.svg">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -50,7 +57,6 @@
     @endauth
     @yield('main')
     <!-- Footer-->
-    @include('components.footers.default')
     <!-- Toolbar for handheld devices (Marketplace)-->
     <div class="handheld-toolbar">
         <div class="d-table table-layout-fixed w-100">

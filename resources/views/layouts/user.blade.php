@@ -11,7 +11,7 @@
           <div class="row">
             @include('components.profiles.aside')
             <!-- Content-->
-            <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
+            <section class="col-lg-9 pt-lg-4 pb-4 mb-3">
               <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
                 @if(session('success'))
                     @include('components.alerts.success',['message' => session('success')])

@@ -7,12 +7,8 @@
         </div>
       </div>
       <div class="d-flex">
-        <div class="text-sm-end me-5">
-          <div class="text-light fs-base">Status</div>
-          <p class="text-light">{{implode(",",Auth::user()->role_name)}}</p>
-        </div>
         <div class="text-sm-end">
-          <div class="text-light fs-base">Sisa saldo</div>
+          <div class="text-light fs-base">Uangku</div>
           <p class="text-light">{{'Rp'.number_format(Auth::user()->balance,2,',','.')}}</p>
         </div>
       </div>

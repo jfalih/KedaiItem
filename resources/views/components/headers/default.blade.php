@@ -1,7 +1,16 @@
 <header class="bg-light shadow-sm navbar-sticky">
     <div class="navbar navbar-expand-lg navbar-light">
       <div class="container"><a class="navbar-brand d-none d-sm-block flex-shrink-0 me-4 order-lg-1" href="{{url('/')}}">
-        <img src="{{url('assets/img/logo-dark.png')}}" width="142" alt="{{config('app.name')}}"></a><a class="navbar-brand d-sm-none me-2 order-lg-1" href="index.html"><img src="{{url('assets/img/logo-icon.png')}}" width="74" alt="{{config('app.name')}}"></a>
+        @if(\App\Models\Setting::first())
+          @if(\App\Models\Setting::first()->logo)
+          <img src="{{Storage::url(\App\Models\Setting::first()->logo->name)}}" width="54" alt="{{\App\Models\Setting::first()->name}}"></a>
+          <a class="navbar-brand d-sm-none me-2 order-lg-1" href="{{route('welcome')}}">
+            <img src="{{Storage::url(\App\Models\Setting::first()->logo->name)}}" width="74" alt="{{\App\Models\Setting::first()->name}}"></a>
+          @endif
+        @else
+        <img src="{{url('assets/img/logo-dark.png')}}" width="142" alt="{{config('app.name')}}"></a>
+        <a class="navbar-brand d-sm-none me-2 order-lg-1" href="{{route('welcome')}}"><img src="{{url('assets/img/logo-dark.png')}}" width="74" alt="{{config('app.name')}}"></a>
+        @endif
         <!-- Toolbar-->
         <div class="navbar-toolbar d-flex align-items-center order-lg-3">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -25,12 +34,8 @@
                 <a class="dropdown-item d-flex align-items-center" href="{{route('pembelian')}}">
                   <i class="ci-basket opacity-60 me-2"></i>Pembelian
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="{{route('galeri')}}">
-                  <i class="ci-image opacity-60 me-2"></i>Galeri
-                </a>
                 <a class="dropdown-item d-flex align-items-center" href="{{route('chat')}}">
                   <i class="ci-chat opacity-60 me-2"></i>Chat
-                  <span class="fs-xs text-muted ms-auto">4</span>
                 </a>
                 @if(in_array('reseller',Auth::user()->role_name))
                   <div class="dropdown-divider"></div>
@@ -43,7 +48,7 @@
                   </a>
                   <a class="dropdown-item d-flex align-items-center" href="{{route('reseller.product.add')}}">
                     <i class="ci-cloud-upload opacity-60 me-2"></i>Add New Product</a>
-                    <a class="dropdown-item d-flex align-items-center" href="dashboard-payouts.html">
+                    <a class="dropdown-item d-flex align-items-center" href="{{route('reseller.payout')}}">
                       <i class="ci-currency-exchange opacity-60 me-2"></i>Payouts</a>
                 @endif
                   <div class="dropdown-divider"></div>

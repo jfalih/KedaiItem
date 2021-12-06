@@ -15,11 +15,10 @@ class ImageSeeder extends Seeder
      */
     public function run()
     {
-        $image = Image::create([
-            'name' => '/img/marketplace/single/01.jpg',
+        Image::create([
+            'name' => '/storage/website/illustration/sad.png',
             'caption' => Str::random(10), 
             'status_id' => Status::first()->id
         ]);
-        $image->users()->attach([1]);
     }
 }

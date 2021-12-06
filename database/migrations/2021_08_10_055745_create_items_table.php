@@ -21,6 +21,8 @@ class CreateItemsTable extends Migration
             $table->integer('sold')->unsigned()->default(0);
             $table->integer('views')->unsigned()->default(0);
             $table->integer('price')->unsigned()->default(0);
+            $table->integer('stok')->unsigned()->default(0);
+            $table->integer('min')->unsigned()->default(1);
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('status_id');

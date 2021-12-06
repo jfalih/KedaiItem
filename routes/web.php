@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     CartController,
     VerificationController,
     ResellerController,
-    SearchController
+    SearchController,
+    PayoutController
 };
 use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
@@ -44,7 +45,7 @@ use App\Http\Controllers\Admin\{
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::post('/search', [WelcomeController::class,'search'])->name('welcome.search');
 Route::get('/search/{keyword}', [SearchController::class,'index'])->name('search');
-Route::get('/penjual/{seller}/item/{product}',[ProductController::class,'index']);
+Route::get('/penjual/{seller}/item/{product}',[ProductController::class,'index'])->name('item.detail');
 Route::get('/penjual/{seller}', [VendorController::class,'index'])->name('vendor');
 
 //Auth
@@ -72,8 +73,7 @@ Route::middleware('auth')->group(function(){
     
     Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
     Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
-    Route::post('/upgrade/tabungan', [UpgradeController::class,'tabungan'])->name('tabungan.verif');
-    Route::post('/upgrade/ktp', [UpgradeController::class,'ktp'])->name('ktp.verif');
+    Route::post('/upgrade/add', [UpgradeController::class,'upgrade'])->name('upgrade.add');
     Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
     Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
     Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
@@ -88,8 +88,11 @@ Route::middleware('auth')->group(function(){
 
     //Reseller
     Route::middleware('reseller')->name('reseller.')->group(function () {
-        Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan'); 
+        Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
+        Route::get('/payout', [PayoutController::class, 'index'])->name('payout'); 
+        Route::post('/payout', [PayoutController::class, 'create'])->name('payout'); 
         Route::get('/product', [ResellerController::class, 'product'])->name('product');
+        Route::post('/product', [ResellerController::class,'product'])->name('product');
         Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
         Route::delete('/product/{item}/delete', [ResellerController::class, 'destroy'])->name('product.delete');
         Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
@@ -97,7 +100,7 @@ Route::middleware('auth')->group(function(){
         Route::put('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
     });
     Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('kategori', AdminCategoryController::class);
         Route::resource('subcategory', AdminSubcategoryController::class);
@@ -115,6 +118,7 @@ Route::middleware('auth')->group(function(){
 });
 //User
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
 Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');

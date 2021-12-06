@@ -12,26 +12,16 @@
           <form method="POST" action="{{route('register')}}" class="needs-validation" novalidate>
             @csrf
             <div class="row gx-4 gy-3">
-            <div class="col-sm-12">
-                <label class="form-label" for="reg-name">Nama Lengkap</label>
-                <div class="input-group">
-                    <i class="ci-user position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-                    <input class="form-control @error('name') is-invalid @enderror rounded-start" name="name" id="reg-name" type="text" placeholder="Nama Lengkap" required="">
-                </div>
-                @error('name')
-                <div class="form-text text-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div class="col-sm-12">
-              <label class="form-label" for="reg-fn">Username</label>
-              <div class="input-group">
-                  <i class="ci-globe position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-                  <input class="form-control rounded-start" name="username" id="reg-fn" type="text" placeholder="Username" required="">
+              <div class="col-sm-12">
+                  <label class="form-label" for="reg-name">Nama Lengkap</label>
+                  <div class="input-group">
+                      <i class="ci-user position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
+                      <input class="form-control @error('name') is-invalid @enderror rounded-start" name="name" id="reg-name" type="text" placeholder="Nama Lengkap" required="">
+                  </div>
+                  @error('name')
+                  <div class="form-text text-danger">{{$message}}</div>
+                  @enderror
               </div>
-              @error('username')
-              <div class="form-text text-danger">{{$message}}</div>
-              @enderror
-            </div>
               <div class="col-sm-12">
                 <label class="form-label" for="reg-fn">Alamat email</label>
                 <div class="input-group">
@@ -52,7 +42,6 @@
                 <div class="form-text text-danger">{{$message}}</div>
                 @enderror
               </div>
-              
               <div class="col-sm-12">
                 <label class="form-label" for="reg-pw">Password</label>
                 <div class="input-group">

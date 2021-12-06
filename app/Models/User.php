@@ -21,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'nomorhp',
         'status_id',
+        'profile_id',
         'password',
     ];
 
@@ -126,6 +127,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function ktp()
     {
         return $this->belongsTo(Image::class,'ktp_id', 'id');
+    }
+    public function tabungan()
+    {
+        return $this->belongsTo(Image::class,'tabungan_id', 'id');
+    }
+    /**
+     * Get the user associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function upgrade()
+    {
+        return $this->hasOne(Upgrade::class, 'user_id', 'id');
     }
     public function selfie()
     {

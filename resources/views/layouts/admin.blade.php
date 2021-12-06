@@ -36,21 +36,9 @@
                 <!-- LOGO -->
                 <div class="navbar-brand-box">
                     <a href="index.html" class="logo logo-dark">
-                        <span class="logo-sm">
-                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="22">
-                        </span>
-                        <span class="logo-lg">
-                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="20">
-                        </span>
                     </a>
 
                     <a href="index.html" class="logo logo-light">
-                        <span class="logo-sm">
-                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="22">
-                        </span>
-                        <span class="logo-lg">
-                            <img src="@if(App\Models\Setting::first()->logo){{Storage::url(App\Models\Setting::first()->logo->name)}}@else nothing.jpg @endif" alt="" height="20">
-                        </span>
                     </a>
                 </div>
 
