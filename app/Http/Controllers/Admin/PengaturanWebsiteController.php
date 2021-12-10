@@ -54,6 +54,8 @@ class PengaturanWebsiteController extends Controller
             'name' => 'required',
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'required',
+            'harga' => 'required',
+            'maintenance' => 'required',
             'title' => 'required'
         ], [
             'required' => ':attribute harus diisi.'
@@ -62,6 +64,8 @@ class PengaturanWebsiteController extends Controller
         if($setting){
             $setting->name = $request->name;
             $setting->title = $request->title;
+            $setting->harga = $request->harga;
+            $setting->maintenance = $request->maintenance;
             $setting->description = $request->description;
             if($request->file('logo')){
                 Image::destroy($setting->logo_id);
@@ -89,6 +93,8 @@ class PengaturanWebsiteController extends Controller
                 'name' => $request->name,
                 'title' => $request->title,
                 'description' => $request->description,
+                'maintenance' => $request->maintenance,
+                'harga' => $request->harga
             ]);
             if($request->file('logo')){
                 Image::destroy($setting->logo_id);

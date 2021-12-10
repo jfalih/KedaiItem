@@ -20,6 +20,8 @@ class CreateSettingsTable extends Migration
             $table->foreignId('favicon_id')->nullable();
             $table->foreign('favicon_id')->references('id')->on('images');
             $table->string('name');
+            $table->integer('harga');
+            $table->enum('maintenance', [0,1]);
             $table->string('title');
             $table->text('description');
             $table->timestamps();

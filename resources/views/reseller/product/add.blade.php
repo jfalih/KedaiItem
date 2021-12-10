@@ -102,7 +102,9 @@
         <div class="input-group"><span class="input-group-text">Rp</span>
           <input class="form-control" name="price" type="text" placeholder="0" id="unp-standard-price">
         </div>
-        <div class="form-text">Harga per 1 Produk.</div>
+        @if(App\Models\Setting::first())
+          <div class="form-text">Harga per 1 Produk. {{App\Models\Setting::first()->harga}}</div>
+        @endif
       </div>
     </div>
     <div class="row">

@@ -27,7 +27,11 @@
             @endphp
             Rp{{number_format($jumlah,2,',','.')}}
           </p>
+          @if(\App\Models\Payout::latest('created_at')->first())
           <p class="fs-ms text-muted mb-0">Penarikan Terakhir {{\App\Models\Payout::latest('created_at')->first()->created_at}}</p>
+          @else
+          <p class="fs-ms text-muted mb-0">Penarikan Terakhir (Belum ada penarikan)</p>
+          @endif
         </div>
       </div>
       <div class="col-md-4 col-sm-6 px-2 mb-4">

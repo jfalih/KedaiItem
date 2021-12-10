@@ -136,6 +136,22 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Harga</label>
+                            <div class="col-md-10">
+                                <input class="form-control @error('harga') is-invalid @enderror" value="{{$setting->harga}}"  placeholder="Harga" name="harga">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <!-- Checked switch -->
+                            <label for="example-text-input" class="col-md-2 col-form-label">Maintenance</label>
+                            <div class="col-md-10">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="maintenance" value="1" class="@error('maintenance') is-invalid @enderror form-check-input" id="customSwitch2" @if($setting->maintenance == 1) checked @endif>
+                                    <label class="form-check-label" for="customSwitch2">Website dibuat menjadi maintenance?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
                             <label for="example-text-input" class="col-md-2 col-form-label">Slogan / Deskripsi</label>
                             <div class="col-md-10">
                                 <textarea class="form-control @error('description') is-invalid @enderror" name="description" value={{$setting->description}} placeholder="Slogan / Deskripsi">{{$setting->description}}</textarea>
@@ -180,6 +196,22 @@
                             <label for="example-text-input" class="col-md-2 col-form-label">Judul</label>
                             <div class="col-md-10">
                                 <input class="form-control @error('title') is-invalid @enderror" placeholder="Judul" name="title">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Harga</label>
+                            <div class="col-md-10">
+                                <input class="form-control @error('harga') is-invalid @enderror"  placeholder="Harga" name="harga">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <!-- Checked switch -->
+                            <label for="example-text-input" class="col-md-2 col-form-label">Maintenance</label>
+                            <div class="col-md-10">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="maintenance" value="1" class="@error('maintenance') is-invalid @enderror form-check-input" id="customSwitch2">
+                                    <label class="form-check-label" for="customSwitch2">Website dibuat menjadi maintenance?</label>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3 row">
