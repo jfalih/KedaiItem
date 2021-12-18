@@ -147,7 +147,7 @@
                     success:function(data) {
                         $('select[name="subcategory"]').empty();
                         $.each(data, function(key, value) {
-                            $('select[name="subcategory"]').append('<option value="'+ key +'">'+ value.name +'</option>');
+                            $('select[name="subcategory"]').append('<option value="'+ value.id +'">'+ value.name +'</option>');
                         });
                     }
                 });

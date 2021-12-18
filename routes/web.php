@@ -118,6 +118,7 @@ Route::middleware('auth')->group(function(){
 });
 //User
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
 Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
 Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');

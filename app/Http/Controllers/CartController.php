@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{
     Item,
+    Payment,
     Purchase
 };
 use Cart;
@@ -66,6 +67,12 @@ class CartController extends Controller
     public function checkout(Request $request)
     {
         if(Auth::check()){
+            $request->validate([
+                'method' => 'required',
+                'option' => 'required|in:not,premium',
+            ],[
+                'required' => ':attribute harus diisi.'
+            ]);
             foreach(Cart::getContent() as $cart){
                 Purchase::create([
                     'item_id' => $cart->id,
@@ -74,7 +81,63 @@ class CartController extends Controller
                     'status' => 'pending'
                 ]);
             }
-            return redirect()->route('payment');
+            $payments = Payment::create([
+                'method' => $request->method,
+                'options' => $request->option,
+                'total' => Cart::getTotal()
+            ]);
+            if($payments) {
+                $apiKey       = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
+                $privateKey   = 'UPtWn-1d1l2-CO0Kk-36QbX-xXbGl';
+                $merchantCode = 'T5005';
+                $merchantRef  = 'KIP-'.$payments->id;
+                $amount       = Cart::getTotal();
+                $arr_barang = [];
+                foreach(Cart::getContent() as $item){
+                    $arr_barang[] = [
+                        'sku' => 'ITEM-'.$item->id,
+                        'name' => $item->name,
+                        'price' => $item->getPriceSum(),
+                        'quantity' => $cart->quantity
+                    ];
+                }
+                $data = [
+                    'method'         => $request->method,
+                    'merchant_ref'   => $merchantRef,
+                    'amount'         => $amount,
+                    'customer_name'  => Auth::user()->name,
+                    'customer_email' => Auth::user()->email,
+                    'customer_phone' => $request->phone,
+                    'order_items'    => $arr_barang,
+                    'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey)
+                ];
+                $curl = curl_init();
+                curl_setopt_array($curl, [
+                    CURLOPT_FRESH_CONNECT  => true,
+                    CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/create',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HEADER         => false,
+                    CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                    CURLOPT_FAILONERROR    => false,
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => http_build_query($data)
+                ]);
+                $response = curl_exec($curl);
+                $error = curl_error($curl);
+                curl_close($curl);
+                if(empty($error)) {
+                    $res = json_decode($response);
+                    if($res->success){
+                        return redirect()->route('payment',[
+                            'id' => $payments->id
+                        ]);
+                    } else {
+                        return redirect()->back()->with('error', 'Gagal request pembayaran!');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'Gagal request pembayaran!');
+                }
+            }
         } else {
             return redirect()->route('login');
         }
@@ -84,9 +147,11 @@ class CartController extends Controller
         Cart::remove($request->id);
         return redirect()->back()->with('success','Berhasil menghapus keranjang belanja!');
     }
+    public function payment($id, Request $request){
+        return $id;
+    }
     public function index()
     {
-        
         $apiKey = 'LqR9FsmjGCqj6ahtQyyI666Rtiie1bEiur8xwThv';
         $curl = curl_init();
         curl_setopt_array($curl, array(

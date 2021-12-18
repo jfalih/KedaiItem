@@ -20,6 +20,8 @@
         </div>
     </div>
     <div class="container pb-5 mb-2 mb-md-4">
+        <form method="POST" action="{{ route('checkout') }}">
+            @csrf
         <div class="row">
             <!-- List of items-->
             <section class="col-lg-8">
@@ -44,6 +46,16 @@
                 </div>
                 <!-- Shipping methods table-->
                 <h2 class="h6 pb-3 mb-2">Pilih metode pembayaran</h2>
+                @if(count($errors) > 0)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul style="margin-bottom: 0px">
+                        @foreach($errors->all() as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="table-responsive">
                     <table class="table table-hover fs-sm border-top">
                         <thead>
@@ -59,7 +71,7 @@
                             <tr>
                                 <td>
                                 <div class="form-check mb-4">
-                                    <input class="form-check-input" type="radio" name="method">
+                                    <input class="form-check-input" type="radio" value={{$pembayaran['code']}} name="method">
                                     <label class="form-check-label" for="courier"></label>
                                 </div>
                                 </td>
@@ -139,7 +151,15 @@
                   <div class="py-2 px-xl-2">
                     <div class="widget mb-3">
                       <h2 class="widget-title text-center">Keranjang Belanja</h2>
-                      
+                        <div class="mb-3">
+                            <select name="option" class="form-select" required>
+                                <option>Pilih Status Pembelian</option>
+                                <option value="premium">Premium</option>
+                                <option value="not">Normal</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                        </div>
                         @forelse (Cart::getContent() as $item)  
                         <div class="d-flex align-items-center pb-2 border-bottom">
                             <a class="d-block flex-shrink-0" href="shop-single-v1.html">
@@ -155,6 +175,9 @@
                         @endforelse
                     </div>
                     <h3 class="fw-normal text-center my-4">Rp{{number_format(Cart::getTotal(),2,',','.')}}</h3>
+                    <button type="submit" class="btn btn-primary btn-shadow d-block w-100 mt-4">
+                        <i class="ci-card fs-lg me-2"></i> Lanjutkan Pembayaran
+                    </button>
                   </div>
                 </div>
               </aside>
@@ -206,6 +229,7 @@
                 </div>
             </aside> --}}
         </div>
+    </form>
     </div>
 </main>
   
