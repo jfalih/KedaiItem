@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->string('method');
             $table->integer('total');
+            $table->enum('options',['not','premium']);
             $table->timestamps();
         });
     }

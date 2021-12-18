@@ -58,13 +58,6 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="username">Username</label>
-                                            <input type="text" name="username" placeholder="Username" class="form-control @error('username') is-invalid @enderror" id="username">
-                                            @error('username')
-                                            <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
                                             <label class="form-label" for="nomorhp">Nomorhp</label>
                                             <input type="number" name="nomorhp" placeholder="Nomor Handphone" class="form-control @error('nomorhp') is-invalid @enderror" id="nomorhp">
                                             @error('nomorhp')

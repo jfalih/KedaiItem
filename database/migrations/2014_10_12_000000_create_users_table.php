@@ -17,9 +17,10 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('atas_nama')->nullable();
-            $table->integer('nomor_rekening')->nullable();
+            $table->bigInteger('nomor_rekening')->nullable();
             $table->string('username')->unique()->nullable();
             $table->integer('balance')->unsigned()->default(0);
+            $table->integer('point')->unsigned()->default(0);
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamp('last_seen')->nullable();

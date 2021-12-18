@@ -33,7 +33,7 @@
             <div id="list-img" class="row">
                 @foreach ($item->images as $img)
                     <!-- Item -->
-                    <div class="col-xl-4 col-sm-12">
+                    <div class="col-xl-6 col-sm-12">
                         <a href="{{url(Storage::url($img->name))}}" class="gallery-item" data-sub-html='<h6 class="fs-sm text-light">{{$img->caption}}</h6>'>
                         <img src="{{url(Storage::url($img->name))}}" alt="{{$img->caption}}">
                         <span class="gallery-item-caption">{{$img->caption}}</span>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div id="list-upload" style="display:none" class="row">
-                <div class="col-xl-4 col-sm-12">
+                <div class="col-xl-6 col-sm-12">
                     <div class="file-drop-area mb-3">
                         <div class="file-drop-icon ci-cloud-upload"></div><span class="file-drop-message">Drag and drop here to upload product screenshot</span>
                         <input class="file-drop-input" name="files[]" type="file">
@@ -53,7 +53,7 @@
                         <div class="form-text">1000 x 800px ideal size for hi-res displays</div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-sm-12">
+                <div class="col-xl-6 col-sm-12">
                     <div class="file-drop-area mb-3">
                         <div class="file-drop-icon ci-cloud-upload"></div><span class="file-drop-message">Drag and drop here to upload product screenshot</span>
                         <input class="file-drop-input" name="files[]" type="file">
@@ -61,7 +61,15 @@
                         <div class="form-text">1000 x 800px ideal size for hi-res displays</div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-sm-12">
+                <div class="col-xl-6 col-sm-12">
+                    <div class="file-drop-area mb-3">
+                        <div class="file-drop-icon ci-cloud-upload"></div><span class="file-drop-message">Drag and drop here to upload product screenshot</span>
+                        <input class="file-drop-input" name="files[]" type="file">
+                        <button class="file-drop-btn btn btn-primary btn-sm mb-2" type="button">Or select file</button>
+                        <div class="form-text">1000 x 800px ideal size for hi-res displays</div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-sm-12">
                     <div class="file-drop-area mb-3">
                         <div class="file-drop-icon ci-cloud-upload"></div><span class="file-drop-message">Drag and drop here to upload product screenshot</span>
                         <input class="file-drop-input" name="files[]" type="file">
@@ -88,6 +96,24 @@
         </div>
         <div class="form-text">Average marketplace price for this category is $15.</div>
       </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mb-3">
+          <label class="form-label" for="unp-standard-price">Stok</label>
+          <div class="input-group">
+            <input class="form-control" name="stok" type="text" value="{{$item->stok}}" placeholder="0" id="unp-standard-price">
+            <span class="input-group-text">Produk</span>
+          </div>
+          <div class="form-text">Stok produk yang kamu jual.</div>
+        </div>    
+        <div class="col-sm-6 mb-3">
+            <label class="form-label" for="unp-standard-price">Minimal Pembelian</label>
+            <div class="input-group">
+            <input class="form-control" name="min" type="text" value="{{$item->min}}" placeholder="0" id="unp-standard-price">
+            <span class="input-group-text">Produk</span>
+            </div>
+            <div class="form-text">Minimal pembelian produk yang kamu jual.</div>
+        </div>
     </div>
     <button class="btn btn-primary d-block w-100" type="submit"><i class="ci-cloud-upload fs-lg me-2"></i>Ubah Produk</button>
   </form>

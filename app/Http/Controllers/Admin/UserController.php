@@ -95,6 +95,7 @@ class UserController extends Controller
         $user = User::findOrFail($user);
         $user->selfie_id = null;
         $user->ktp_id = null;
+        $user->username = null;
         $user->tabungan_id = null;
         $user->save();
         
@@ -139,7 +140,6 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'username' => 'required|unique:users',
             'nomorhp' => 'required|unique:users',
             'email' => 'required|unique:users',
             'status' => 'required',
@@ -149,7 +149,6 @@ class UserController extends Controller
         ]);
         $user = User::create([
             'name' => $request->name,
-            'username' => $request->username,
             'password' => Hash::make($request->password),
             'nomorhp' => $request->nomorhp,
             'email' => $request->email,

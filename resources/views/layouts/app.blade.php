@@ -42,6 +42,13 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous">
     </script>
+    <style>
+      .gallery-item img{
+        width:100%;
+        height: 300px;
+        object-fit: cover;
+      }
+    </style>
   </head>
   <!-- Body-->
   <body class="handheld-toolbar-enabled">

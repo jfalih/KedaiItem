@@ -10,7 +10,7 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name','slug','description','sold','views','price','status_id','user_id' 
+        'name','slug','stok','min', 'description','sold','views','price','status_id','user_id' 
     ];
     /**
      * Get all of the reviews for the Item

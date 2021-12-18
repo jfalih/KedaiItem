@@ -22,7 +22,7 @@ class UpgradeController extends Controller
             'ktp' => 'required|mimes:jpg,png,jpeg|max:3024',
             'tabungan' => 'required|mimes:jpg,png,jpeg|max:3024',
             'selfie' => 'required|mimes:jpg,png,jpeg|max:3024',            
-            'nama_toko' => 'required',
+            'nama_toko' => 'required|alpha_dash|min:3',
             'atas_nama' => 'required',
             'nomor_rekening' => 'required',
         ],[

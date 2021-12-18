@@ -171,7 +171,7 @@
                                         </td>
                                     </tr>
                                     @empty
-                                    <tr>Tidak ada item</tr>
+                                    <tr><td>Tidak ada item</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>

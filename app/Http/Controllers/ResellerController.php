@@ -77,21 +77,21 @@ class ResellerController extends Controller
                 'status_id' => Status::first()->id
             ]);
         }
+        $item->subcategories()->attach($request->subcategory);
         $item->images()->createMany($item_files);
         return redirect()->back()->with('success', 'Berhasil menambahkan produk!');
     }
-    
     public function update($id, Request $request)
     {
         $request->validate([
             'category' => 'required',
             'subcategory' => 'required',
-            'price' => 'required',
-            'stok' => 'required',
-            'min' => 'required',
             'title' => 'required',
+            'price' => 'required',
+            'stok' => 'required|min:1',
+            'min' => 'required|min:1',
             'description' => 'required',
-            'files.*' => 'mimes:jpg,jpeg,png'
+            'files.*' => 'required|mimes:jpg,jpeg,png'
         ],[
             'required' => ':attribute harus diisi.'
         ]);
@@ -124,7 +124,7 @@ class ResellerController extends Controller
             $item->images()->detach();
             $item->images()->createMany($item_files);
         }
-        return redirect()->back()->with('success', 'Berhasil menambahkan produk!');
+        return redirect()->back()->with('success', 'Berhasil mengedit produk!');
     }
     public function product(Request $request)
     {

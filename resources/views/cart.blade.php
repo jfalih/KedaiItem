@@ -45,42 +45,38 @@
                 <!-- Shipping methods table-->
                 <h2 class="h6 pb-3 mb-2">Pilih metode pembayaran</h2>
                 <div class="table-responsive">
-                  <table class="table table-hover fs-sm border-top">
-                    <thead>
-                      <tr>
-                        <th class="align-middle"></th>
-                        <th class="align-middle"></th>
-                        <th class="align-middle">Metode Pembayaran</th>
-                        <th class="align-middle">Pajak</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($data_pembayaran as $pembayaran)
+                    <table class="table table-hover fs-sm border-top">
+                        <thead>
                         <tr>
-                            <td>
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="radio" name="method">
-                                <label class="form-check-label" for="courier"></label>
-                            </div>
-                            </td>
-                            <td>
-                                <img src="{{$pembayaran['icon_url']}}" width="40" height="40"/>
-                            </td>
-                            <td class="align-middle">
-                                <span class="text-dark fw-medium">{{$pembayaran['group']}}</span>
-                                <br>
-                                <span class="text-muted">{{$pembayaran['name']}}</span></td>
-                            <td class="align-middle">Rp{{number_format($pembayaran['total_fee']['flat'],2,',','.')}}</td>
+                            <th class="align-middle"></th>
+                            <th class="align-middle"></th>
+                            <th class="align-middle">Metode Pembayaran</th>
+                            <th class="align-middle">Pajak</th>
                         </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                        @foreach($data_pembayaran as $pembayaran)
+                            <tr>
+                                <td>
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="radio" name="method">
+                                    <label class="form-check-label" for="courier"></label>
+                                </div>
+                                </td>
+                                <td>
+                                    <img src="{{$pembayaran['icon_url']}}" width="40" height="40"/>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="text-dark fw-medium">{{$pembayaran['group']}}</span>
+                                    <br>
+                                    <span class="text-muted">{{$pembayaran['name']}}</span></td>
+                                <td class="align-middle">Rp{{number_format($pembayaran['total_fee']['flat'],2,',','.')}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <!-- Navigation (desktop)-->
-                <div class="d-none d-lg-flex pt-4">
-                  <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="checkout-details.html"><i class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Adresses</span><span class="d-inline d-sm-none">Back</span></a></div>
-                  <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="checkout-payment.html"><span class="d-none d-sm-inline">Proceed to Payment</span><span class="d-inline d-sm-none">Next</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
-                </div>
               </section>
 {{--             
             <section class="col-lg-8">
@@ -147,7 +143,7 @@
                         @forelse (Cart::getContent() as $item)  
                         <div class="d-flex align-items-center pb-2 border-bottom">
                             <a class="d-block flex-shrink-0" href="shop-single-v1.html">
-                                <img src="{{Storage::url(App\Models\Item::find($item->id)->images->first()->name)}}" width="64" alt="Product">
+                                <img style="width: 80px; height:80px; object-fit:cover;" src="{{Storage::url(App\Models\Item::find($item->id)->images->first()->name)}}" width="64" alt="Product">
                             </a>
                             <div class="ps-2">
                             <h6 class="widget-product-title"><a href="shop-single-v1.html">{{$item->name}}</a></h6>
@@ -159,10 +155,6 @@
                         @endforelse
                     </div>
                     <h3 class="fw-normal text-center my-4">Rp{{number_format(Cart::getTotal(),2,',','.')}}</h3>
-                    <form class="needs-validation" method="post" >
-                      @csrf
-                      <button class="btn btn-outline-primary d-block w-100" type="submit">Apply promo code</button>
-                    </form>
                   </div>
                 </div>
               </aside>
