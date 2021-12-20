@@ -37,7 +37,7 @@
                     </a>
                     </a><a class="step-item" href="checkout-review.html">
                     <div class="step-progress">
-                        <span class="step-count">5</span>
+                        <span class="step-count">2</span>
                     </div>
                     <div class="step-label">
                         <i class="ci-check-circle"></i>Review
@@ -46,6 +46,12 @@
                 </div>
                 <!-- Shipping methods table-->
                 <h2 class="h6 pb-3 mb-2">Pilih metode pembayaran</h2>
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{session('error')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 @if(count($errors) > 0)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <ul style="margin-bottom: 0px">

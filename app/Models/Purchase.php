@@ -18,4 +18,12 @@ class Purchase extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    /**
+     * The payments the Purchase
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function payments(){
+        return $this->belongsToMany(Payment::class,'purchase_payment','purchase_id','payment_id');
+    }
 }

@@ -73,32 +73,18 @@ class CartController extends Controller
             ],[
                 'required' => ':attribute harus diisi.'
             ]);
-            foreach(Cart::getContent() as $cart){
-                Purchase::create([
-                    'item_id' => $cart->id,
-                    'user_id' => Auth::user()->id,
-                    'quantity' => $cart->quantity,
-                    'status' => 'pending'
-                ]);
-            }
-            $payments = Payment::create([
-                'method' => $request->method,
-                'options' => $request->option,
-                'total' => Cart::getTotal()
-            ]);
-            if($payments) {
                 $apiKey       = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
                 $privateKey   = 'UPtWn-1d1l2-CO0Kk-36QbX-xXbGl';
                 $merchantCode = 'T5005';
-                $merchantRef  = 'KIP-'.$payments->id;
+                $merchantRef = 'KEDAIITEM';
                 $amount       = Cart::getTotal();
                 $arr_barang = [];
                 foreach(Cart::getContent() as $item){
                     $arr_barang[] = [
                         'sku' => 'ITEM-'.$item->id,
                         'name' => $item->name,
-                        'price' => $item->getPriceSum(),
-                        'quantity' => $cart->quantity
+                        'price' => $item->price,
+                        'quantity' => $item->quantity
                     ];
                 }
                 $data = [
@@ -127,17 +113,32 @@ class CartController extends Controller
                 curl_close($curl);
                 if(empty($error)) {
                     $res = json_decode($response);
-                    if($res->success){
+                    if($res->success){                        
+                        $payments = Payment::create([
+                            'method' => $request->method,
+                            'user_id' => Auth::user()->id,
+                            'options' => $request->option,
+                            'total' => Cart::getTotal(),
+                            'references' => $res->data->reference
+                        ]);            
+                        foreach(Cart::getContent() as $cart){
+                            $purchase = Purchase::create([
+                                'item_id' => $cart->id,
+                                'user_id' => Auth::user()->id,
+                                'quantity' => $cart->quantity,
+                                'status' => 'pending'
+                            ]);
+                            $purchase->payments()->attach($payments->id);
+                        }
                         return redirect()->route('payment',[
                             'id' => $payments->id
                         ]);
                     } else {
-                        return redirect()->back()->with('error', 'Gagal request pembayaran!');
+                        echo $response;
                     }
                 } else {
                     return redirect()->back()->with('error', 'Gagal request pembayaran!');
                 }
-            }
         } else {
             return redirect()->route('login');
         }
@@ -147,8 +148,38 @@ class CartController extends Controller
         Cart::remove($request->id);
         return redirect()->back()->with('success','Berhasil menghapus keranjang belanja!');
     }
-    public function payment($id, Request $request){
-        return $id;
+    public function payment($id){
+        $payment = Payment::where([
+            ['user_id', '=', Auth::user()->id],
+            ['id', '=', $id]
+        ])->firstOrFail();        
+        $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
+        $payload = ['reference'	=> $payment->references];
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_FRESH_CONNECT  => true,
+            CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+            CURLOPT_FAILONERROR    => false,
+        ]);
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+        if(empty($error)) {
+            $res = json_decode($response);
+            if($res->success){                                 
+                return view('payment',[
+                    'payment' => $payment,
+                    'response' => $res,
+                ]);
+            } else {
+                return abort(404);
+            }
+        } else {
+            return abort(404);
+        }
     }
     public function index()
     {

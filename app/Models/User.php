@@ -141,6 +141,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Upgrade::class, 'user_id', 'id');
     }
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
     public function selfie()
     {
         return $this->belongsTo(Image::class,'selfie_id', 'id');
