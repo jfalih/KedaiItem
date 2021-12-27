@@ -47,19 +47,16 @@ class UpgradeController extends Controller
         $req_tabungan = Storage::putFile('public/verification', $request->file('tabungan'));
         $tabungan = Image::create([
             'name' => $req_tabungan,
-            'caption' => 'Verifikasi Buku Tabungan '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
         $req_ktp = Storage::putFile('public/verification', $request->file('ktp'));
         $ktp = Image::create([
             'name' => $req_ktp,
-            'caption' => 'Verifikasi Ktp '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
         $req_selfie = Storage::putFile('public/verification', $request->file('selfie'));
         $selfie = Image::create([
             'name' => $req_selfie,
-            'caption' => 'Verifikasi Ktp + Selfie '.Auth::user()->name,
             'status_id' => Status::first()->id
         ]);
         $user = User::findOrFail(Auth::user()->id);

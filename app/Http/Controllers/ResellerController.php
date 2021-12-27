@@ -73,7 +73,6 @@ class ResellerController extends Controller
             $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
             array_push($item_files, [
                 'name' => $path,
-                'caption' => 'gambar_item_1',
                 'status_id' => Status::first()->id
             ]);
         }
@@ -117,7 +116,6 @@ class ResellerController extends Controller
                 $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
                 array_push($item_files, [
                     'name' => $path,
-                    'caption' => 'gambar_item_1',
                     'status_id' => Status::first()->id
                 ]);
             }

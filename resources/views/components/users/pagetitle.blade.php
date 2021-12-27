@@ -7,9 +7,14 @@
         </div>
       </div>
       <div class="d-flex">
-        <div class="text-sm-end">
+        <div class="text-sm-end me-4">
           <div class="text-light fs-base">Uangku</div>
           <p class="text-light">{{'Rp'.number_format(Auth::user()->balance,2,',','.')}}</p>
+        </div>
+        
+        <div class="text-sm-end">
+          <div class="text-light fs-base">Point</div>
+          <p class="text-light">{{Auth::user()->point}}</p>
         </div>
       </div>
     </div>

@@ -33,9 +33,7 @@
             <div class="card-body">
               <div class="d-flex flex-wrap justify-content-between align-items-start pb-2">
                 <div class="text-muted fs-xs me-1">by <a class="product-meta fw-medium" href="{{url('penjual/'.$new->user->username)}}">{{ $new->user->username }}</a></div>
-               
                 @include('components.shops.stars.default',['rating' => $new->average_rating])
-               
               </div>
               <h3 class="product-title fs-sm mb-2">
                 <a href="">{{ $new->title }}</a>

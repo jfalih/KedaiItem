@@ -15,7 +15,7 @@
     <!-- Profile-->
     <div class="tab-pane fade show active" id="profile" role="tabpanel">
       <div class="bg-secondary rounded-3 p-4 mb-4">
-        <div class="d-flex align-items-center"><img class="rounded" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif" width="90" alt="@if(Auth::user()->profile != null) {{Auth::user()->profile->caption}} @else @endif">
+        <div class="d-flex align-items-center"><img class="rounded" alt="foto-profile" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif" width="90">
           <div class="ps-3">
             <button href="#imagepicker-modal" data-bs-toggle="modal" class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Ganti <span class='d-none d-sm-inline'>foto profil</span></button>
             <div class="p mb-0 fs-ms text-muted">Upload dengan format JPG, JPEG dan PNG.</div>
@@ -37,13 +37,9 @@
       </div>
       <form method="POST" action="{{route('change_profile')}}" class="row gx-4 gy-3">
         @csrf
-        <div class="col-sm-6">
+        <div class="col-sm-12">
           <label class="form-label" for="dashboard-fn">Nama Lengkap</label>
           <input class="form-control" name="name" type="text" id="dashboard-fn" value="{{Auth::user()->name}}">
-        </div>
-        <div class="col-sm-6">
-          <label class="form-label" for="dashboard-profile-name">Username</label>
-          <input class="form-control" name="username" type="text" id="dashboard-profile-name" value="{{Auth::user()->username}}">
         </div>
         <div class="col-sm-6">
           <label class="form-label" for="dashboard-email">Email address</label>

@@ -10,10 +10,6 @@
               <div class="modal-body">
                 <!-- Drag and drop file upload -->
                 <!-- Text input -->
-                <div class="mb-3">
-                    <label for="text-input" class="form-label">Caption Gambar</label>
-                    <input class="form-control" name="caption" type="text" id="text-input" placeholder="Caption">
-                </div>
                 <div class="file-drop-area mb-3">
                     <div class="file-drop-icon ci-cloud-upload"></div>
                     <span class="file-drop-message">Drag and drop here to upload</span>

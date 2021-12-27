@@ -19,7 +19,11 @@
           @if (Auth::user())
           <div class="navbar-tool dropdown ms-2">
             <a class="navbar-tool-icon-box border dropdown-toggle" href="{{route('pengaturan')}}">
-              <img class="rounded-circle" style="width:32px;height:32px;object-fit: cover" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif"alt="@if(Auth::user()->profile != null) {{Auth::user()->profile->caption}} @else Caption @endif">
+              @if(Auth::user()->profile != null)
+              <img class="rounded-circle" style="width:32px;height:32px;object-fit: cover" src="{{Storage::url(Auth::user()->profile->name)}}">
+              @else
+              <img class="rounded-circle" style="width:32px;height:32px;object-fit: cover" src="{{url('assets/img/marketplace/account/avatar.png')}}">
+              @endif
             </a>
             <a class="navbar-tool-text ms-n1" href="{{route('pengaturan')}}">
               <small>{{Auth::user()->name}}</small>

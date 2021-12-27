@@ -23,14 +23,16 @@ class DashboardController extends Controller
     public function addImage(Request $request)
     {
         $request->validate([
-            'caption'=> 'required|min:10|max:255',
             'image' => 'required|mimes:jpg,png,jpeg|max:3024'
         ],[
-            'caption.required' => 'Caption harus diisi.',
-            'caption.min' => 'Minimal karakter caption harus :min karakter.',
             'image.required' => 'Gambar harus diupload.',
             'image.mimes' => 'File harus berupa jpg, png, dan jpeg.',
             'image.max' => 'Maximal ukuran file adalah 3MB.'
+        ]);
+        $path = Storage::putFile('public/images', $request->file('image'));
+        $image = Image::create([
+            'name' => $path,
+            'status_id' => Status::first()->id
         ]);
         Auth::user()->images()->attach($image->id);
         return redirect()->back()->with('success', 'Berhasil menambahkan gambar!');
@@ -46,7 +48,6 @@ class DashboardController extends Controller
         $path = Storage::putFile('public/images', $request->file('profile'));
         $image = Image::create([
             'name' => $path,
-            'caption' => $request->caption,
             'status_id' => Status::first()->id
         ]);
         $user->profile_id = $image->id;
@@ -85,7 +86,6 @@ class DashboardController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         if($user){
             $user->name = $request->name;
-            $user->username = $request->username;
             $user->save();
             return redirect()->back()->with('success', 'Berhasil merubah pengaturan profil!');
         } else {

@@ -17,7 +17,6 @@ class ImageSeeder extends Seeder
     {
         Image::create([
             'name' => '/storage/website/illustration/sad.png',
-            'caption' => Str::random(10), 
             'status_id' => Status::first()->id
         ]);
     }
