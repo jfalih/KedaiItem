@@ -18,6 +18,10 @@ class CreatePayoutsTable extends Migration
             $table->integer('jumlah');
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->enum('opsi', [
+                'premium',
+                'not'
+            ])->default('not');
             $table->enum('status', [
                 'success',
                 'pending',

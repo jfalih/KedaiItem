@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Payment;
+use DataTables;
 class PembelianController extends Controller
 {
     /**
@@ -13,8 +14,22 @@ class PembelianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $pembelians = Payment::all();
+        if($request->ajax()){
+            return DataTables::of($pembelians)
+            ->addIndexColumn()
+            ->addColumn('user', function (Payment $pembelian) {
+                return $pembelian->user->name;
+            })
+            ->addColumn('action', function (Payment $purchase) {
+                return view('admin.item.action', [
+                    'data' => $purchase
+                ]);
+            })
+            ->make(true);
+        }
         return view('admin.pembelian');
     }
 

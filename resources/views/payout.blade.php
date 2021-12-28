@@ -5,12 +5,9 @@
       <div class="py-2">
         <div class="d-flex flex-nowrap align-items-center pb-3">
           <!-- Launch default modal -->
-          <form method="POST" action="{{route('reseller.payout')}}">
-            @csrf
-          <button class="btn btn-outline-secondary" type="submit" data-bs-toggle="offcanvas" data-bs-target="#filterRight">
+          <button data-bs-toggle="modal" data-bs-target="#modalDefault" class="btn btn-outline-secondary">
             <i class="ci-dollar me-2"></i>Lakukan Penarikan Dana
           </button>
-          </form>
         </div>
       </div>
     </div>
@@ -51,6 +48,31 @@
     </div>
     <!-- Products list-->
     <!-- Product-->
+    <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Opsi Penarikan Dana</h4>
+            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">            
+            <!-- Select -->
+            <div class="mb-3">
+              <label for="select-input" class="form-label">Pilih Opsi Penarikan</label>
+              <select class="form-select" id="select-input">
+                <option>-- Pilih Opsi --</option>
+                <option value="premium">Premium</option>
+                <option value="not">Biasa</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary btn-shadow btn-sm" type="button">Tarik Dana</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="table-responsive fs-md mb-4">
       <table class="table table-hover mb-0">
         <thead>
