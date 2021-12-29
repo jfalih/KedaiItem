@@ -31,7 +31,7 @@ class DashboardController extends Controller
         ]);
         $path = Storage::putFile('public/images', $request->file('image'));
         $image = Image::create([
-            'name' => $path,
+            'name' => 'public'.$path,
             'status_id' => Status::first()->id
         ]);
         Auth::user()->images()->attach($image->id);
@@ -47,7 +47,7 @@ class DashboardController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $path = Storage::putFile('public/images', $request->file('profile'));
         $image = Image::create([
-            'name' => $path,
+            'name' => 'public'.$path,
             'status_id' => Status::first()->id
         ]);
         $user->profile_id = $image->id;

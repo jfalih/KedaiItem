@@ -72,7 +72,7 @@ class ResellerController extends Controller
         foreach ($request->file('files') as $file) {
             $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
             array_push($item_files, [
-                'name' => $path,
+                'name' => 'public'.$path,
                 'status_id' => Status::first()->id
             ]);
         }
@@ -115,7 +115,7 @@ class ResellerController extends Controller
             foreach ($request->file('files') as $file) {
                 $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
                 array_push($item_files, [
-                    'name' => $path,
+                    'name' => 'public'.$path,
                     'status_id' => Status::first()->id
                 ]);
             }
