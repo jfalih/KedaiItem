@@ -68,7 +68,7 @@
         <hr class="mt-4 mb-3">
         <div class="row py-4">
           <!-- Reviews list-->
-          <div class="col-md-7">
+          <div class="col-md-12">
             <!-- Review-->
             @forelse ($item->reviews()->take(5)->get() as $review)
                 
@@ -92,7 +92,7 @@
             @endforelse
           </div>
           <!-- Leave review form-->
-          <div class="col-md-5 mt-2 pt-4 mt-md-0 pt-md-0">
+          {{-- <div class="col-md-5 mt-2 pt-4 mt-md-0 pt-md-0">
             <div class="bg-secondary py-grid-gutter px-grid-gutter rounded-3">
               <h3 class="h4 pb-2">Berikan review</h3>
               @if(session('success'))              
@@ -130,7 +130,7 @@
                 <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Submit a Review</button>
               </form>
             </div>
-          </div>
+          </div> --}}
         </div>
       </div>
       <!-- Comments tab-->
