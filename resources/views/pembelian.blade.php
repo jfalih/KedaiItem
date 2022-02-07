@@ -1,40 +1,87 @@
 @extends('layouts.user')
+@section('css')
+<link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/datatables.css')}}">
+@endsection
 @section('content')
-                  <div class="d-sm-flex mb-4 flex-wrap justify-content-between align-items-center border-bottom">
-                    <h2 class="h3 py-2 me-2 text-center text-sm-start">Pembelian</h2>
-                  </div>
-                  <!-- Products list-->
-                  <!-- Product-->
-                  <div class="table-responsive fs-md mb-4">
-                    <table class="table table-hover mb-0">
-                      <thead>
-                        <tr>
-                          <th>Order ID #</th>
-                          <th>Tanggal Pembelian</th>
-                          <th>Status</th>
-                          <th>Total</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @forelse($pembelian as $pembeli)
-                        <tr>
-                          <td class="py-3"><a class="nav-link-style fw-medium fs-sm" href="#order-details" data-bs-toggle="modal">{{$pembeli->id}}</a></td>
-                          <td class="py-3">{{$pembeli->created_at}}</td>
-                          <td class="py-3"></td>
-                          <td class="py-3">Rp{{number_format($pembeli->quantity*$pembeli->item->price,2,',','.')}}</td>
-                          <td class="py-3">
-                            @include('pembelian.action')
-                          </td>
-                        </tr>
-                        @empty
-                        <tr>
-                          <td colspan="5">Pembelian Masih Kosong</td>
-                        </tr>
-                        @endforelse
-                      </tbody>
-                    </table>
-                  </div>
-                  <!-- Pagination-->
-                  {{$pembelian->links('components.paginations.default')}}
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="page-header">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Pembelian</h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html" data-bs-original-title="" title="">Home</a></li>
+            <li class="breadcrumb-item active">Pembelian</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Zero Configuration  Starts-->
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Data Pembelian</h5>
+            <span>Berikut ini data pembelian kamu di {{env('APP_NAME')}}</span>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="display datatables" id="datatables1">
+                <thead>
+                  <tr>
+                    <th>NO</th>
+                    <th>ID</th>
+                    <th>ITEM</th>
+                    <th>HARGA</th>
+                    <th>JUMLAH</th>
+                    <th>TOTAL HARGA</th>
+                    <th>AKSI</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>NO</th>
+                    <th>ID</th>
+                    <th>ITEM</th>
+                    <th>HARGA</th>
+                    <th>JUMLAH</th>
+                    <th>TOTAL HARGA</th>
+                    <th>AKSI</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+@endsection
+@section('js')
+@parent
+<script src="{{asset('assets_users/assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets_users/assets/js/datatable/datatables/datatable.custom.js')}}"></script>
+<script type="text/javascript">
+  $(function () {
+    var table = $('#datatables1').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('pembelian') }}",
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'id', name: 'id'},
+            {data: 'item', name: 'item'},
+            {data: 'harga', name: 'harga'},
+            {data: 'quantity', name: 'quantity'},
+            {data: 'total', name: 'total'},
+            {data: 'aksi', name: 'aksi'},
+          ]
+    });
+  });
+</script>
 @endsection

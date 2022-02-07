@@ -11,6 +11,9 @@ use App\Models\{
     Message,
     Purchase
 };
+use Illuminate\Support\Facades\Validator;
+
+use DataTables;
 use Auth;
 use Hash;
 use Storage;
@@ -19,6 +22,14 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+    public function index()
+    {
+        return view('dashboard');
+    }
+    public function indexChangePassword()
+    {
+        return view('change_password');
     }
     public function addImage(Request $request)
     {
@@ -38,21 +49,31 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'Berhasil menambahkan gambar!');
     }
     public function change_avatar(Request $request)
-    {
-        $request->validate([
-            'profile' => 'required|mimes:jpg,png,jpeg|max:2024'
-        ],[
-            'profile.required' => 'Silahkan upload gambar terlebih dahulu.'
+    {   
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:jpg,png,jpeg|max:3024',
         ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'path' => null,
+                'message' => 'Gagal mengganti foto profile!'
+            ]);
+        }
         $user = User::findOrFail(Auth::user()->id);
-        $path = Storage::putFile('public/images', $request->file('profile'));
+        $image = $request->file('file');
+        $path = Storage::putFile('public/images', $image);
         $image = Image::create([
-            'name' => 'public'.$path,
+            'name' => $path,
             'status_id' => Status::first()->id
         ]);
         $user->profile_id = $image->id;
         $user->save();
-        return redirect()->back()->withSuccess('Berhasil mengganti foto profil!');
+        return response()->json([
+            'success' => true,
+            'path' => $path,
+            'message' => 'Berhasil mengganti foto profile!'
+        ]);
     }
     public function change_password(Request $request)
     {
@@ -68,6 +89,7 @@ class DashboardController extends Controller
             'new_password.min' => 'Minimal panjang karakter password harus :min karakter.',
             'new_password.max' => 'Maximal panjang karakter password harus :max karakter.',
             'c_password.required' => 'Konfirmasi password baru harus diisi.',
+            'c_password.same' => 'Konfirmasi password tidak sama dengan password baru.',
             'c_password.min' => 'Minimal panjang karakter password harus :min karakter.',
             'c_password.max' => 'Maximal panjang karakter password harus :max karakter.',
             
@@ -99,12 +121,27 @@ class DashboardController extends Controller
             'convertations' => $convertations
         ]);
     }
-    public function pembelian()
-    {
-        $pembelian = Purchase::where('user_id', Auth::user()->id)->paginate(5);
-        return view('pembelian',[
-            'pembelian' => $pembelian
-        ]);
+    public function pembelian(Request $request)
+    { 
+        if($request->ajax()){ 
+            $pembelian = Purchase::where('user_id', Auth::user()->id)->get();
+            return DataTables::of($pembelian)
+            ->addIndexColumn()
+            ->addColumn('item', function (Purchase $pembelian) {
+                return $pembelian->item->name;
+            })
+            ->addColumn('harga', function (Purchase $pembelian) {
+                return $pembelian->item->price;
+            })
+            ->addColumn('total', function (Purchase $pembelian) {
+                return $pembelian->item->price*$pembelian->quantity;
+            })
+            ->addColumn('aksi', function (Purchase $pembelian) {
+                return 'belum';
+            })
+            ->make(true);
+        }
+        return view('pembelian');
     }
     public function pengaturan()
     {

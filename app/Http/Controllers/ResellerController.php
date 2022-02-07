@@ -9,12 +9,18 @@ use App\Models\{
     Purchase,
     Item
 };
+use DataTables;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ResellerController extends Controller
 {
+    public function index()
+    {
+        return view('reseller.dashboard');
+    }
     public function penjualan()
     {
         $penjualans = Purchase::where('status','!=','pending')->whereHas('item', function($q){
@@ -40,7 +46,7 @@ class ResellerController extends Controller
     }
     public function store_product(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category' => 'required',
             'subcategory' => 'required',
             'title' => 'required',
@@ -48,9 +54,15 @@ class ResellerController extends Controller
             'stok' => 'required|min:1',
             'min' => 'required|min:1',
             'description' => 'required',
-            'files' => 'required',
-            'files.*' => 'required|mimes:jpg,jpeg,png'
+            'file' => 'required',
+            'file.*' => 'required|mimes:jpg,jpeg,png'
         ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => $request->all()
+            ]);
+        }
         $check_slug = Item::where('slug', Str::slug($request->title))->count();
         if ($check_slug > 0) {
             $number = $check_slug + 1;
@@ -69,16 +81,19 @@ class ResellerController extends Controller
             'status_id' => Status::first()->id
         ]);
         $item_files = [];
-        foreach ($request->file('files') as $file) {
+        foreach ($request->file('file') as $file) {
             $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
             array_push($item_files, [
-                'name' => 'public'.$path,
+                'name' => $path,
                 'status_id' => Status::first()->id
             ]);
         }
         $item->subcategories()->attach($request->subcategory);
         $item->images()->createMany($item_files);
-        return redirect()->back()->with('success', 'Berhasil menambahkan produk!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil menambahkan produk!'
+        ]);
     }
     public function update($id, Request $request)
     {
@@ -115,7 +130,7 @@ class ResellerController extends Controller
             foreach ($request->file('files') as $file) {
                 $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
                 array_push($item_files, [
-                    'name' => 'public'.$path,
+                    'name' => $path,
                     'status_id' => Status::first()->id
                 ]);
             }
@@ -125,18 +140,31 @@ class ResellerController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengedit produk!');
     }
     public function product(Request $request)
-    {
-        $categories = Category::where('status_id', 1)->get();
-        $items = Item::where('user_id', Auth::user()->id)->when($request->nama_barang !== null, function($q) use($request){
-            $q->where('name', 'like',"%{$request->nama_barang}%");
-        })->when($request->stok !== null, function($q) use($request){
-            $q->where('stok', $request->stok);
-        })->when($request->min !== null, function($q) use($request){
-            $q->where('min', $request->min);    
-        })->paginate(5);
+    { 
+        $products = Item::where('user_id', Auth::user()->id)->get();
+        if($request->ajax()){ 
+            return DataTables::of($products)
+            ->addIndexColumn()
+            ->addColumn('status', function (Item $products) {
+                return view('reseller.product.status', [
+                    'status' => $products->status->name
+                ]);
+            })
+            ->addColumn('stok', function (Item $products) {
+                return view('reseller.product.stok', [
+                    'stok' => $products->stok
+                ]);
+            })
+            ->addColumn('action', function (Item $products) {
+                return view('reseller.product.action', [
+                    'action' => $products
+                ]);
+            })
+            ->rawColumns(['status','stok'])
+            ->make(true);
+        }
         return view('reseller.product', [
-            'items' => $items,
-            'categories' => $categories
+            'products' => $products
         ]);
     }
     public function edit($item)

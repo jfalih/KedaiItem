@@ -1,77 +1,154 @@
 @extends('layouts.app')
-@section('main')
-<main class="page-wrapper">
-    <!-- Navbar 3 Level (Light)-->
-    @include('components.headers.default')
-    <!-- Page Title-->
-    @include('components.headers.pagetitle', ['title' => 'Pencarian untuk "'.$keyword.'"'])
-    <div class="container pb-5 mb-2 mb-md-4">
-        <div class="row">
-            <!-- Sidebar-->
-            <aside class="col-lg-4">
-            <!-- Sidebar-->
-            <div class="offcanvas offcanvas-collapse bg-white w-100 rounded-3 shadow-lg py-1" id="shop-sidebar" style="max-width: 22rem;">
-                <div class="offcanvas-header align-items-center shadow-sm">
-                <h2 class="h5 mb-0">Filters</h2>
-                <button class="btn-close ms-auto" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body py-grid-gutter px-lg-grid-gutter">
-                <!-- Categories-->
-                <div class="widget widget-categories mb-4 pb-4 border-bottom">
-                    <h3 class="widget-title">Kategori</h3>
-                    <div class="accordion mt-n1" id="shop-categories">
-                    <!-- Shoes-->
-                    @foreach($categories as $index => $cat)
-                    <div class="accordion-item">
-                        <h3 class="accordion-header"><a class="accordion-button @if($index != 0) collapsed @endif" href="#{{$cat->slug}}" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{$cat->slug}}">{{$cat->name}}</a></h3>
-                        <div class="accordion-collapse collapse @if($index == 0) show @endif" id="{{$cat->slug}}" data-bs-parent="#shop-categories">
-                        <div class="accordion-body">
-                            <div class="widget widget-links widget-filter">
-                            <ul class="widget-list widget-filter-list pt-1" style="height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
-                                @foreach ($cat->subcategories as $sub)
-                                <li class="widget-list-item widget-filter-item"><a class="widget-list-link d-flex justify-content-between align-items-center" href="#"><span class="widget-filter-item-text">{{$sub->name}}</span><span class="fs-xs text-muted ms-3">{{$sub->items->count()}}</span></a></li>
-                                @endforeach
-                            </ul>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    @endforeach
-                    </div>
-                </div>
-                </div>
-            </div>
-            </aside>
-            <!-- Content  -->
-            <section class="col-lg-8">
-            <!-- Products grid-->
-            <div class="row mx-n2"> 
-                <!-- Product-->
-                @foreach ($items as $item)
-                    <div class="col-md-4 col-sm-6 px-2 mb-4">
-                        <div class="card product-card">
-                            <a class="card-img-top d-block overflow-hidden" href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}">
-                                <img src="{{Storage::url($item->images->first()->name)}}" alt="{{$item->images->first()->caption}}">
-                            </a>
-                            <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">{{$item->subcategories->first()->name}}</a>
-                            <h3 class="product-title fs-sm"><a href="{{url('penjual/'.$item->user->username.'/item/'.$item->slug)}}">{{$item->name}}</a></h3>
-                            <div class="d-flex justify-content-between">
-                                <div class="product-price">
-                                    <span class="text-accent">Rp{{number_format($item->price,2,',','.')}}</span>
-                                </div>
-                                @include('components.shops.stars.default',['rating' => $item->average_rating])
-                            </div>
-                            </div>
-                        </div>
-                        <hr class="d-sm-none">
-                    </div>
-                    <!-- Product-->
-                @endforeach
-            </div>
-            <!-- Pagination-->
-            {{$items->links('components.paginations.default')}}
-            </section>
-        </div>
-    </div>
-</main>
+@section('content')
+	<!-- page title -->
+	<section class="section section--first section--last section--head" data-bg="{{asset('assets/img/bg.jpg')}}">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="section__wrap">
+						<!-- section title -->
+						<h2 class="section__title">{{$keyword}} <span>({{$items->count()}} items)</span></h2>
+						<!-- end section title -->
+
+						<!-- breadcrumb -->
+						<ul class="breadcrumb">
+							<li class="breadcrumb__item"><a href="{{route('welcome')}}">Home</a></li>
+							<li class="breadcrumb__item breadcrumb__item--active">Search</li>
+						</ul>
+						<!-- end breadcrumb -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- end page title -->
+	
+	<!-- section -->
+	<section class="section section--last section--catalog">
+		<div class="container">
+			<!-- catalog -->
+			<div class="row catalog">
+				<!-- filter wrap -->
+				<div class="col-12 col-lg-20">
+					<div class="row">
+						<div class="col-12">
+							<div class="filter-wrap">
+								<button class="filter-wrap__btn" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">Open filter</button>
+
+								<div class="collapse filter-wrap__content" id="collapseFilter">
+									<!-- filter -->
+									<form method="GET" action="{{route('welcome.search')}}" class="filter">
+										<h4 class="filter__title">Filter <button type="button">Clear all</button></h4>
+
+										<div class="filter__group">
+											<label class="filter__label">Kata Kunci:</label>
+											<input type="text" class="filter__input" placeholder="Kata Kunci" name="keyword" value="{{$keyword}}">
+										</div>
+
+										<div class="filter__group">
+											<label for="sort" class="filter__label">Berdasarkan:</label>
+											<div class="filter__select-wrap">
+												<select name="sort" id="sort" class="filter__select">
+													<option value="0">Relefansi</option>
+													<option value="1">Terbaru</option>
+													<option value="2">Terlama</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="filter__group">
+											<label class="filter__label">Harga:</label>
+											<div class="row">
+											<div class="col-6 pr-1">
+												<input type="text" class="filter__input mr-0" placeholder="Min">
+											</div>
+											<div class="col-6 pl-1">
+												<input type="text" class="filter__input" placeholder="Max">
+											</div>
+											
+											</div>
+										</div>
+										<div class="filter__group">
+											<label class="filter__label">Kategori:</label>
+											<ul class="filter__checkboxes">
+												@foreach($categories as $cat)
+												<li>
+													<input id="type1" type="checkbox" name="categories[]" value="{{$cat->id}}"
+														@foreach($category as $c)
+															@if($c == $cat->id) checked @endif
+														@endforeach
+													>
+													<label for="type1">{{$cat->name}}</label>
+												</li>
+												@endforeach
+											</ul>
+										</div>
+
+										<div class="filter__group">
+											<label class="filter__label">Subkategori:</label>
+											<ul class="filter__checkboxes">
+												@foreach($subcategories as $sub)
+												<li>
+													<input id="{{$sub->name}}" type="checkbox" name="subcategories">
+													<label for="{{$sub->name}}">{{$sub->name}}</label>
+												</li>
+												@endforeach
+											</ul>
+										</div>
+
+										<div class="filter__group">
+											<button class="filter__btn" type="submit">Terapkan</button>
+										</div>
+									</form>
+									<!-- end filter -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end filter wrap -->
+
+				<!-- content wrap -->
+				<div class="col-12 col-lg-80">
+					<div class="row">
+						<!-- card -->
+                        @forelse($items as $item)
+						<div class="col-12 col-sm-6 col-md-4 col-xl-3">
+							<div class="card card--catalog">
+								<a href="{{route('item.detail',[
+									'seller'=>$item->user->username,
+									'product' => $item->slug
+								])}}" class="card__cover">
+									<img src="{{asset('assets/img/cards/5.jpg')}}" alt="">
+								</a>
+								<div class="card__title">
+									<h3><a href="details.html">{{$item->title_format}}</a></h3>
+									<span>{{$item->price_format}}</span>
+								</div>
+
+								<div class="card__actions">
+									<button class="card__buy" type="button">Beli</button>
+									<button class="card__favorite" type="button">
+										<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><path d='M352.92,80C288,80,256,144,256,144s-32-64-96.92-64C106.32,80,64.54,124.14,64,176.81c-1.1,109.33,86.73,187.08,183,252.42a16,16,0,0,0,18,0c96.26-65.34,184.09-143.09,183-252.42C447.46,124.14,405.68,80,352.92,80Z' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
+									</button>
+								</div>
+							</div>
+						</div>
+                        @empty
+                        @endforelse
+						<!-- end card -->
+						@if($items->count() > 0)
+                        {{$items->links('components.paginations.default')}}
+						@endif
+						<!-- paginator -->
+						<!-- end paginator -->
+					</div>
+				</div>
+				<!-- end content wrap -->
+			</div>
+			<!-- end catalog -->	
+		</div>
+	</section>
+	<!-- end section -->
+
 @endsection

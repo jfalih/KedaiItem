@@ -43,7 +43,7 @@ use App\Http\Controllers\Admin\{
 */
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-Route::post('/search', [WelcomeController::class,'search'])->name('welcome.search');
+Route::get('/search', [SearchController::class,'index'])->name('welcome.search');
 Route::get('/search/{keyword}', [SearchController::class,'index'])->name('search');
 Route::get('/penjual/{seller}/item/{product}',[ProductController::class,'index'])->name('item.detail');
 Route::get('/penjual/{seller}', [VendorController::class,'index'])->name('vendor');
@@ -70,10 +70,11 @@ Route::middleware('auth')->group(function(){
         Auth::logout();
         return redirect()->route('welcome');
     })->name('logout');
-    
+    Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
     Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
     Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
     Route::post('/upgrade/add', [UpgradeController::class,'upgrade'])->name('upgrade.add');
+    Route::get('/change_password', [DashboardController::class, 'indexChangePassword'])->name('index_change_password');
     Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
     Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
     Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
@@ -85,10 +86,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
     Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
     Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
-
     //Reseller
     Route::middleware('reseller')->name('reseller.')->group(function () {
-        Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
+         Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
         Route::get('/payout', [PayoutController::class, 'index'])->name('payout'); 
         Route::post('/payout', [PayoutController::class, 'create'])->name('payout'); 
         Route::get('/product', [ResellerController::class, 'product'])->name('product');

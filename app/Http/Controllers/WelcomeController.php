@@ -4,29 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{
-    Category,
     Item,
-    Setting,
-    Feature
+    Subcategory
 };
+use Illuminate\Database\Eloquent\Builder;
+
 class WelcomeController extends Controller
 {
     public function index()
     {
-        $items = Item::inRandomOrder()->limit(5)->get();
-        $features = Feature::limit(4)->get();
-        $new_item = Item::orderBy('created_at', 'ASC')->limit(8)->get();
-        $recomended_categories = Category::limit(4)->get();       
-        $setting = Setting::first();
+        $random_items = Item::inRandomOrder()->limit(8)->get();
+        $latest_items = Item::orderBy('created_at','ASC')->limit(8)->get();
+        $subcategories = Subcategory::whereHas('status', function(Builder $q){
+            $q->where('name','active');
+        })->limit(3)->get();
         return view('welcome', [
-            'items' => $items,
-            'newitem' => $new_item,
-            'setting' => $setting,
-            'features' => $features,
-            'recomended_categories' => $recomended_categories
+            'random_items' => $random_items,
+            'latest_items' => $latest_items,
+            'subcategories' => $subcategories
         ]);
-    }
-    public function search(Request $request){
-        return redirect('/search/'.$request->search);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -37,9 +38,13 @@ class Item extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function getTitleFormatAttribute()
+    {
+        return Str::title(strlen($this->name) > 50 ? substr($this->name,0,50)."..." : $this->name);
+    }
     public function getPriceFormatAttribute()
     {
-        return 'Rp'.number_format($this->price,2,',','.');
+        return 'Rp'.number_format($this->price,0,',','.');
     }
     public function getCountReview($number = null)
     {

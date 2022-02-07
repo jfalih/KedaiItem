@@ -8,7 +8,7 @@
                 <!-- Product gallery-->
                 <div class="gallery">
                   <a class="gallery-item rounded-3 mb-grid-gutter" href="{{Storage::url($item->images()->first()->name)}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;{{Storage::url($item->images()->first()->caption)}}&lt;/h6&gt;">
-                    <img src="{{Storage::url($item->images()->first()->name)}}" alt="{{Storage::url($item->images()->first()->caption)}}">
+                    <img src="{{url('laravel/public/'.Storage::url($item->images()->first()->name))}}" alt="{{Storage::url($item->images()->first()->caption)}}">
                     <span class="gallery-item-caption">{{Storage::url($item->images()->first()->caption)}}</span>
                   </a>
                   <div class="row">
@@ -16,7 +16,7 @@
                     @if($index !== 0)
                     <div class="col-4">
                         <a class="gallery-item rounded-3 mb-grid-gutter" href="{{Storage::url($image->name)}}" data-sub-html="&lt;h6 class=&quot;fs-sm text-light&quot;&gt;{{$image->caption}}&lt;/h6&gt;">
-                            <img src="{{Storage::url($image->name)}}" alt="{{$image->caption}}">
+                            <img src="{{url('laravel/public/'.Storage::url($image->name))}}" alt="{{$image->caption}}">
                             <span class="gallery-item-caption">{{$image->caption}}</span>
                         </a>
                     </div>

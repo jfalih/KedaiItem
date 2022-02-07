@@ -10,58 +10,43 @@ use App\Models\{
 };
 use Cart;
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
     public function add(Request $request)
     {
-        if(Cart::isEmpty())
-        {
-            $item = Item::findOrFail($request->id);
-            if($item){
-                $arr = [
-                    'id' => $request->id,
-                    'name' => $item->name,
-                    'price' => $item->price,
-                    'quantity' => $request->quantity,
-                ];
-                Cart::add($arr);
-                return response()->json(['quantity' => Cart::getTotalQuantity()], 200);
-            } else {
-                return response()->json('Server Error', 500);
-            }
+        $item = Item::findOrFail($request->id);
+        if(session()->has('cart')){
+            $cart = session()->get('cart');
+            $cart[$item->user->username][$request->id]['quantity'] += 1;
+            session()->put('cart', $cart);
         } else {
-            $search = Cart::get($request->id);
-            if($search){
-                Cart::update($request->id, [
-                    'quantity' => $request->quantity
-                ]);        
-                return response()->json(['quantity' => Cart::getTotalQuantity()], 200);
-            } else {
-                $item = Item::findOrFail($request->id);
-                if($item){
-                    $arr = [
-                        'id' => $request->id,
-                        'name' => $item->name,
-                        'price' => $item->price,
-                        'quantity' => $request->quantity,
-                    ];
-                    Cart::add($arr);
-                    return response()->json(['quantity' => Cart::getTotalQuantity()], 200);
-                } else {
-                    return response()->json('Server Error', 500);
-                }
-            }
+            $cart = session()->get('cart');
+            $cart[$item->user->username][$request->id] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'price' => $item->price,
+                'quantity' => 1,
+            ];
+            session()->put('cart', $cart);
+            session()->save();
         }
+        return response()->json([
+            'status' => true,
+            'data' => $cart
+        ]);
     }
     public function update(Request $request)
     {
-        $cart = Cart::update($request->id,[
-            'quantity' => $request->quantity
-        ]);
+        $cart = Session::get('cart');
+        foreach($cart as $key => $val){
+            $val[$request->id]['quantity'] += 1;
+        }
+        Session::put('cart', $cart);
         return response()->json([
-            'item'=> Cart::getContent(),
-            'total' => Cart::getTotal()
+            'status' => true,
+            'data' => $cart
         ]);
     }
     public function checkout(Request $request)

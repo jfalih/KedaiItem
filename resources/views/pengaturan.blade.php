@@ -1,87 +1,118 @@
 @extends('layouts.user')
-@section('content')
-  <h2 class="h3 py-2 text-center text-sm-start">Pengaturan</h2>
-  <!-- Tabs-->
-  <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li class="nav-item"><a class="nav-link px-0 active" href="#profile" data-bs-toggle="tab" role="tab">
-        <div class="d-none d-lg-block"><i class="ci-user opacity-60 me-2"></i>Profil</div>
-        <div class="d-lg-none text-center"><i class="ci-user opacity-60 d-block fs-xl mb-2"></i><span class="fs-ms">Profil</span></div></a></li>
-    <li class="nav-item"><a class="nav-link px-0" href="#notifications" data-bs-toggle="tab" role="tab">
-        <div class="d-none d-lg-block"><i class="ci-locked opacity-60 me-2"></i>Ganti Password</div>
-        <div class="d-lg-none text-center"><i class="ci-locked opacity-60 d-block fs-xl mb-2"></i><span class="fs-ms">Ganti Password</span></div></a></li>
-  </ul>
-  <!-- Tab content-->
-  <div class="tab-content">
-    <!-- Profile-->
-    <div class="tab-pane fade show active" id="profile" role="tabpanel">
-      <div class="bg-secondary rounded-3 p-4 mb-4">
-        <div class="d-flex align-items-center"><img class="rounded" alt="foto-profile" src="@if(Auth::user()->profile != null) {{Storage::url(Auth::user()->profile->name)}} @else {{url('assets/img/marketplace/account/avatar.png')}} @endif" width="90">
-          <div class="ps-3">
-            <button href="#imagepicker-modal" data-bs-toggle="modal" class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Ganti <span class='d-none d-sm-inline'>foto profil</span></button>
-            <div class="p mb-0 fs-ms text-muted">Upload dengan format JPG, JPEG dan PNG.</div>
+@section('css')
+@parent
+<link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/dropzone.css')}}">
+@endsection
+@section('content') 
+  <!-- Page Sidebar Ends-->
+  <div class="page-body">
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <h3>Pengaturan akun</h3>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
+              <li class="breadcrumb-item active">Pengaturan akun</li>
+            </ol>
           </div>
         </div>
       </div>
+    </div>
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
       <div class="row">
-        @if(Auth::user()->email_verified_at == null)
-          <div class="@if(Auth::user()->nomorhp_verified_at != null) col-sm-12 @endif">
-            <div class="bg-danger rounded-3 p-4 mb-4">
-              <p class="fs-sm text-white mb-2">Alamat email kamu belum terverifikasi.</p>
-              <form method="POST" action="{{route('verification.send')}}">
+        <div class="col-md-4 col-sm-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Ganti Foto Profile</h5>
+              <span>Ganti foto profile kamu dengan yang baru disini.</span>
+            </div>
+            <div class="card-body">
+              <div id="alert"></div>
+              <form method="post" enctype="multipart/form-data" class="dropzone digits dz-clickable" id="image-upload" action="{{route('change_avatar')}}">
                 @csrf
-                <button class="btn btn-light btn-shadow btn-sm" type="submit"><i class="ci-mail me-2"></i>Kirim verifikasi email</span></button>
+                <div class="dz-message needsclick"><i class="icon-cloud-up"></i>
+                  <h6>Upload foto profile disini.</h6>
+                  <span class="note needsclick">Ganti foto profile kamu disini..</span>
+                </div>
               </form>
             </div>
           </div>
-        @endif
+        </div>
+        <div class="col-md-8 col-sm-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5>Pengaturan Akun</h5><span>Ganti pengaturan akun kamu disini seperti nama, verifikasi email dan lainnya.</span>
+            </div>
+            <div class="card-body">
+              <form method="POST" action="{{route('change_profile')}}" class="needs-validation">
+                @csrf
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('success')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                <div class="row g-3 mb-3">
+                  <div class="col-md-12">
+                    <label class="form-label" >Nama Lengkap</label>
+                    <input class="form-control" type="text" name="name" required value="{{Auth::user()->name}}">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" type="text" value="{{Auth::user()->name}}" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="validationCustom02">Nomor Handphone</label>
+                    <input class="form-control" id="validationCustom02" type="text" value="{{Auth::user()->nomorhp}}" readonly>
+                    <div class="valid-feedback">Looks good!</div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Submit form</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <form method="POST" action="{{route('change_profile')}}" class="row gx-4 gy-3">
-        @csrf
-        <div class="col-sm-12">
-          <label class="form-label" for="dashboard-fn">Nama Lengkap</label>
-          <input class="form-control" name="name" type="text" id="dashboard-fn" value="{{Auth::user()->name}}">
-        </div>
-        <div class="col-sm-6">
-          <label class="form-label" for="dashboard-email">Email address</label>
-          <input class="form-control" type="text" id="dashboard-email" value="{{Auth::user()->email}}" disabled>
-        </div>
-        <div class="col-sm-6">
-          <label class="form-label" for="dashboard-phone">Nomor Handphone</label>
-          <input class="form-control" type="text" id="dashboard-phone" value="{{Auth::user()->nomorhp}}" disabled>
-        </div>
-        <div class="col-12">
-          <hr class="mt-2 mb-4">
-          <div class="d-sm-flex justify-content-between align-items-center">
-            <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Simpan Perubahan</button>
-          </div>
-        </div>
-      </form>
     </div>
-    
-    <div class="tab-pane fade" id="notifications" role="tabpanel">
-      <form method="POST" action="{{route('change_password')}}" class="row gx-4 gy-3">
-        @csrf
-        <div class="col-sm-12">
-          <label class="form-label" for="dashboard-fn">Password Lama</label>
-          <input class="form-control" name="password" type="password" id="dashboard-fn" placeholder="Password Lama">
-          <div class="form-text"><a href="">Lupa password?</a></div>
-        </div>
-        <div class="col-sm-12">
-          <label class="form-label" for="dashboard-profile-name">Password Baru</label>
-          <input class="form-control" name="new_password" type="password" id="dashboard-profile-name" placeholder="Password Baru"">
-        </div>
-        <div class="col-sm-12">
-          <label class="form-label" for="dashboard-email">Konfirmasi Password Baru</label>
-          <input class="form-control" name="c_password" type="password" id="dashboard-email" placeholder="Konfirmasi Password Baru">
-        </div>
-        
-        <div class="col-12">
-          <hr class="mt-2 mb-4">
-          <div class="d-sm-flex justify-content-between align-items-center">
-            <button class="btn btn-primary mt-3 mt-sm-0" type="submit">Simpan Perubahan</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+    <!-- Container-fluid Ends-->
+  </div>   
+@endsection
+@section('js')
+@parent
+<script src="{{asset('assets_users/assets/js/dropzone/dropzone.js')}}"></script>
+<script src="{{asset('assets_users/assets/js/dropzone/dropzone-script.js')}}"></script>
+<script type="text/javascript">
+  Dropzone.options.imageUpload = {
+      maxFilesize : 1,
+      maxFiles: 1,
+      url: "{{route('change_avatar')}}",
+      init : function() {     
+            this.on("success", function(file, response) {                               
+              if(response.success) {
+                $("#alert").html(`
+                <div class="alert alert-success dark alert-dismissible fade show mb-3" role="alert">
+                <span>${response.message}</span>
+                </div>
+                `)
+              } else {
+                $("#alert").html(`
+                <div class="alert alert-danger dark alert-dismissible fade show mb-3" role="alert">
+                <span>${response.message}</span>
+                </div>
+                `)
+              }
+            });  
+            this.on("maxfilesexceeded", function(file){
+              $("#alert").html(`
+                <div class="alert alert-danger dark alert-dismissible fade show mb-3" role="alert">
+                <span>Tidak bisa mengupload lebih dari 1 file</span>
+                </div>
+                `)
+            });
+      },
+      acceptedFiles: ".jpeg,.jpg,.png,.gif"
+  };
+</script>
 @endsection
