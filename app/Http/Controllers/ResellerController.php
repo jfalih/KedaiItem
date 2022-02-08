@@ -7,7 +7,8 @@ use App\Models\{
     Category,
     Status,
     Purchase,
-    Item
+    Item,
+    Subcategory
 };
 use DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -60,7 +61,7 @@ class ResellerController extends Controller
         if($validator->fails()){
             return response()->json([
                 'success' => false,
-                'message' => $request->all()
+                'message' => 'Masih ada form yang kosong!'
             ]);
         }
         $check_slug = Item::where('slug', Str::slug($request->title))->count();
@@ -95,9 +96,38 @@ class ResellerController extends Controller
             'message' => 'Berhasil menambahkan produk!'
         ]);
     }
+    public function updateImage($id, Request $request){
+        $validator = Validator::make($request->all(), [
+            'file' => 'required',
+            'file.*' => 'mimes:jpg,jpeg,png'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => 'Masih ada form yang kosong!'
+            ]);
+        }
+        $item = Item::where('user_id', Auth::user()->id)->find($id);
+        $item_files = [];
+        if($request->file('file')){
+            foreach ($request->file('file') as $file) {
+                $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
+                array_push($item_files, [
+                    'name' => $path,
+                    'status_id' => Status::first()->id
+                ]);
+            }
+            $item->images()->detach();
+            $item->images()->createMany($item_files);
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mengedit gambar produk!'
+        ]);
+    }
     public function update($id, Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category' => 'required',
             'subcategory' => 'required',
             'title' => 'required',
@@ -105,10 +135,20 @@ class ResellerController extends Controller
             'stok' => 'required|min:1',
             'min' => 'required|min:1',
             'description' => 'required',
-            'files.*' => 'required|mimes:jpg,jpeg,png'
-        ],[
-            'required' => ':attribute harus diisi.'
         ]);
+        $check_category = Category::find($request->category);
+        $check_subcategory = Subcategory::find($request->subcategory);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => 'Masih ada form yang kosong!'
+            ]);
+        } else if(!$check_category && !$check_subcategory){
+            return response()->json([
+                'success' => false,
+                'message' => 'Kategori atau subcategory tidak ditemukan!'
+            ]);
+        }
         $check_slug = Item::where('slug', Str::slug($request->title))->count();
         if ($check_slug > 0) {
             $number = $check_slug + 1;
@@ -125,19 +165,12 @@ class ResellerController extends Controller
             'price' => $request->price,
             'slug' => $slug,
         ]);
-        $item_files = [];
-        if($request->file('files')){
-            foreach ($request->file('files') as $file) {
-                $path = Storage::putFile('public/reseller/' . Auth::user()->username, $file);
-                array_push($item_files, [
-                    'name' => $path,
-                    'status_id' => Status::first()->id
-                ]);
-            }
-            $item->images()->detach();
-            $item->images()->createMany($item_files);
-        }
-        return redirect()->back()->with('success', 'Berhasil mengedit produk!');
+        $item->subcategories()->detach();
+        $item->subcategories()->attach([$request->subcategory]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mengubah product!'
+        ]);
     }
     public function product(Request $request)
     { 

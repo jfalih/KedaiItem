@@ -22,11 +22,11 @@
   <!-- Container-fluid starts-->
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="card">
           <div class="card-header pb-0">
-            <h5>Edit Product</h5>
-            <span>Edit product/item yang ingin kamu jual disini.</span>
+            <h5>Ubah Gambar Product</h5>
+            <span>Ubah gambar product/item yang sebelumnya disini.</span>
           </div>
           <div class="card-body">
               <div id="alert"></div>
@@ -39,6 +39,20 @@
                     </div>
                   </div>
                 </div>
+              </form>
+              <button id="submit" class="btn btn-primary">Ubah Gambar Product</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header pb-0">
+            <h5>Edit Product</h5>
+            <span>Edit product/item yang ingin kamu jual disini.</span>
+          </div>
+          <form method="POST" id="form-nofile" action="{{route('reseller.product.update', ['item' => $item->id])}}" class="card-body">
+            <div id="alert-nofile"></div>  
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label class="form-label" for="exampleFormControlSelect9">Category</label>
                     <select class="form-select digits" name="category">
@@ -92,14 +106,16 @@
                 </div>
                 <div class="col-md-12">
                   <label class="form-label">Deskripsi</label>
-                  <textarea name="description" id="description" class="form-control"  rows="10" cols="50"></textarea>
+                  <textarea name="description" id="description" class="form-control"  rows="10" cols="50">
+                    {!! $item->description !!}
+                  </textarea>
                   @error('description')
                   <div class="invalid-feedback">{{$message}}</div>
                   @enderror
                 </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Ubah Product</button>
               </form>
-              <button id="submit" class="btn btn-primary">Tambah Product</button>
-          </div>
         </div>
       </div>
     </div>
@@ -126,6 +142,54 @@
    CKEDITOR.config.allowedContent = true;
 </script>
 <script type="text/javascript">
+  var frm = $('#form-nofile');
+  frm.submit(function (e) {
+      e.preventDefault();
+      swal({
+        title:'Loading',
+        text:'Loading edit item..',
+        closeOnClickOutside: false,
+        buttons:false
+      });
+      formData = new FormData(this);
+      formData.append("_token", "{{ csrf_token() }}");
+      var category = $('select[name=category] option').filter(':selected').val();
+      var subcategory = $('select[name=subcategory] option').filter(':selected').val();
+      var description = CKEDITOR.instances.description.getData();
+      $("form#form-nofile").find("input").each(function(){
+          formData.append($(this).attr("name"), $(this).val());
+      });
+      formData.append("category", category);
+      formData.append("description", description);
+      formData.append("subcategory", subcategory);
+      $.ajax({
+          processData: false,
+          contentType: false,
+          cache: false,
+          type: frm.attr('method'),
+          url: frm.attr('action'),
+          data: formData,
+          success: function (response) {
+          swal.close();
+            console.log(response);
+            if(response.success) {
+            $("#alert-nofile").html(`
+            <div class="alert alert-success dark alert-dismissible fade show mb-3" role="alert">
+            <span>${response.message}</span>
+            </div>
+            `)
+          } else {
+            $("#alert-nofile").html(`
+            <div class="alert alert-danger dark alert-dismissible fade show mb-3" role="alert">
+            <span>${response.message}</span>
+            </div>
+            `)
+          }
+          }
+      });
+  });
+</script>
+<script type="text/javascript">
   Dropzone.autoDiscover = false;
   $(document).ready(function () {
         $("#image-upload").dropzone({
@@ -133,7 +197,7 @@
           uploadMultiple: true,
           parallelUploads: 100,
           maxFiles: 4,
-          url: "{{route('reseller.product.store')}}",
+          url: "{{route('reseller.product.updateImage', ['item' => $item->id])}}",
            init: function() {
         var myDropzone = this;
         // First change the button to actually tell Dropzone to process the queue.
@@ -150,7 +214,7 @@
             myDropzone.processQueue();
             swal({
               title:'Loading',
-              text:'Loading adding item..',
+              text:'Loading edit gambar item..',
               closeOnClickOutside: false,
               buttons:false
             });
@@ -173,7 +237,6 @@
         });
         this.on("successmultiple", function(files, response) {
           swal.close();
-          console.log(response);
           if(response.success) {
             $('#form_order').trigger("reset");
             $("#alert").html(`

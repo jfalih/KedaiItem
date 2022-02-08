@@ -97,7 +97,8 @@ Route::middleware('auth')->group(function(){
         Route::delete('/product/{item}/delete', [ResellerController::class, 'destroy'])->name('product.delete');
         Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
         Route::post('/product/add', [ResellerController::class, 'store_product'])->name('product.store');
-        Route::put('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
+        Route::post('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
+        Route::post('/product/{item}/updateImage', [ResellerController::class,'updateImage'])->name('product.updateImage');
     });
     Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {

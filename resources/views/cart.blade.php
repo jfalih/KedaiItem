@@ -65,10 +65,10 @@
 											</tr>
 											<tr>
 												<td colspan="4">
-													<select name="systems" class="form__select">
-														<option value="visa">Visa</option>
-														<option value="mastercard">Mastercard</option>
-														<option value="paypal">Paypal</option>
+													<span>Pengiriman</span><br>
+													<select name="systems" class="form__select mt-2">
+														<option value="default">Biasa</option>
+														<option value="premium">Premium (Penambahan Fee Rp1.000)</option>
 													</select>
 												</td>
 											</tr>

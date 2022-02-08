@@ -19,8 +19,17 @@ class CartController extends Controller
         $item = Item::findOrFail($request->id);
         if(session()->has('cart')){
             $cart = session()->get('cart');
-            $cart[$item->user->username][$request->id]['quantity'] += 1;
-            session()->put('cart', $cart);
+            if(empty($cart[$item->user->username])) {
+                $cart[$item->user->username][$request->id] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'price' => $item->price,
+                    'quantity' => 1,
+                ];
+            } else {
+                $cart[$item->user->username][$request->id]['quantity'] += 1;
+            }
+                session()->put('cart', $cart);
         } else {
             $cart = session()->get('cart');
             $cart[$item->user->username][$request->id] = [
