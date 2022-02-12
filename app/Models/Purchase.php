@@ -10,7 +10,7 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'quantity', 'user_id', 'item_id'
+        'quantity', 'user_id', 'item_id','options','gusername','catatan'
     ];
     public function item(){
         return $this->belongsTo(Item::class);

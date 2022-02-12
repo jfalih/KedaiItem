@@ -179,6 +179,7 @@
 	<!-- end footer -->
 
 	<!-- JS -->
+	@section('js')
 	<script src="{{asset('assets/js/jquery-3.5.1.min.js')}}"></script>
 	<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 	<script src="{{asset('assets/js/owl.carousel.min.js')}}"></script>
@@ -189,6 +190,7 @@
 	<script src="{{asset('assets/js/jquery.mousewheel.min.js')}}"></script>
 	<script src="{{asset('assets/js/jquery.mCustomScrollbar.min.js')}}"></script>
 	<script src="{{asset('assets/js/main.js')}}"></script>
+	@show
 	<script type="text/javascript">
 		$(document).ready(function(){
 		  $.ajaxSetup({

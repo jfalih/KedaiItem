@@ -1,98 +1,212 @@
-@extends('layouts.app')
-@section('main')
-        
-    <main class="page-wrapper">
-    <!-- Page Title-->
-        @include('components.headers.default')
-        <div class="page-title-overlap bg-dark pt-4">
-            <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
-            <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
-                <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-                    <li class="breadcrumb-item"><a class="text-nowrap" href="{{url('/')}}"><i class="ci-home"></i>Home</a></li>
-                    <li class="breadcrumb-item text-nowrap active" aria-current="page">Keranjang Belanja</li>
-                </ol>
-                </nav>
-            </div>
-            <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
-                <h1 class="h3 text-light mb-0">Keranjang Belanja</h1>
-            </div>
-            </div>
-        </div>
-        
-        <div class="container pb-5 mb-2 mb-md-4">
-            <div class="row">
-                <!-- List of items-->
-                <section class="col-lg-8">
-                    <!-- Steps-->
-                    <div class="steps steps-light pt-2 pb-3 mb-5">
-                        <a class="step-item ">
-                        <div class="step-progress">
-                            <span class="step-count">1</span>
-                        </div>
-                        <div class="step-label">
-                            <i class="ci-cart"></i>Cart
-                        </div>
-                        </a>
-                        </a><a class="step-item active">
-                        <div class="step-progress">
-                            <span class="step-count">2</span>
-                        </div>
-                        <div class="step-label">
-                            <i class="ci-check-circle"></i>Review
-                        </div>
-                        </a>
+@extends('layouts.user')
+@section('content')
+        <div class="page-body checkout">
+            <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                <div class="col-sm-6">
+                    <div class="page-header-left">
+                    <h3>Pembayaran</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
+                        <li class="breadcrumb-item active">Pembayaran</li>
+                    </ol>
                     </div>
-                    <div class="bg-secondary rounded-3 px-4 pt-4 pb-2">
-                        
-                        @foreach ($payment->purchases as $purchase)
-                            <div class="d-sm-flex justify-content-between my-4 pb-3 border-bottom">
-                                <div class="d-sm-flex text-center text-sm-start">
-                                    <a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="{{url('penjual/'.$purchase->user->username.'/item/'.$purchase->item->slug)}}">
-                                        <img src={{Storage::url($purchase->item->images->first()->name)}} width="160" alt="Product">
-                                    </a>
-                                <div class="pt-2">
-                                    <h3 class="product-title fs-base mb-2"><a href="{{url('penjual/'.$purchase->user->username.'/item/'.$purchase->item->slug)}}">{{ $purchase->item->name }}</a></h3>
-                                    <div class="fs-sm"><span class="text-muted me-2">Seller:</span>{{ $purchase->item->user->username }}</div>
-                                    <div class="fs-lg text-accent pt-2">Rp{{ number_format($purchase->item->price,2,',','.') }}</div>
-                                </div>
-                                </div>
-                                <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-end" style="max-width: 9rem;">
-                                    <p class="mb-0">
-                                        <span class="text-muted fs-sm">Quantity:</span>
-                                        <span>&nbsp;{{ $purchase->quantity }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
-                      </div>
-                </section>
-                <aside class="col-lg-4 pt-4 pt-lg-0 ps-xl-5">
-                    <div class="bg-white rounded-3 shadow-lg p-4">
-                      <h5>Intruksi Pembayaran</h5>
-                      <div class="py-2 px-xl-2">
-                        <div class="accordion" id="accordionExample">
-
-                          @foreach($response->data->instructions as $index => $res)
-                            <!-- Item -->
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{$index}}">
-                                  <button class="accordion-button @if($index != 0) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$index}}" aria-expanded="true" aria-controls="collapse{{$index}}">{{$res->title}}</button>
-                                </h2>
-                                <div class="accordion-collapse p-3 collapse @if($index == 0) show @endif" id="collapse{{$index}}" aria-labelledby="heading{{$index}}" data-bs-parent="#accordionExample">
-                                    @foreach($res->steps as $step)
-                                    <p>{!! $step !!}</p>
-                                    @endforeach
+                </div>
+                </div>
+            </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container invoice">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                          <div class="card-body">                            
+                            <div>
+                              <div>
+                                <div class="row invo-header">
+                                  <div class="col-sm-6">
+                                    <div class="media">
+                                      <div class="media-left"><a href="index.html" data-bs-original-title="" title=""><img class="media-object img-60" src="../assets/images/logo/logo-1.png" alt=""></a></div>
+                                      <div class="media-body m-l-20">
+                                        <h4 class="media-heading f-w-600">{{env('APP_NAME')}}</h4>
+                                        <p>kedaiitem@emailnya<br><span class="digits">0124123123128</span></p>
+                                      </div>
+                                    </div>
+                                    <!-- End Info-->
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="text-md-end text-xs-center">
+                                      <h3>Payment #<span class="digits counter">{{$payment->id}}</span></h3>
+                                      <p>Dibuka Sejak: {{$payment->created_at}}</p>
+                                    </div>
+                                    <!-- End Title                                 -->
+                                  </div>
                                 </div>
                               </div>
-                          @endforeach
-                          
-                        </div><button class="btn btn-primary btn-shadow d-block w-100 mt-4"><i class="ci-card fs-lg me-2"></i>Periksa Pembayaran</button>
+                              <!-- End InvoiceTop-->
+                              <div class="row invo-profile">
+                                <div class="col-xl-4">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <img class="media-object rounded-circle img-60" src="{{asset('assets_users/assets/images/user/1.jpg')}}" alt=""></div>
+                                    <div class="media-body m-l-20">
+                                      <h4 class="media-heading f-w-600">{{Auth::user()->name}}</h4>
+                                      <p>{{Auth::user()->email}}<br><span class="digits">{{Auth::user()->nomorhp}}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-xl-8">
+                                  <div class="text-xl-end" id="project">
+                                    <h6>Status Pembayaran</h6>
+                                    @if($category_pembayaran['data']['status'] == 'UNPAID')
+                                      <h2><span class="badge badge-danger">Belum Dibayar</span></h2>
+                                    @else
+                                      <h2><span class="badge badge-primary">Sudah Dibayar</span></h2>
+                                    @endif
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- End Invoice Mid-->
+                              <div>
+                                <div class="table-responsive invoice-table" id="table">
+                                  <table class="table table-bordered table-striped">
+                                    <tbody>
+                                      <tr>
+                                        <td class="item">
+                                          <h6 class="p-2 mb-0">Deskripsi Item</h6>
+                                        </td>
+                                        <td class="Hours">
+                                          <h6 class="p-2 mb-0">Quantity</h6>
+                                        </td>
+                                        <td class="Rate">
+                                          <h6 class="p-2 mb-0">Harga</h6>
+                                        </td>
+                                        <td class="subtotal">
+                                          <h6 class="p-2 mb-0">Sub-total</h6>
+                                        </td>
+                                      </tr>
+                                      @php
+                                       $total = 0;   
+                                      @endphp
+                                      @foreach($purchases as $purchase)
+                                      @php
+                                       $total += ($purchase->item->price*$purchase->quantity);   
+                                      @endphp
+                                      <tr>
+                                        <td>
+                                          <label>{{$purchase->item->subcategories()->first()->name}}</label>
+                                          <p class="m-0">{{$purchase->item->name}}</p>
+                                        </td>
+                                        <td>
+                                          <p class="itemtext digits">{{$purchase->quantity}}</p>
+                                        </td>
+                                        <td>
+                                          <p class="itemtext digits">Rp{{number_format($purchase->item->price,0,',','.')}}</p>
+                                        </td>
+                                        <td>
+                                          <p class="itemtext digits">Rp{{number_format($purchase->quantity*$purchase->item->price,0,',','.')}}</p>
+                                        </td>
+                                      </tr>
+                                      @endforeach
+                                      <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="Rate">
+                                          <h6 class="mb-0 p-2">Total</h6>
+                                        </td>
+                                        <td class="payment digits">
+                                          <h6 class="mb-0 p-2">Rp{{number_format($total,0,',','.')}}</h6>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!-- End Table-->
+                                @if(!$payment->method)
+                                <form method="POST" action="{{route('purchase',['id' => $payment->id])}}" class="col mt-3">
+                                  @csrf
+                                  <div class="col-md-12">
+                                    <h6>Metode pembayaran:</h6>
+                                    <p>Pilih metode pembayaran yang sesuai dan akan digunakan oleh kamu.</p>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <div class="mega-inline plain-style mt-3">
+                                      <div class="row">
+                                        @foreach($category_pembayaran['data'] as $data)
+                                        <div class="col-sm-6">
+                                          <div class="card">
+                                            <div class="media p-20">
+                                              <div class="radio radio-primary me-3">
+                                                <input id="{{$data['code']}}" type="radio" name="method" value="{{$data['code']}}">
+                                                <label for="{{$data['code']}}"></label>
+                                              </div>
+                                              <div class="media-body">
+                                                <h6 class="mt-0 mega-title-badge">{{$data['code']}}<span class="badge badge-primary pull-right digits">{{$data['group']}}</span></h6>
+                                                <p>{{$data['name']}}<br>Biaya Admin: Rp{{number_format($data['fee_customer']['flat'],0,',','.')}}</p>
+                                                <img style="object-fit: cover; width:auto;height:80px;" src="{{$data['icon_url']}}"/>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        @endforeach
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-12 text-center mt-3">
+                                    <button class="btn btn-secondary" type="button" data-bs-original-title="" title="">Hapus Pembayaran</button>
+                                    <button class="btn btn btn-primary me-2" type="submit" data-bs-original-title="" title="">Lanjutkan Pembayaran</button>
+                                  </div>
+                                </form>
+                                @else
+                                <div class="col mt-3">
+                                  <div class="col-md-12">
+                                    <center>
+                                      <h2>Dibayarkan Sebelum:</h2>
+                                      <h5>{{date('Y-m-d H:i:s',$category_pembayaran['data']['expired_time'])}}</h5>
+                                    </center>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <h6>Intruksi pembayaran:</h6>
+                                    <p>Berikut intruksi pembayaran yang dapat kamu lakukan, silahkan refresh halaman ini jika sudah melakukan pembayaran.</p>
+                                  </div>
+                                  <div class="col-sm-12 mt-3">
+                                    <div class="default-according" id="accordion">
+                                      @foreach($category_pembayaran['data']['instructions'] as $stepKey => $stepVal)
+                                      <div class="card">
+                                        <div class="card-header" id="heading{{$stepKey}}">
+                                          <h5 class="mb-0">
+                                            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapse{{$stepKey}}" aria-expanded="true" aria-controls="collapse{{$stepKey}}">{{$stepVal['title']}}</button>
+                                          </h5>
+                                        </div>
+                                        <div class="collapse @if($stepKey == 0) show @endif" id="collapse{{$stepKey}}" aria-labelledby="heading{{$stepKey}}" data-bs-parent="#accordion" style="">
+                                          <div class="card-body">
+                                            <ul>
+                                              @foreach($stepVal['steps'] as $stepChild)
+                                              <li>{!! $stepChild !!}</li>
+                                              @endforeach
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      @endforeach
+                                    </div>
+                                  </div>
+                                </div>
+                                @endif
+                              </div>
+                              <!-- End InvoiceBot-->
+                            </div>
+                            <!-- End Invoice-->
+                            <!-- End Invoice Holder-->
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </aside>
+                </div>
             </div>
+            <!-- Container-fluid Ends-->
         </div>
-        
-</main>
+@endsection
+@section('js')
+@parent
 @endsection

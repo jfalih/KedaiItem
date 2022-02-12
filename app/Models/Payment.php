@@ -10,7 +10,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'method', 'options', 'total', 'user_id','references'
+        'method', 'total', 'user_id','references','kode_unik'
     ];
     /**
      * The purchases that belong to the Payment

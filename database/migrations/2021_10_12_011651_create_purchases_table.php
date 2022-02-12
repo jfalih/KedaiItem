@@ -20,7 +20,10 @@ class CreatePurchasesTable extends Migration
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('quantity');
-            $table->enum('status', ['success','waiting','confirmed','canceled']);
+            $table->text('catatan');
+            $table->string('gusername');
+            $table->enum('options', ['not','premium']);
+            $table->enum('status', ['pending','success','waiting','confirmed','canceled']);
             $table->timestamps();
         });
     }
