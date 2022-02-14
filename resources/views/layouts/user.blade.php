@@ -33,6 +33,7 @@
        
     @show
     <!-- Plugins css start-->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/prism.css')}}">
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/bootstrap.css')}}">
@@ -115,8 +116,8 @@
                     </div>
                   </li>
                   <li>
-                    <a class="nav-link menu-title link-nav" href="{{route('chat')}}">
-                      <i data-feather="message-square"></i><span>Dashboard</span>
+                    <a class="nav-link menu-title link-nav" href="{{route('pembayaran')}}">
+                      <i data-feather="dollar-sign"></i><span>Pembayaran</span>
                     </a>
                   </li>
                   <li>

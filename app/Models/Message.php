@@ -21,8 +21,8 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'from_id', 'id');
     }
-    public function conversation()
+    public function purchases()
     {
-        return $this->belongsTo(Convertation::class,'convertation_id','id');
+        return $this->belongsTo(Purchase::class,'trx_id','id');
     }
 }

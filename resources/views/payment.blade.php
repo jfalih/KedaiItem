@@ -56,6 +56,7 @@
                                     </div>
                                   </div>
                                 </div>
+                                @if($payment->method)
                                 <div class="col-xl-8">
                                   <div class="text-xl-end" id="project">
                                     <h6>Status Pembayaran</h6>
@@ -66,6 +67,7 @@
                                     @endif
                                   </div>
                                 </div>
+                                @endif
                               </div>
                               <!-- End Invoice Mid-->
                               <div>
@@ -75,6 +77,9 @@
                                       <tr>
                                         <td class="item">
                                           <h6 class="p-2 mb-0">Deskripsi Item</h6>
+                                        </td>
+                                        <td class="item">
+                                          <h6 class="p-2 mb-0">Pengiriman</h6>
                                         </td>
                                         <td class="Hours">
                                           <h6 class="p-2 mb-0">Quantity</h6>
@@ -91,12 +96,23 @@
                                       @endphp
                                       @foreach($purchases as $purchase)
                                       @php
-                                       $total += ($purchase->item->price*$purchase->quantity);   
+                                      if($purchase->options == 'premium'):
+                                        $total += ($purchase->item->price*$purchase->quantity)+App\Models\Setting::first()->harga;   
+                                      else:
+                                        $total += ($purchase->item->price*$purchase->quantity);   
+                                      endif;
                                       @endphp
                                       <tr>
                                         <td>
                                           <label>{{$purchase->item->subcategories()->first()->name}}</label>
                                           <p class="m-0">{{$purchase->item->name}}</p>
+                                        </td>
+                                        <td>
+                                          @if($purchase->options == 'premium')
+                                          <p class="m-0">{{Str::title($purchase->options)}} Fee: Rp{{number_format(App\Models\Setting::first()->harga,0,',','.')}}</p>
+                                          @else
+                                          <p class="m-0">{{Str::title($purchase->options)}}</p> 
+                                          @endif
                                         </td>
                                         <td>
                                           <p class="itemtext digits">{{$purchase->quantity}}</p>
@@ -105,20 +121,31 @@
                                           <p class="itemtext digits">Rp{{number_format($purchase->item->price,0,',','.')}}</p>
                                         </td>
                                         <td>
+                                          @if($purchase->options == 'premium')
+                                          <p class="itemtext digits">Rp{{number_format($purchase->quantity*$purchase->item->price+App\Models\Setting::first()->harga,0,',','.')}}</p>
+                                          @else
                                           <p class="itemtext digits">Rp{{number_format($purchase->quantity*$purchase->item->price,0,',','.')}}</p>
+                                          @endif
                                         </td>
                                       </tr>
                                       @endforeach
+                                      @if($payment->method)
                                       <tr>
                                         <td></td>
-                                        <td></td>
+                                        <td class="Rate">
+                                          <h6 class="mb-0 p-2">Fee Customer</h6>
+                                        </td>
+                                        <td class="payment digits">
+                                          <h6 class="mb-0 p-2">Rp{{number_format($category_pembayaran['data']['fee_customer'],0,',','.')}}</h6>
+                                        </td>
                                         <td class="Rate">
                                           <h6 class="mb-0 p-2">Total</h6>
                                         </td>
                                         <td class="payment digits">
-                                          <h6 class="mb-0 p-2">Rp{{number_format($total,0,',','.')}}</h6>
+                                          <h6 class="mb-0 p-2">Rp{{number_format($total+$category_pembayaran['data']['fee_customer'],0,',','.')}}</h6>
                                         </td>
                                       </tr>
+                                      @endif
                                     </tbody>
                                   </table>
                                 </div>

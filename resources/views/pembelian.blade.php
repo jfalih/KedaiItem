@@ -10,7 +10,7 @@
         <div class="col-sm-12">
           <h3>Pembelian</h3>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html" data-bs-original-title="" title="">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{url('/')}}" data-bs-original-title="" title="">Home</a></li>
             <li class="breadcrumb-item active">Pembelian</li>
           </ol>
         </div>
@@ -35,10 +35,12 @@
                     <th>NO</th>
                     <th>ID</th>
                     <th>ITEM</th>
-                    <th>HARGA</th>
-                    <th>JUMLAH</th>
-                    <th>TOTAL HARGA</th>
-                    <th>AKSI</th>
+                    <th>NAME</th>
+                    <th>QUANTITY</th>
+                    <th>PENGIRIMAN</th>
+                    <th>STATUS</th>
+                    <th>TOTAL</th>
+                    <th>ACTION</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -46,10 +48,12 @@
                     <th>NO</th>
                     <th>ID</th>
                     <th>ITEM</th>
-                    <th>HARGA</th>
-                    <th>JUMLAH</th>
-                    <th>TOTAL HARGA</th>
-                    <th>AKSI</th>
+                    <th>NAME</th>
+                    <th>QUANTITY</th>
+                    <th>PENGIRIMAN</th>
+                    <th>STATUS</th>
+                    <th>TOTAL</th>
+                    <th>ACTION</th>
                   </tr>
                 </tfoot>
               </table>
@@ -75,11 +79,13 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'id', name: 'id'},
-            {data: 'item', name: 'item'},
-            {data: 'harga', name: 'harga'},
+            {data: 'image', name: 'image'},
+            {data: 'name', name: 'name'},
             {data: 'quantity', name: 'quantity'},
+            {data: 'option', name: 'option'},
+            {data: 'status', name: 'status'},
             {data: 'total', name: 'total'},
-            {data: 'aksi', name: 'aksi'},
+            {data: 'action', name: 'action'},
           ]
     });
   });

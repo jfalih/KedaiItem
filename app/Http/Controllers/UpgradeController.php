@@ -42,7 +42,7 @@ class UpgradeController extends Controller
             ['status', '=', 'pending']
         ])->first();
         if($check_up){
-            return redirect()->back()->withErrors('Sudah dalam proses verifikasi..');
+            return redirect()->back()->withError('Sudah dalam proses verifikasi..');
         }
         $req_tabungan = Storage::putFile('public/verification', $request->file('tabungan'));
         $tabungan = Image::create([

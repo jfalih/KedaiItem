@@ -55,7 +55,6 @@ class PengaturanWebsiteController extends Controller
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'required',
             'harga' => 'required',
-            'maintenance' => 'required',
             'title' => 'required'
         ], [
             'required' => ':attribute harus diisi.'
@@ -65,13 +64,16 @@ class PengaturanWebsiteController extends Controller
             $setting->name = $request->name;
             $setting->title = $request->title;
             $setting->harga = $request->harga;
-            $setting->maintenance = $request->maintenance;
+            if($request->has('maintenance')){
+                $setting->maintenance = $request->maintenance;
+            } else {
+                $setting->maintenance = "0";
+            }
             $setting->description = $request->description;
             if($request->file('logo')){
                 Image::destroy($setting->logo_id);
                 $path = Storage::putFile('public/website/', $request->file('logo'));
                 $logo = Image::create([
-                    'caption' => 'logo website '.$request->name,
                     'name' => $path,
                     'status_id' => 1
                 ]);
@@ -81,7 +83,6 @@ class PengaturanWebsiteController extends Controller
                 Image::destroy($setting->favicon_id);
                 $path = Storage::putFile('public/website/', $request->file('favicon'));
                 $fav = Image::create([
-                    'caption' => 'Favicon icon '.$request->name,
                     'name' => $path,
                     'status_id' => 1
                 ]);
@@ -89,18 +90,19 @@ class PengaturanWebsiteController extends Controller
             }
             $setting->save();
         } else {
+            if($request->has('maintenance')){
+             }
             $setting = Setting::create([
                 'name' => $request->name,
                 'title' => $request->title,
                 'description' => $request->description,
-                'maintenance' => $request->maintenance,
+                'maintenance' => $request->has('maintenance') ? $request->maintenance : 0,
                 'harga' => $request->harga
             ]);
             if($request->file('logo')){
                 Image::destroy($setting->logo_id);
                 $path = Storage::putFile('public/website/', $request->file('logo'));
                 $logo = Image::create([
-                    'caption' => 'logo website '.$request->name,
                     'name' => $path,
                     'status_id' => 1
                 ]);
@@ -110,7 +112,6 @@ class PengaturanWebsiteController extends Controller
                 Image::destroy($setting->favicon_id);
                 $path = Storage::putFile('public/website/', $request->file('favicon'));
                 $fav = Image::create([
-                    'caption' => 'Favicon icon '.$request->name,
                     'name' => $path,
                     'status_id' => 1
                 ]);

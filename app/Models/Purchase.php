@@ -23,6 +23,10 @@ class Purchase extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'trx_id', 'id');
+    }
     public function payments(){
         return $this->belongsToMany(Payment::class,'purchase_payment','purchase_id','payment_id');
     }

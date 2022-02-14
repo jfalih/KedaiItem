@@ -1,0 +1,1 @@
+<img class="img-fluid" width="200" height="200" src="{{('assets_users/assets/images/product/1.png')}}" alt="#">

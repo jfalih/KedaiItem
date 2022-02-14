@@ -71,7 +71,7 @@
 										<div class="filter__group">
 											<label class="filter__label">Kategori:</label>
 											<ul class="filter__checkboxes">
-												@foreach($categories as $cat)
+												@forelse($categories as $cat)
 												<li>
 													<input id="type1" type="checkbox" name="categories[]" value="{{$cat->id}}"
 														@foreach($category as $c)
@@ -80,19 +80,23 @@
 													>
 													<label for="type1">{{$cat->name}}</label>
 												</li>
-												@endforeach
+												@empty
+												<li><span style="color:#fff; font-size:12px">Kategori belum tersedia</span></li>
+												@endforelse
 											</ul>
 										</div>
 
 										<div class="filter__group">
 											<label class="filter__label">Subkategori:</label>
 											<ul class="filter__checkboxes">
-												@foreach($subcategories as $sub)
+												@forelse($subcategories as $sub)
 												<li>
 													<input id="{{$sub->name}}" type="checkbox" name="subcategories">
 													<label for="{{$sub->name}}">{{$sub->name}}</label>
 												</li>
-												@endforeach
+												@empty
+												<li><span style="color:#fff; font-size:12px">Subkategori belum tersedia</span></li>
+												@endforelse
 											</ul>
 										</div>
 
@@ -135,6 +139,25 @@
 							</div>
 						</div>
                         @empty
+						<div class="col-12">
+							
+							<table class="cart__table">
+								<tr>
+									<td>
+										<center>
+											<img width="300" height="300" src="{{asset('assets/img/not_found.svg')}}"/>
+										</center>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<center>
+											<h1>Produk tidak ditemukan..</h1>
+										</center>
+									</td>
+								</tr>
+							</table>
+						</div>
                         @endforelse
 						<!-- end card -->
 						@if($items->count() > 0)

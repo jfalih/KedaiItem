@@ -23,12 +23,12 @@
 								<input type="password" name="password" class="sign__input" placeholder="Password"></div>
 							<div class="sign__group sign__group--checkbox">
 								<input id="remember" name="remember" type="checkbox" checked="checked">
-								<label for="remember">Remember Me</label>
+								<label for="remember">Ingat Saya</label>
 							</div>
-							<button type="submit" class="sign__btn" type="button">Sign in</button>
-							<span class="sign__delimiter">or</span>
-							<span class="sign__text">Don't have an account? <a href="{{route('register')}}">Sign up!</a></span>
-							<span class="sign__text"><a href="">Forgot password?</a></span>
+							<button type="submit" class="sign__btn" type="button">Masuk</button>
+							<span class="sign__delimiter">atau</span>
+							<span class="sign__text">Tidak punya akun? <a href="{{route('register')}}">Daftar!</a></span>
+							<span class="sign__text"><a href="">Lupa password?</a></span>
 						</form>
 						<!-- end authorization form --></div>
 				</div>

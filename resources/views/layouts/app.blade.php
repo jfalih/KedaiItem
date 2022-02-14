@@ -39,8 +39,8 @@
 								<span></span>
 							</button>
 
-							<a href="index-2.html" class="header__logo">
-								<img src="img/logo.svg" alt="">
+							<a href="{{route('welcome')}}" class="header__logo">
+								<img src="{{asset('assets/img/logo.svg')}}" alt="">
 							</a>
 
 							<div class="header__actions">
@@ -53,21 +53,14 @@
 										</a>
 
 										<ul class="dropdown-menu header__nav-menu header__nav-menu--scroll" aria-labelledby="dropdownMenu3">
-											<li><a href="checkout.html">Checkout</a></li>
-											<li><a href="favorites.html">Favorites</a></li>
-											<li><a href="about.html">About</a></li>
-											<li><a href="profile.html">Profile</a></li>
-											<li><a href="signin.html">Sign in</a></li>
-											<li><a href="signup.html">Sign up</a></li>
-											<li><a href="forgot.html">Forgot password</a></li>
-											<li><a href="privacy.html">Privacy policy</a></li>
-											<li><a href="contacts.html">Contacts</a></li>
-											<li><a href="404.html">404 Page</a></li>
+											<li><a href="{{route('pengaturan')}}">Pengaturan</a></li>
+											<li><a href="{{route('pembelian')}}">Pembelian</a></li>
+											<li><a href="{{route('logout')}}">Keluar</a></li>
 										</ul>
 									</div>
 								@endauth
 								@guest
-								<a href="signin.html" class="header__login">
+								<a href="{{route('login')}}" class="header__login">
 									<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><path d='M192,176V136a40,40,0,0,1,40-40H392a40,40,0,0,1,40,40V376a40,40,0,0,1-40,40H240c-22.09,0-48-17.91-48-40V336' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><polyline points='288 336 368 256 288 176' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><line x1='80' y1='256' x2='352' y2='256' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
 									<span>Sign in</span>
 								</a>
@@ -92,12 +85,7 @@
 							</form>
 
 							<div class="header__actions header__actions--2">
-								<a href="favorites.html" class="header__link">
-									<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><path d='M352.92,80C288,80,256,144,256,144s-32-64-96.92-64C106.32,80,64.54,124.14,64,176.81c-1.1,109.33,86.73,187.08,183,252.42a16,16,0,0,0,18,0c96.26-65.34,184.09-143.09,183-252.42C447.46,124.14,405.68,80,352.92,80Z' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
-									<span>Favorites</span>
-								</a>
-
-								<a href="checkout.html" class="header__link">
+								<a href="{{route('cart')}}" class="header__link">
 									<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><circle cx='176' cy='416' r='16' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><circle cx='400' cy='416' r='16' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><polyline points='48 80 112 80 160 352 416 352' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><path d='M160,288H409.44a8,8,0,0,0,7.85-6.43l28.8-144a8,8,0,0,0-7.85-9.57H128' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
 									<span id="total_cart">Rp{{number_format(Cart::getTotal(),0,',','.')}}</span>
 								</a>
@@ -166,8 +154,8 @@
 
 				<div class="col-12">
 					<div class="footer__wrap">
-						<a class="footer__logo" href="index-2.html">
-							<img src="img/logo.svg" alt="">
+						<a class="footer__logo" href="{{route('welcome')}}">
+							<img src="{{asset('assets/img/logo.svg')}}" alt="">
 						</a>
 
 						<span class="footer__copyright">© GG.template, 2020—2021 <br> Create by <a href="https://themeforest.net/user/dmitryvolkov/portfolio" target="_blank">Dmitry Volkov</a></span>

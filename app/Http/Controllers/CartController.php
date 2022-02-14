@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\{
     Item,
     Payment,
-    Purchase
+    Purchase,
+    Setting
 };
 use Illuminate\Support\Str;
 use Auth;
@@ -60,6 +61,7 @@ class CartController extends Controller
     }
     public function checkout(Request $request)
     {
+        $setting = Setting::first();
         if(Auth::check()){
             $request->validate([
                 'options' => 'required',
@@ -79,7 +81,7 @@ class CartController extends Controller
             foreach($cart as $cartVal){
                 foreach($cartVal as $itemKey => $itemVal){
                     $item = Item::find($itemVal['id']);
-                    $total_cart += $item->price * $itemVal['quantity'];
+                    $total_cart +=  $options[$itemKey] == "premium" ? ($item->price * $itemVal['quantity']) + $setting->harga : ($item->price * $itemVal['quantity']);
                     Purchase::create([
                         'item_id' => $item->id,
                         'user_id' => Auth::user()->id,
@@ -105,6 +107,7 @@ class CartController extends Controller
         }
     }
     public function purchase($id, Request $request){
+        $setting = Setting::first();
         $request->validate([
             'method' => 'required',
         ],[
@@ -129,6 +132,14 @@ class CartController extends Controller
                 'price' => $purchase->item->price,
                 'quantity' => $purchase->quantity
             ];
+            if($purchase->options == 'premium'){
+                $arr_barang[] = [
+                    'sku' => 'ADDONS-'.$purchase->item->id,
+                    'name' => 'Premium Delivery',
+                    'price' => $setting->harga,
+                    'quantity' => 1,
+                ];
+            }
         }
         
         $amount = $payment->total;

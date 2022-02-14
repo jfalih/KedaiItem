@@ -9,7 +9,9 @@ use App\Models\{
     Image, 
     Status, 
     Message,
-    Purchase
+    Payment,
+    Purchase,
+    Setting
 };
 use Illuminate\Support\Facades\Validator;
 
@@ -122,26 +124,72 @@ class DashboardController extends Controller
         ]);
     }
     public function pembelian(Request $request)
-    { 
+    {
+        $setting = Setting::first();
+        $purchase = Purchase::with('payments')->where('user_id', Auth::user()->id)->get();
         if($request->ajax()){ 
-            $pembelian = Purchase::where('user_id', Auth::user()->id)->get();
-            return DataTables::of($pembelian)
+            return DataTables::of($purchase)
             ->addIndexColumn()
-            ->addColumn('item', function (Purchase $pembelian) {
-                return $pembelian->item->name;
+            ->addColumn('image', function (Purchase $purchase) {
+                return view('components.items.tableImage', [
+                    'images' => $purchase->item->images()->first()->name
+                ]);
             })
-            ->addColumn('harga', function (Purchase $pembelian) {
-                return $pembelian->item->price;
+            ->addColumn('name', function (Purchase $purchase) {
+                return $purchase->item->name;
             })
-            ->addColumn('total', function (Purchase $pembelian) {
-                return $pembelian->item->price*$pembelian->quantity;
+            ->addColumn('total', function (Purchase $purchase) use($setting){
+                if($purchase->options === 'premium'){
+                    return 'Rp'.number_format($purchase->quantity * $purchase->item->price + $setting->harga,0,',','.');
+                } else {
+                    return 'Rp'.number_format($purchase->quantity * $purchase->item->price,0,',','.');    
+                }
             })
-            ->addColumn('aksi', function (Purchase $pembelian) {
-                return 'belum';
+            ->addColumn('option', function (Purchase $purchase) {
+                return view('pembelian.option', [
+                    'data' => $purchase
+                ]);
+            })
+            ->addColumn('status', function (Purchase $purchase) {
+                return view('pembelian.status', [
+                    'data' => $purchase
+                ]);
+            })
+            ->addColumn('action', function (Purchase $purchase) {
+                return view('pembelian.action', [
+                    'data' => $purchase
+                ]);
             })
             ->make(true);
         }
         return view('pembelian');
+    }
+    public function pembayaran(Request $request)
+    { 
+        $pembelian = Payment::where('user_id', Auth::user()->id)->get();
+        if($request->ajax()){ 
+            return DataTables::of($pembelian)
+            ->addIndexColumn()
+            ->addColumn('id', function (Payment $pembelian) {
+                return 'Payment#'.$pembelian->id;
+            })
+            ->addColumn('total', function (Payment $pembelian) {
+                return 'Rp'.number_format($pembelian->total,0,',','.');
+            })
+            ->addColumn('status', function (Payment $payment) {
+                return view('pembayaran.status', [
+                    'data' => $payment
+                ]);
+            })
+            ->addColumn('action', function (Payment $payment) {
+                return view('pembayaran.action', [
+                    'data' => $payment
+                ]);
+            })
+            ->make(true);
+        }
+        return view('pembayaran');
+
     }
     public function pengaturan()
     {

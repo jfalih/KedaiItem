@@ -31,6 +31,12 @@
             <div class="card-body">
               <form method="POST"  enctype="multipart/form-data" action="{{ route('upgrade.add') }}">
                 @csrf
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{session('error')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{session('success')}}
@@ -40,33 +46,57 @@
                 <div class="row g-3 mb-3">
                   <div class="col-md-6">
                     <label class="form-label" >Nama Toko</label>
-                    <input class="form-control" type="text" name="nama_toko" required>
+                    <input class="form-control @error('nama_toko') is-invalid @enderror" type="text" name="nama_toko" required>
+                    @error('name')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else
                     <small class="form-text text-muted">Hanya dapat alfabet, angka, dan underscore. Nama toko tidak dapat diganti.</small>
+                    @endif
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Nomor Rekening</label>
-                    <input class="form-control" type="number" >
+                    <input class="form-control @error('nomor_rekening') is-invalid @enderror" name="nomor_rekening" type="number" >
+                    @error('nomor_rekening')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else
                     <small class="form-text text-muted">Hanya dapat memasukan angka. Nomor rekening harus sesuai dengan buku tabungan.</small>  
+                    @enderror
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Atas Nama</label>
-                    <input class="form-control" type="text">
+                    <input class="form-control @error('atas_nama') is-invalid @enderror" name="atas_nama" type="text">
+                    @error('atas_nama')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else
                     <small class="form-text text-muted">Hanya dapat alfabet dan spasi. Atas nama harus sesuai dengan buku tabungan</small>
+                    @enderror
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Foto Buku Tabungan</label>
-                    <input class="form-control" type="file" name="tabungan" >
-                    <small class="form-text text-muted" id="emailHelp">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    <input class="form-control @error('tabungan') is-invalid @enderror" type="file" name="tabungan" >
+                    @error('tabungan')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else
+                      <small class="form-text text-muted">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    @endif
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Foto Ktp</label>
-                    <input class="form-control" type="file" name="ktp">
-                    <small class="form-text text-muted" id="emailHelp">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    <input class="form-control @error('ktp') is-invalid @enderror" type="file" name="ktp">
+                    @error('ktp')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else  
+                      <small class="form-text text-muted" id="ktp">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    @enderror
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Foto Ktp + Selfie</label>
-                    <input class="form-control" type="file" name="selfie" >
-                    <small class="form-text text-muted" id="emailHelp">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    <input class="form-control @error('selfie') is-invalid @endif" type="file" name="selfie">
+                    @error('selfie')
+                      <small class="form-text text-danger">{{$message}}</small>
+                    @else
+                      <small class="form-text text-muted">Kami tidak akan menyebarkan data hanya digunakan untuk verifikasi.</small>
+                    @endif
                   </div>
                 </div>
                 <button class="btn btn-primary" type="submit">Submit form</button>

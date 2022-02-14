@@ -74,7 +74,7 @@
 														<span>Pengiriman</span><br>
 														<select name="options[{{$value['id']}}]" class="form__select mt-2">
 															<option value="not">Biasa</option>
-															<option value="premium">Premium (Penambahan Fee Rp1.000)</option>
+															<option value="premium">Premium (Penambahan Fee Rp{{number_format(App\Models\Setting::first()->harga,0,',','.')}})</option>
 														</select>
 													</td>
 													<td colspan="2">

@@ -79,12 +79,11 @@ Route::middleware('auth')->group(function(){
     Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
     Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
 
-    Route::get('/chat', [DashboardController::class, 'chat'])->name('chat');
-    Route::get('/chat/{user}',[ChatController::class, 'index'])->name('chat.detail');
-    Route::post('/chat/{user}',[ChatController::class, 'create'])->name('chat.create');
-
+    Route::get('/chat/{id}',[ChatController::class, 'index'])->name('chat');
+   
     Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
     Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
+    Route::get('/pembayaran', [DashboardController::class, 'pembayaran'])->name('pembayaran');
     Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
     //Reseller
     Route::middleware('reseller')->name('reseller.')->group(function () {

@@ -9,7 +9,7 @@ class Setting extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'logo_id', 'favicon_id', 'title', 'description'
+        'name', 'logo_id', 'favicon_id', 'title', 'description','harga','maintenance'
     ];
     
     public function logo()

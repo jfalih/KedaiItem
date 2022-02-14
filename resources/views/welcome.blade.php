@@ -28,7 +28,7 @@
 		<!-- carousel -->
 		<div class="owl-carousel section__carousel section__carousel--big" id="carousel0">
 			<!-- big card -->
-			@foreach($random_items as $random_item)
+			@forelse($random_items as $random_item)
 			<div class="card card--big">
 				<a href="{{route('item.detail', ['seller' => $random_item->user->username,
 					'product' => $random_item->slug ])}}" class="card__cover">
@@ -58,8 +58,12 @@
 					</div>
 				</div>
 			</div>
+			@empty
+			<div class="alert alert-danger mt-2">
+				<span>Belum ada produk yang ditambahkan</span>
+			</div>
 			<!-- end big card -->
-			@endforeach
+			@endforelse
 			<!-- end big card -->
 		</div>
 		<!-- end carousel -->
@@ -76,7 +80,6 @@
 						<h2 class="section__title">Latest releases</h2>
 
 						<div class="section__nav-wrap">
-							<a href="catalog.html" class="section__view">View All</a>
 
 							<button class="section__nav section__nav--prev" type="button" data-nav="#carousel1">
 								<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><polyline points='328 112 184 256 328 400' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px'/></svg>
@@ -94,7 +97,7 @@
 
 		<!-- carousel -->
 		<div class="owl-carousel section__carousel section__carousel--catalog" id="carousel1">
-			@foreach($latest_items as $last)
+			@forelse($latest_items as $last)
 				<!-- card -->
 				<div class="card">
 					<a href="{{route('item.detail', [
@@ -119,7 +122,11 @@
 					</div>
 				</div>
 				<!-- end card -->
-			@endforeach
+				@empty
+				<div class="alert alert-danger mt-2">
+					Produk tidak tersedia
+				</div>
+			@endforelse
 		</div>
 		<!-- end carousel -->
 	</section>
@@ -137,10 +144,6 @@
 							<!-- title -->
 							<div class="section__title-wrap section__title-wrap--single">
 								<h2 class="section__title section__title--small">{{$sub->name}}</h2>
-
-								<div class="section__nav-wrap">
-									<a href="#" class="section__view">View All</a>
-								</div>
 							</div>
 							<!-- end title -->
 
