@@ -101,9 +101,12 @@ class TopupController extends Controller
         $error = curl_error($curl);
         curl_close($curl);
         if (empty($error)){
-            return dd($response);
+            return view('topup.detail', [
+                'topup' => $topup,
+                'data_api' => $response
+            ]);
         } else {
-            return dd($error);
+            return redirect()->back()->with('error', 'Tidak dapat menemukan data topup!');
         }
     }
 }
