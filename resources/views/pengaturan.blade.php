@@ -54,6 +54,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
+                @if(session('error_verif'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{session('error_verif')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                @if(Auth::user()->email_verified_at == null)
+                <div class="alert alert-danger dark" role="alert">
+                  <p>Belum verifikasi email? <a href="{{route('verification.send')}}" class="alert-link">Kirim ulang verifikasi</a></p>
+                </div>
+                @endif
                 <div class="row g-3 mb-3">
                   <div class="col-md-12">
                     <label class="form-label" >Nama Lengkap</label>

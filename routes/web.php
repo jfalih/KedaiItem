@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -11,6 +10,7 @@ use App\Http\Controllers\{
     DashboardController,
     WelcomeController,
     VendorController,
+    TopupController,
     UpgradeController,
     ProductController,
     ReviewController,
@@ -23,6 +23,7 @@ use App\Http\Controllers\{
 use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
     ItemController as AdminItemController,
+    PaymentCategoryController as AdminPaymentCategoryController,
     CategoryController as AdminCategoryController,
     SubcategoryController as AdminSubcategoryController,
     UserController as AdminUserController,
@@ -51,71 +52,77 @@ Route::get('/penjual/{seller}', [VendorController::class,'index'])->name('vendor
 //Auth
 Route::get('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'register']);
-Route::post('/phone/verification-notification', [VerificationController::class, 'phone']);
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/pengaturan');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('success', 'Link verifikasi telah dikirim!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
 Route::post('/login', [AuthController::class,'authenticate'])->name('login');
 Route::post('/register', [AuthController::class,'registerUser'])->name('register');
+
 //Setting
 Route::middleware('auth')->group(function(){
     Route::get('/logout', function(){
         Auth::logout();
         return redirect()->route('welcome');
     })->name('logout');
-    Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+
     Route::get('/pengaturan', [DashboardController::class,'pengaturan'])->name('pengaturan');
-    Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
-    Route::post('/upgrade/add', [UpgradeController::class,'upgrade'])->name('upgrade.add');
-    Route::get('/change_password', [DashboardController::class, 'indexChangePassword'])->name('index_change_password');
-    Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
-    Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
-    Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
+    Route::get('/verification', [DashboardController::class,'verification'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/pengaturan')->with('success','Email berhasil diverifikasi!');
+    })->middleware(['auth', 'signed'])->name('verification.verify');    
 
-    Route::get('/chat/{id}',[ChatController::class, 'index'])->name('chat');
-   
-    Route::get('/galeri', [DashboardController::class, 'galeri'])->name('galeri');
-    Route::post('/galeri/addImage', [DashboardController::class,'addImage'])->name('galeri.addImage');
-    Route::get('/pembayaran', [DashboardController::class, 'pembayaran'])->name('pembayaran');
-    Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
-    //Reseller
-    Route::middleware('reseller')->name('reseller.')->group(function () {
-         Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
-        Route::get('/payout', [PayoutController::class, 'index'])->name('payout'); 
-        Route::post('/payout', [PayoutController::class, 'create'])->name('payout'); 
-        Route::get('/product', [ResellerController::class, 'product'])->name('product');
-        Route::post('/product', [ResellerController::class,'product'])->name('product');
-        Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
-        Route::delete('/product/{item}/delete', [ResellerController::class, 'destroy'])->name('product.delete');
-        Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
-        Route::post('/product/add', [ResellerController::class, 'store_product'])->name('product.store');
-        Route::post('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
-        Route::post('/product/{item}/updateImage', [ResellerController::class,'updateImage'])->name('product.updateImage');
-    });
-    Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
-    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::resource('kategori', AdminCategoryController::class);
-        Route::resource('subcategory', AdminSubcategoryController::class);
-        Route::get('/user/verified', [AdminUserController::class, 'verified'])->name('user.verified');
-        Route::post('/user/verified/{user}/add', [AdminUserController::class, 'verified_add'])->name('user.verified.add');
-        Route::post('/user/verified/{user}/declined', [AdminUserController::class, 'verified_declined'])->name('user.verified.declined');
-        Route::resource('user', AdminUserController::class);
-        Route::resource('pembelian', AdminPembelianController::class);
-        Route::resource('item', AdminItemController::class);
-        Route::resource('chat', AdminChatController::class);
-        Route::resource('pengaturan', AdminPengaturanWebsiteController::class);
-        Route::resource('features', AdminFeaturesController::class);
-    });
+    Route::get('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('success', 'Link verifikasi telah dikirim!');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+    Route::middleware('verified')->group(function(){
+        Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
+        Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+        Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
+        Route::post('/upgrade/add', [UpgradeController::class,'upgrade'])->name('upgrade.add');
+        Route::get('/change_password', [DashboardController::class, 'indexChangePassword'])->name('index_change_password');
+        Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
+        Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
+        Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
+        Route::get('/chat/{id}',[ChatController::class, 'index'])->name('chat');
+        Route::get('/pembayaran', [DashboardController::class, 'pembayaran'])->name('pembayaran');
+        Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
+        Route::get('/topup', [TopupController::class, 'index'])->name('topup');
+        Route::get('/topup/{id}', [TopupController::class, 'detail'])->name('topup.detail');
+        Route::post('/topup/saldo', [TopupController::class,'topup'])->name('topup.saldo');
+        //Reseller
+        Route::middleware('reseller')->name('reseller.')->group(function () {
+            Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
+            Route::get('/payout', [PayoutController::class, 'index'])->name('payout'); 
+            Route::post('/payout', [PayoutController::class, 'create'])->name('payout'); 
+            Route::get('/product', [ResellerController::class, 'product'])->name('product');
+            Route::post('/product', [ResellerController::class,'product'])->name('product');
+            Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
+            Route::delete('/product/{item}/delete', [ResellerController::class, 'destroy'])->name('product.delete');
+            Route::get('/product/add', [ResellerController::class, 'new_product'])->name('product.add');
+            Route::post('/product/add', [ResellerController::class, 'store_product'])->name('product.store');
+            Route::post('/product/{item}/update', [ResellerController::class,'update'])->name('product.update');
+            Route::post('/product/{item}/updateImage', [ResellerController::class,'updateImage'])->name('product.updateImage');
+        });
+
+        // Admin
+        Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+            Route::resource('kategori', AdminCategoryController::class);
+            Route::resource('kategoripembayaran', AdminPaymentCategoryController::class);
+            Route::resource('subcategory', AdminSubcategoryController::class);
+            Route::get('/user/verified', [AdminUserController::class, 'verified'])->name('user.verified');
+            Route::post('/user/verified/{user}/add', [AdminUserController::class, 'verified_add'])->name('user.verified.add');
+            Route::post('/user/verified/{user}/declined', [AdminUserController::class, 'verified_declined'])->name('user.verified.declined');
+            Route::resource('user', AdminUserController::class);
+            Route::resource('pembelian', AdminPembelianController::class);
+            Route::resource('item', AdminItemController::class);
+            Route::resource('chat', AdminChatController::class);
+            Route::resource('pengaturan', AdminPengaturanWebsiteController::class);
+            Route::resource('features', AdminFeaturesController::class);
+        });
+    });    
 });
+
 //User
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');

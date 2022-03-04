@@ -65,6 +65,12 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{route('admin.kategoripembayaran.index')}}">
+                                    <i class="fas fa-database"></i>
+                                    <span>Kategori Pembayaran</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{route('admin.subcategory.index')}}">
                                     <i class="fas fa-database"></i>
                                     <span>Subkategori</span>

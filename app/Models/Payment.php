@@ -21,7 +21,13 @@ class Payment extends Model
     {
         return $this->belongsToMany(Purchase::class,'purchase_payment','payment_id','purchase_id');
     }
+    
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function paymentcategory()
+    {
+        return $this->belongsTo(Paymentcategory::class);
     }
 }

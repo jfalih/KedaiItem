@@ -195,4 +195,8 @@ class DashboardController extends Controller
     {
         return view('pengaturan');
     }
+    public function verification()
+    {
+        return redirect()->back()->with('error_verif', 'Silahkan verifikasi email terlebih dahulu');
+    }
 }

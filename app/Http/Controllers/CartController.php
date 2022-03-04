@@ -141,8 +141,13 @@ class CartController extends Controller
                 ];
             }
         }
-        
-        $amount = $payment->total;
+        $arr_barang[] = [
+            'sku' => 'KODEUNIK-'.$payment->id,
+            'name' => 'Kode Unik Kedaiitem '.$payment->id,
+            'price' => $payment->kode_unik,
+            'quantity' => 1,
+        ];
+        $amount = $payment->total+$payment->kode_unik;
         $data = [
             'method'         => $request->method,
             'merchant_ref'   => $merchantRef,
@@ -174,7 +179,7 @@ class CartController extends Controller
             $payment->save();
             return dd($res);   
         } else {
-            return dd($err);
+            return dd($res);
         }
     }
     public function payment($id)
@@ -183,50 +188,13 @@ class CartController extends Controller
         $purchases = Purchase::whereHas('payments', function($q) use($payment){
             $q->where('payment_id', $payment->id);
         })->get();
-        if(!$payment->method){
-            $apiKey = 'LqR9FsmjGCqj6ahtQyyI666Rtiie1bEiur8xwThv';
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-            CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => 'https://tripay.co.id/api/merchant/payment-channel',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-            CURLOPT_FAILONERROR    => false
-            ));
-            $response = curl_exec($curl);
-            $error = curl_error($curl);
-            curl_close($curl);
-
-            $res = json_decode($response, true);
+        if(!$payment->method_id){
             return view('payment',[
                 'payment' => $payment, 
                 'purchases' => $purchases,
-                'category_pembayaran' => $res,
             ]);
         } else {
-            $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
-            $payload = ['reference'	=> $payment->references];
-            $curl = curl_init();
-            curl_setopt_array($curl, [
-                CURLOPT_FRESH_CONNECT  => true,
-                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER         => false,
-                CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-                CURLOPT_FAILONERROR    => false,
-            ]);
-
-            $response = curl_exec($curl);
-            $error = curl_error($curl);
-
-            curl_close($curl);
-            $res = json_decode($response, true);
-            return view('payment',[
-                'payment' => $payment, 
-                'purchases' => $purchases,
-                'category_pembayaran' => $res,
-            ]);
+          
         }
     }
     public function index()

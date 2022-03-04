@@ -21,7 +21,7 @@ class RoleSeeder extends Seeder
             'name' => 'reseller'
         ]);
         Role::create([
-            'name' => 'developer'
+            'name' => 'admin'
         ]);
     }
 }

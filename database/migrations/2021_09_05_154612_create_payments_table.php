@@ -17,8 +17,9 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('references');
-            $table->string('method');
+            $table->string('references')->nullable();
+            $table->foreignId('method_id')->nullable();
+            $table->foreign('method_id')->references('id')->on('paymentcategories')->onDelete('cascade');
             $table->enum('status', ['pending','success','waiting','confirmed','canceled']);
             $table->integer('total');
             $table->integer('kode_unik');
