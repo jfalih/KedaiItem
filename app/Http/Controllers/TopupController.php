@@ -5,13 +5,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{
     Paymentcategory,
-    Topup
+    Topup,
+    User
 };
 use Auth;
+use DataTables;
 class TopupController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $categoryPayment = Paymentcategory::where('status_id', 1)->get();
+        $topup = Topup::where('user_id', Auth::user()->id)->get();
+        if($request->ajax()){ 
+            return DataTables::of($topup)
+            ->addIndexColumn()
+            ->addColumn('method', function (Topup $topup) {
+                return $topup->paymentcategory->name;
+            })
+            ->addColumn('nominal', function(Topup $topup){
+                return 'Rp'.number_format($topup->nominal,0,',','.');
+            })
+            ->addColumn('kode_unik', function(Topup $topup){
+                return 'Rp'.number_format($topup->kode_unik,0,',','.');
+            })
+            ->addColumn('status', function (Topup $topup) {
+                return view('pembelian.status', [
+                    'data' => $topup
+                ]);
+            })
+            ->addColumn('action', function (Topup $topup) {
+                return view('topup.action', [
+                    'data' => $topup
+                ]);
+            })
+            ->addColumn('total', function (Topup $topup){
+                return 'Rp'.number_format($topup->nominal + $topup->kode_unik,0,',','.');
+            })
+            ->make(true);
+        }
         return view('topup', [
             'categoryPayment' => $categoryPayment
         ]);
@@ -85,7 +115,7 @@ class TopupController extends Controller
     }
 
     public function detail($id) {
-        $topup = Topup::find($id);
+        $topup = Topup::findOrFail($id);
         $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
         $payload = ['reference'	=> $topup->references];
         $curl = curl_init();
@@ -101,12 +131,53 @@ class TopupController extends Controller
         $error = curl_error($curl);
         curl_close($curl);
         if (empty($error)){
+            $res = json_decode($response, true);
             return view('topup.detail', [
                 'topup' => $topup,
-                'data_api' => $response
+                'data_api' => $res
             ]);
         } else {
             return redirect()->back()->with('error', 'Tidak dapat menemukan data topup!');
         }
+    }
+    public function check($id){
+        $topup = Topup::findOrFail($id);
+        $user = User::find(Auth::user()->id);
+        $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
+        $payload = ['reference'	=> $topup->references];
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_FRESH_CONNECT  => true,
+            CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+            CURLOPT_FAILONERROR    => false,
+        ]);
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+        if (empty($error)){
+            $res = json_decode($response, true);
+            if($res['data']['status'] != 'PAID') {
+                return redirect()->back()->with('error', 'Pembayaran belum dibayar!');
+            } else if($topup->status == 'success') {
+                return redirect()->back()->with('error', 'Pembayaran sudah pernah dilakukan!');
+            } else {
+                $topup->status = 'success';
+                $topup->save();
+                $user->balance += ($topup->nominal + $topup->kode_unik);
+                $user->save();
+                return redirect()->back()->with('success', 'Pembayaran berhasil dibayarkan!');            
+            } 
+        } else {
+            return redirect()->back()->with('error', 'Tidak dapat menemukan data topup!');
+        }
+    }
+    public function cancel($id){
+        $topup = Topup::find($id);
+        $topup->status = 'canceled';
+        $topup->save();
+        return redirect()->back()->with('success', 'Berhasil membatalkan topup saldo!');
     }
 }

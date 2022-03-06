@@ -10,7 +10,7 @@ class Topup extends Model
     use HasFactory;
         
     protected $fillable = [
-        'nominal', 'method_id', 'references', 'kode_unik','user_id'
+        'nominal', 'method_id', 'references', 'kode_unik','user_id','status'
     ];
 
     public function paymentcategory()

@@ -10,7 +10,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'method', 'total', 'user_id','references','kode_unik'
+        'method_id', 'total', 'user_id','references','kode_unik'
     ];
     /**
      * The purchases that belong to the Payment
@@ -28,6 +28,6 @@ class Payment extends Model
 
     public function paymentcategory()
     {
-        return $this->belongsTo(Paymentcategory::class);
+        return $this->belongsTo(Paymentcategory::class,'method_id');
     }
 }

@@ -96,13 +96,21 @@
                       <h6>Seller Menu</h6>
                     </div>
                   </li>
-                  <li>
-                    <a class="nav-link menu-title link-nav" href="{{route('dashboard')}}">
-                      <i data-feather="credit-card"></i><span>Payout</span>
-                    </a>
+                  <li class="dropdown"><a class="nav-link menu-title">
+                    <i data-feather="credit-card"></i><span>Payout</span></a>
+                    <ul class="nav-submenu menu-content">
+                      <li>
+                        <a href="{{route('reseller.payout')}}"><span>History Payout</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{{route('reseller.payout.show')}}"><span>Request Payout</span>
+                        </a>
+                      </li>
+                    </ul>
                   </li>
                   <li>
-                    <a class="nav-link menu-title link-nav" href="{{route('dashboard')}}">
+                    <a class="nav-link menu-title link-nav" href="{{route('reseller.penjualan')}}">
                       <i data-feather="shopping-cart"></i><span>Penjualan</span>
                     </a>
                   </li>
@@ -128,7 +136,7 @@
                     </a>
                   </li>
                   <li>
-                    <a class="nav-link menu-title link-nav" href="">
+                    <a class="nav-link menu-title link-nav" href="{{route('topup')}}">
                       <i data-feather="dollar-sign"></i><span>Isi Saldo</span>
                     </a>
                   </li>

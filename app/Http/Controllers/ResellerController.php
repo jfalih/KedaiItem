@@ -7,6 +7,7 @@ use App\Models\{
     Category,
     Status,
     Purchase,
+    Setting,
     Item,
     Subcategory
 };
@@ -22,13 +23,48 @@ class ResellerController extends Controller
     {
         return view('reseller.dashboard');
     }
-    public function penjualan()
+    public function penjualan(Request $request)
     {
-        $penjualans = Purchase::where('status','!=','pending')->whereHas('item', function($q){
+        $setting = Setting::firstOrFail();
+        $purchase = Purchase::whereHas('item', function($q){
           $q->where('user_id', Auth::user()->id);
-        })->paginate();
+        });
+        if($request->ajax()){ 
+            return DataTables::of($purchase)
+            ->addColumn('image', function (Purchase $purchase) {
+                return view('components.items.tableImage', [
+                    'images' => $purchase->item->images()->first()->name
+                ]);
+            })
+            ->addColumn('name', function (Purchase $purchase) {
+                return $purchase->item->name;
+            })
+            ->addColumn('total', function (Purchase $purchase) use($setting){
+                if($purchase->options === 'premium'){
+                    return 'Rp'.number_format($purchase->quantity * $purchase->item->price + $setting->harga,0,',','.');
+                } else {
+                    return 'Rp'.number_format($purchase->quantity * $purchase->item->price,0,',','.');    
+                }
+            })
+            ->addColumn('option', function (Purchase $purchase) {
+                return view('reseller.penjualan.option', [
+                    'data' => $purchase
+                ]);
+            })
+            ->addColumn('status', function (Purchase $purchase) {
+                return view('reseller.penjualan.status', [
+                    'data' => $purchase
+                ]);
+            })
+            ->addColumn('action', function (Purchase $purchase) {
+                return view('reseller.penjualan.action', [
+                    'data' => $purchase,
+                ]);
+            })
+            ->make(true);
+        }
         return view('reseller.penjualan',[
-            'penjualans' => $penjualans
+            'purchase' => $purchase
         ]);
     }
     public function new_product()

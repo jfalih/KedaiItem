@@ -157,7 +157,7 @@ class DashboardController extends Controller
             })
             ->addColumn('action', function (Purchase $purchase) {
                 return view('pembelian.action', [
-                    'data' => $purchase
+                    'data' => $purchase,
                 ]);
             })
             ->make(true);
@@ -170,8 +170,12 @@ class DashboardController extends Controller
         if($request->ajax()){ 
             return DataTables::of($pembelian)
             ->addIndexColumn()
-            ->addColumn('id', function (Payment $pembelian) {
-                return 'Payment#'.$pembelian->id;
+            ->addColumn('method', function (Payment $pembelian) {
+                if($pembelian->method_id){
+                    return $pembelian->paymentcategory->name;
+                } else {
+                    return 'Silahkan pilih pembayaran';
+                }
             })
             ->addColumn('total', function (Payment $pembelian) {
                 return 'Rp'.number_format($pembelian->total,0,',','.');
@@ -197,6 +201,6 @@ class DashboardController extends Controller
     }
     public function verification()
     {
-        return redirect()->back()->with('error_verif', 'Silahkan verifikasi email terlebih dahulu');
+        return redirect()->route('pengaturan')->with('error_verif', 'Silahkan verifikasi email terlebih dahulu');
     }
 }

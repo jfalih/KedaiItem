@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\{
     UserController as AdminUserController,
     PembelianController as AdminPembelianController,
     ChatController as AdminChatController,
+    PayoutController as AdminPayoutController,
     PengaturanWebsiteController as AdminPengaturanWebsiteController,
     FeaturesController as AdminFeaturesController
 };
@@ -73,27 +74,60 @@ Route::middleware('auth')->group(function(){
         $request->user()->sendEmailVerificationNotification();
         return back()->with('success', 'Link verifikasi telah dikirim!');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    
+    Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
+    
+    Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+    Route::get('/change_password', [DashboardController::class, 'indexChangePassword'])->name('index_change_password');
+    Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
+    Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
+    Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
+    Route::get('/chat/{id}',[ChatController::class, 'index'])->name('chat');
+    Route::get('/pembayaran', [DashboardController::class, 'pembayaran'])->name('pembayaran');
 
+    Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
+    Route::get('/topup', [TopupController::class, 'index'])->name('topup');
+    Route::get('/topup/{id}', [TopupController::class, 'detail'])->name('topup.detail');
+    Route::post('/topup/saldo', [TopupController::class,'topup'])->name('topup.saldo');
+    Route::post('/topup/check/{id}', [TopupController::class,'check'])->name('topup.check');
+    Route::post('/topup/cancel', [TopupController::class,'cancel'])->name('topup.cancel');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
+    Route::post('/payment/{id}', [CartController::class,'purchase'])->name('purchase');
+    Route::post('/payment/check/{id}',[CartController::class,'check_payment'])->name('payment.check');
+    Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
+    Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('kategori', AdminCategoryController::class);
+        Route::resource('kategoripembayaran', AdminPaymentCategoryController::class);
+        Route::resource('subcategory', AdminSubcategoryController::class);
+        Route::get('/reseller/verified', [AdminUserController::class, 'verified'])->name('reseller.verified');
+        Route::post('/reseller/verified/{user}/add', [AdminUserController::class, 'verified_add'])->name('reseller.verified.add');
+        Route::post('/reseller/verified/{user}/declined', [AdminUserController::class, 'verified_declined'])->name('reseller.verified.declined');
+        Route::resource('user', AdminUserController::class);
+        Route::resource('pembelian', AdminPembelianController::class);
+        Route::resource('item', AdminItemController::class);
+        Route::resource('chat', AdminChatController::class);
+        Route::resource('pengaturan', AdminPengaturanWebsiteController::class);
+        Route::resource('features', AdminFeaturesController::class);
+        Route::get('/payout', [AdminPayoutController::class,'index'])->name('payout.index');
+        Route::post('/payout/{id}/success', [AdminPayoutController::class, 'success'])->name('payout.success');
+        Route::post('/payout/{id}/canceled', [AdminPayoutController::class, 'canceled'])->name('payout.canceled');
+    });
     Route::middleware('verified')->group(function(){
-        Route::get('/product/{category}/subcategory/ajax',[ResellerController::class,'ajax_subcategory'])->name('ajax.product.subcategory');
-        Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+        //Reseller
         Route::get('/upgrade', [UpgradeController::class,'index'])->name('upgrade');
         Route::post('/upgrade/add', [UpgradeController::class,'upgrade'])->name('upgrade.add');
-        Route::get('/change_password', [DashboardController::class, 'indexChangePassword'])->name('index_change_password');
-        Route::post('/pengaturan/change_avatar',[DashboardController::class, 'change_avatar'])->name('change_avatar');
-        Route::post('/pengaturan/change_password',[DashboardController::class, 'change_password'])->name('change_password');
-        Route::post('/pengaturan/change_profile', [DashboardController::class,'change_profile'])->name('change_profile');
-        Route::get('/chat/{id}',[ChatController::class, 'index'])->name('chat');
-        Route::get('/pembayaran', [DashboardController::class, 'pembayaran'])->name('pembayaran');
-        Route::get('/pembelian', [DashboardController::class, 'pembelian'])->name('pembelian');
-        Route::get('/topup', [TopupController::class, 'index'])->name('topup');
-        Route::get('/topup/{id}', [TopupController::class, 'detail'])->name('topup.detail');
-        Route::post('/topup/saldo', [TopupController::class,'topup'])->name('topup.saldo');
-        //Reseller
         Route::middleware('reseller')->name('reseller.')->group(function () {
             Route::get('/penjualan', [ResellerController::class, 'penjualan'])->name('penjualan');
             Route::get('/payout', [PayoutController::class, 'index'])->name('payout'); 
-            Route::post('/payout', [PayoutController::class, 'create'])->name('payout'); 
+            Route::get('/payout/add', [PayoutController::class, 'show'])->name('payout.show'); 
+            Route::post('/payout/create', [PayoutController::class, 'create'])->name('payout.create'); 
             Route::get('/product', [ResellerController::class, 'product'])->name('product');
             Route::post('/product', [ResellerController::class,'product'])->name('product');
             Route::get('/product/{item}/edit',[ResellerController::class,'edit'])->name('product.edit');
@@ -105,32 +139,11 @@ Route::middleware('auth')->group(function(){
         });
 
         // Admin
-        Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-            Route::resource('kategori', AdminCategoryController::class);
-            Route::resource('kategoripembayaran', AdminPaymentCategoryController::class);
-            Route::resource('subcategory', AdminSubcategoryController::class);
-            Route::get('/user/verified', [AdminUserController::class, 'verified'])->name('user.verified');
-            Route::post('/user/verified/{user}/add', [AdminUserController::class, 'verified_add'])->name('user.verified.add');
-            Route::post('/user/verified/{user}/declined', [AdminUserController::class, 'verified_declined'])->name('user.verified.declined');
-            Route::resource('user', AdminUserController::class);
-            Route::resource('pembelian', AdminPembelianController::class);
-            Route::resource('item', AdminItemController::class);
-            Route::resource('chat', AdminChatController::class);
-            Route::resource('pengaturan', AdminPengaturanWebsiteController::class);
-            Route::resource('features', AdminFeaturesController::class);
-        });
+        
     });    
 });
 
 //User
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
-Route::post('/payment/{id}', [CartController::class,'purchase'])->name('purchase');
-Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
-Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
 Route::get('/category/{cat}/subcategory/{subcat}',[CategoryController::class,'indexSubcategory'])->name('category.subcategory');
 Route::post('/category/{category}/subcategory',[CategoryController::class,'subcategories'])->name('category.subcategory');

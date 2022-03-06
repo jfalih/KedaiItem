@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('css')
 @parent
-<link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/dropzone.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('assets_users/assets/css/datatables.css')}}">
 @endsection
 @section('content') 
   <!-- Page Sidebar Ends-->
@@ -68,8 +68,8 @@
                           <label for="{{$payment->code}}"></label>
                         </div>
                         <div class="media-body">
-                          <h6 class="mt-0 mega-title-badge">{{$payment->code}}<span class="badge badge-primary pull-right digits">sadasdsa</span></h6>
-                          <p>{{$payment->name}}<br>Biaya Admin: Rp{{number_format($payment->fee_admin,0,',','.')}}</p>
+                          <h6 class="mt-0 mega-title-badge">{{$payment->name}}<span class="badge badge-primary pull-right digits">{{$payment->code}}</span></h6>
+                          <p>Biaya Admin: Rp{{number_format($payment->fee_admin,0,',','.')}}</p>
                           <img style="object-fit: cover; width:auto;height:80px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/2560px-BANK_BRI_logo.svg.png"/>
                         </div>
                       </div>
@@ -85,6 +85,44 @@
             </div>
           </form>
         </div>
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>History Topup</h5>
+              <span>Berikut ini history topup kamu di {{env('APP_NAME')}}</span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="display datatables" id="datatables1">
+                  <thead>
+                    <tr>
+                      <th>NO</th>
+                      <th>ID</th>
+                      <th>METODE</th>
+                      <th>NOMINAL</th>
+                      <th>KODEUNIK</th>
+                      <th>STATUS</th>
+                      <th>TOTAL</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>NO</th>
+                      <th>ID</th>
+                      <th>METODE</th>
+                      <th>NOMINAL</th>
+                      <th>KODEUNIK</th>
+                      <th>STATUS</th>
+                      <th>TOTAL</th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Container-fluid Ends-->
@@ -92,6 +130,25 @@
 @endsection
 @section('js')
 @parent
-<script src="{{asset('assets_users/assets/js/dropzone/dropzone.js')}}"></script>
-<script src="{{asset('assets_users/assets/js/dropzone/dropzone-script.js')}}"></script>
+<script src="{{asset('assets_users/assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets_users/assets/js/datatable/datatables/datatable.custom.js')}}"></script>
+<script type="text/javascript">
+  $(function () {
+    var table = $('#datatables1').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('topup') }}",
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'id', name: 'id'},
+            {data: 'method', name: 'method'},
+            {data: 'nominal', name: 'nominal'},
+            {data: 'kode_unik', name: 'kode_unik'},
+            {data: 'status', name: 'status'},
+            {data: 'total', name: 'total'},
+            {data: 'action', name: 'action'},
+          ]
+    });
+  });
+</script>
 @endsection

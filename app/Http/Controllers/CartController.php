@@ -7,6 +7,7 @@ use App\Models\{
     Item,
     Payment,
     Purchase,
+    Paymentcategory,
     Setting
 };
 use Illuminate\Support\Str;
@@ -78,10 +79,12 @@ class CartController extends Controller
             $gusername = $request->gusername;
             $options = $request->options;
             $total_cart = 0;
+            $purchaserelation = [];
             foreach($cart as $cartVal){
                 foreach($cartVal as $itemKey => $itemVal){
                     $item = Item::find($itemVal['id']);
                     $total_cart +=  $options[$itemKey] == "premium" ? ($item->price * $itemVal['quantity']) + $setting->harga : ($item->price * $itemVal['quantity']);
+                    $purchaserelation[] = $item->id;
                     Purchase::create([
                         'item_id' => $item->id,
                         'user_id' => Auth::user()->id,
@@ -100,6 +103,7 @@ class CartController extends Controller
                 'total' => $total_cart,
                 'kode_unik' => rand(500,600)
             ]);
+            $payment->purchases()->attach($purchaserelation);
             session()->forget('cart');
             return redirect()->route('payment',['id' => $payment->id]);
         } else {
@@ -115,6 +119,9 @@ class CartController extends Controller
         ]);
         
         $payment = Payment::where('user_id',Auth::user()->id)->findOrFail($id);
+        $payment->method_id = $request->method;
+        $payment->save();
+
         $purchases = Purchase::whereHas('payments', function($q) use($payment){
             $q->where('payment_id', $payment->id);
         })->get();
@@ -149,7 +156,7 @@ class CartController extends Controller
         ];
         $amount = $payment->total+$payment->kode_unik;
         $data = [
-            'method'         => $request->method,
+            'method'         => $payment->paymentcategory->code,
             'merchant_ref'   => $merchantRef,
             'amount'         => $amount,
             'customer_name'  => Auth::user()->name,
@@ -174,7 +181,6 @@ class CartController extends Controller
         curl_close($curl);
         if(empty($error)){
             $res = json_decode($response, true);
-            $payment->method = $request->method;
             $payment->references = $res['data']['reference'];
             $payment->save();
             return dd($res);   
@@ -182,19 +188,76 @@ class CartController extends Controller
             return dd($res);
         }
     }
+
     public function payment($id)
     {
         $payment = Payment::where('user_id',Auth::user()->id)->findOrFail($id);
         $purchases = Purchase::whereHas('payments', function($q) use($payment){
             $q->where('payment_id', $payment->id);
         })->get();
-        if(!$payment->method_id){
+        $categoryPayment = Paymentcategory::where('status_id', 1)->get();
+        if($payment->method_id){
+            $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
+            $payload = ['reference'	=> $payment->references];
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_FRESH_CONNECT  => true,
+                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => false,
+                CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                CURLOPT_FAILONERROR    => false,
+            ]);
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+            curl_close($curl);
+            if (empty($error)){
+                $res = json_decode($response, true);    
+                return view('payment',[
+                    'payment' => $payment, 
+                    'purchases' => $purchases,
+                    'data_api' => $res
+                ]);
+            } else {
+                return redirect()->route('pembayaran')->with('error','Gagal mendapatkan Api!');
+            }
+        } else {
             return view('payment',[
                 'payment' => $payment, 
                 'purchases' => $purchases,
+                'categoryPayment' => $categoryPayment
             ]);
+        }
+       
+    }
+
+    public function payment_check($id){
+        $payment = Payment::findOrFail($id);
+        $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
+        $payload = ['reference'	=> $payment->references];
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_FRESH_CONNECT  => true,
+            CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+            CURLOPT_FAILONERROR    => false,
+        ]);
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+        if (empty($error)){
+            $res = json_decode($response, true);
+            if($res['data']['status'] != 'PAID') {
+                return redirect()->back()->with('error', 'Pembayaran belum dibayar!');
+            } else if($payment->status == 'success') {
+                return redirect()->back()->with('error', 'Pembayaran sudah pernah dilakukan!');
+            } else {
+                return redirect()->back()->with('success', 'Pembayaran berhasil dibayarkan!');            
+            } 
         } else {
-          
+            return redirect()->back()->with('error', 'Tidak dapat menemukan pembayaran!');
         }
     }
     public function index()

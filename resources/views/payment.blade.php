@@ -56,15 +56,11 @@
                                     </div>
                                   </div>
                                 </div>
-                                @if($payment->method)
+                                @if($payment->method_id)
                                 <div class="col-xl-8">
                                   <div class="text-xl-end" id="project">
                                     <h6>Status Pembayaran</h6>
-                                    @if($category_pembayaran['data']['status'] == 'UNPAID')
-                                      <h2><span class="badge badge-danger">Belum Dibayar</span></h2>
-                                    @else
-                                      <h2><span class="badge badge-primary">Sudah Dibayar</span></h2>
-                                    @endif
+                                    @include('pembelian.status', ['data' => $payment])
                                   </div>
                                 </div>
                                 @endif
@@ -129,20 +125,20 @@
                                         </td>
                                       </tr>
                                       @endforeach
-                                      @if($payment->method)
+                                      @if($payment->method_id)
                                       <tr>
                                         <td></td>
                                         <td class="Rate">
                                           <h6 class="mb-0 p-2">Fee Customer</h6>
                                         </td>
                                         <td class="payment digits">
-                                          <h6 class="mb-0 p-2">Rp{{number_format($category_pembayaran['data']['fee_customer'],0,',','.')}}</h6>
+                                          <h6 class="mb-0 p-2">Rp{{number_format($data_api['data']['fee_customer'],0,',','.')}}</h6>
                                         </td>
                                         <td class="Rate">
                                           <h6 class="mb-0 p-2">Total</h6>
                                         </td>
                                         <td class="payment digits">
-                                          <h6 class="mb-0 p-2">Rp{{number_format($total+$category_pembayaran['data']['fee_customer'],0,',','.')}}</h6>
+                                          <h6 class="mb-0 p-2">Rp{{number_format($total+$data_api['data']['fee_customer'],0,',','.')}}</h6>
                                         </td>
                                       </tr>
                                       @endif
@@ -150,38 +146,40 @@
                                   </table>
                                 </div>
                                 <!-- End Table-->
-                                @if(!$payment->method)
+                                @if(!$payment->method_id)
                                 <form method="POST" action="{{route('purchase',['id' => $payment->id])}}" class="col mt-3">
                                   @csrf
-                                  <div class="col-md-12">
-                                    <h6>Metode pembayaran:</h6>
-                                    <p>Pilih metode pembayaran yang sesuai dan akan digunakan oleh kamu.</p>
-                                  </div>
-                                  <div class="col-md-12">
-                                    <div class="mega-inline plain-style mt-3">
-                                      <div class="row">
-                                        @foreach($category_pembayaran['data'] as $data)
-                                        <div class="col-sm-6">
-                                          <div class="card">
-                                            <div class="media p-20">
-                                              <div class="radio radio-primary me-3">
-                                                <input id="{{$data['code']}}" type="radio" name="method" value="{{$data['code']}}">
-                                                <label for="{{$data['code']}}"></label>
-                                              </div>
-                                              <div class="media-body">
-                                                <h6 class="mt-0 mega-title-badge">{{$data['code']}}<span class="badge badge-primary pull-right digits">{{$data['group']}}</span></h6>
-                                                <p>{{$data['name']}}<br>Biaya Admin: Rp{{number_format($data['fee_customer']['flat'],0,',','.')}}</p>
-                                                <img style="object-fit: cover; width:auto;height:80px;" src="{{$data['icon_url']}}"/>
-                                              </div>
-                                            </div>
+                                  <div class="row">  
+                                    <div class="col-md-12">
+                                      <h6>Metode pembayaran:</h6>
+                                      <p>Pilih metode pembayaran yang sesuai dan akan digunakan oleh kamu.</p>
+                                    </div>
+                                    @error('method')
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                      {{$message}}
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @enderror     
+                                    @foreach($categoryPayment as $payment)
+                                    <div class="col-sm-6 mt-3">
+                                      <div class="card">
+                                        <div class="media p-20">
+                                          <div class="radio radio-primary me-3">
+                                            <input id="{{$payment->code}}" type="radio" name="method" value="{{$payment->id}}">
+                                            <label for="{{$payment->code}}"></label>
+                                          </div>
+                                          <div class="media-body">
+                                            <h6 class="mt-0 mega-title-badge">{{$payment->name}}<span class="badge badge-primary pull-right digits">{{$payment->code}}</span></h6>
+                                            <p>Biaya Admin: Rp{{number_format($payment->fee_admin,0,',','.')}}</p>
+                                            <img style="object-fit: cover; width:auto;height:80px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/2560px-BANK_BRI_logo.svg.png"/>
                                           </div>
                                         </div>
-                                        @endforeach
                                       </div>
                                     </div>
+                                    @endforeach
                                   </div>
                                   <div class="col-sm-12 text-center mt-3">
-                                    <button class="btn btn-secondary" type="button" data-bs-original-title="" title="">Hapus Pembayaran</button>
+                                    <button class="btn btn-secondary" type="button" data-bs-original-title="" title="">Batalkan Pembayaran</button>
                                     <button class="btn btn btn-primary me-2" type="submit" data-bs-original-title="" title="">Lanjutkan Pembayaran</button>
                                   </div>
                                 </form>
@@ -190,7 +188,7 @@
                                   <div class="col-md-12">
                                     <center>
                                       <h2>Dibayarkan Sebelum:</h2>
-                                      <h5>{{date('Y-m-d H:i:s',$category_pembayaran['data']['expired_time'])}}</h5>
+                                      <h5>{{date('Y-m-d H:i:s',$data_api['data']['expired_time'])}}</h5>
                                     </center>
                                   </div>
                                   <div class="col-md-12">
@@ -199,7 +197,7 @@
                                   </div>
                                   <div class="col-sm-12 mt-3">
                                     <div class="default-according" id="accordion">
-                                      @foreach($category_pembayaran['data']['instructions'] as $stepKey => $stepVal)
+                                      @foreach($data_api['data']['instructions'] as $stepKey => $stepVal)
                                       <div class="card">
                                         <div class="card-header" id="heading{{$stepKey}}">
                                           <h5 class="mb-0">
@@ -219,6 +217,21 @@
                                       @endforeach
                                     </div>
                                   </div>
+                                </div>
+                                
+                                <div class="d-flex text-center mt-3">
+                                  @if($topup->status == 'pending')
+                                  <form  method="POST" action="{{route('topup.check',['id'=> $topup->id])}}">
+                                    @csrf  
+                                    <button class="btn btn btn-primary me-2" type="submit">Cek Topup</button>
+                                  </form>
+                                  <form  method="POST" action="{{route('topup.cancel')}}">
+                                    @csrf
+                                    <button class="btn btn-danger" type="submit">Batalkan Topup</button>
+                                  </form>
+                                  @else 
+                                    <a href="{{route('topup')}}" class="btn btn-secondary"  type="button">Kembali</a>
+                                  @endif
                                 </div>
                                 @endif
                               </div>

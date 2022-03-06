@@ -50,16 +50,21 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         @endif
-                        <h4 class="card-title">Permintaan Verifikasi User</h4>
-                        <p class="card-title-desc">List permintaan verifikasi website.</p>
+                        @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{session('error')}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @endif
+                        <h4 class="card-title">Permintaan Payout</h4>
+                        <p class="card-title-desc">List permintaan payout reseller.</p>
                         <table id="datatables1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nama</th>
-                                <th>Selfie</th>
-                                <th>Ktp</th>
-                                <th>Tabungan</th>
+                                <th>User</th>
+                                <th>Nominal</th>
+                                <th>Pengiriman</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -105,16 +110,15 @@
               var table = $('#datatables1').DataTable({
                   processing: true,
                   serverSide: true,
-                  ajax: "{{ route('admin.reseller.verified') }}",
+                  ajax: "{{ route('admin.payout.index') }}",
                   columns: [
                       {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                      {data: 'name', name: 'name'},
-                      {data: 'selfie', name: 'selfie'},
-                      {data: 'ktp', name: 'ktp'},
-                      {data: 'tabungan', name: 'tabungan'},
+                      {data: 'user', name: 'user'},
+                      {data: 'jumlah', name: 'jumlah'},
+                      {data: 'pengiriman', name: 'pengiriman'},
                       {data: 'status', name: 'status'},
                       {data: 'action', name: 'action'},
-                  ]
+                    ]
               });
               
             });

@@ -59,22 +59,25 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{route('admin.kategori.index')}}">
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="fas fa-database"></i>
                                     <span>Kategori</span>
                                 </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('admin.kategori.index')}}">Kategori</a></li>
+                                    <li><a href="{{route('admin.kategoripembayaran.index')}}">Kategori Pembayaran</a></li>
+                                    <li><a href="{{route('admin.subcategory.index')}}">Subkategori</a></li>
+                                </ul>
                             </li>
                             <li>
-                                <a href="{{route('admin.kategoripembayaran.index')}}">
-                                    <i class="fas fa-database"></i>
-                                    <span>Kategori Pembayaran</span>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="fas fa-user"></i>
+                                    <span>Reseller</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin.subcategory.index')}}">
-                                    <i class="fas fa-database"></i>
-                                    <span>Subkategori</span>
-                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('admin.reseller.verified')}}">Verifikasi Penjual</a></li>
+                                    <li><a href="{{route('admin.payout.index')}}">Payout Penjual</a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -83,8 +86,6 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('admin.user.index')}}">Pengaturan User</a></li>
-                                    <li><a href="{{route('admin.user.verified')}}">Verified User</a></li>
-                                    <li><a href="{{route('admin.user.verified')}}">List Laporan User <b>(It's Soon)</b></a></li>
                                 </ul>
                             </li>
                             <li>
@@ -94,7 +95,7 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('admin.chat.index')}}">List Chat</a></li>
-                                    <li><a href="{{route('admin.user.verified')}}">Laporan Chat <b>(It's Soon)</b></a></li>
+                                   
                                 </ul>
                             </li>
                             <li>
@@ -104,7 +105,6 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('admin.pembelian.index')}}">List Pembelian</a></li>
-                                    <li><a href="{{route('admin.user.verified')}}">List Review <b>(It's Soon)</b></a></li>
                                 </ul>
                             </li>
                             <li>
@@ -114,7 +114,6 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('admin.item.index')}}">List Item</a></li>
-                                    <li><a href="{{route('admin.user.verified')}}">List Laporan Item</a></li>
                                 </ul>
                             </li>
                             <li>

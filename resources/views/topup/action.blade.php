@@ -1,0 +1,1 @@
+<a href="{{route('topup.detail',['id' => $data->id])}}" class="btn btn-secondary mb-2">Detail</a>

@@ -29,6 +29,11 @@
               <span>Isi formulir dibawah ini untuk mengupgrade akun kamu menjadi</span>
             </div>
             <div class="card-body">
+            @if(Auth::user()->tabungan_id != null)
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+              Proses verifikasi sudah diajukan pada {{Auth::user()->updated_at}}
+            </div>
+            @endif
               <form method="POST"  enctype="multipart/form-data" action="{{ route('upgrade.add') }}">
                 @csrf
                 @if(session('error'))

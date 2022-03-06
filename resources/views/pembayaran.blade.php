@@ -37,7 +37,7 @@
                     <th>METODE</th>
                     <th>TOTAL</th>
                     <th>STATUS</th>
-                    <th>AKSI</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -47,7 +47,7 @@
                     <th>METODE</th>
                     <th>TOTAL</th>
                     <th>STATUS</th>
-                    <th>AKSI</th>
+                    <th></th>
                   </tr>
                 </tfoot>
               </table>

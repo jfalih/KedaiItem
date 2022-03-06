@@ -4,7 +4,7 @@
 @if($data->status == 'refunded')
 <h6><span class="badge badge-primary">Dikembalikan</span></h6>
 @endif
-@if($data->status == 'canceled')
+@if($data->status == 'failed')
 <h6><span class="badge badge-primary">Dibatalkan</span></h6>
 @endif
 @if($data->status == 'pending')

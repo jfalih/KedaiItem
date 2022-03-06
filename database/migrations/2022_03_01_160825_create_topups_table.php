@@ -21,6 +21,7 @@ class CreateTopupsTable extends Migration
             $table->foreignId('method_id');
             $table->foreign('method_id')->references('id')->on('paymentcategories')->onDelete('cascade');
             $table->foreignId('user_id');
+            $table->enum('status', ['pending','success','waiting','confirmed','canceled']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
