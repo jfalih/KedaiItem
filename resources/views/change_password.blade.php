@@ -18,7 +18,7 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="card">
             <div class="card-header pb-0">
               <h5>Ganti Password</h5>

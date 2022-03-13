@@ -18,6 +18,18 @@
             </div>
             <!-- Container-fluid starts-->
             <div class="container invoice">
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('success')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{session('error')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
@@ -220,17 +232,13 @@
                                 </div>
                                 
                                 <div class="d-flex text-center mt-3">
-                                  @if($topup->status == 'pending')
-                                  <form  method="POST" action="{{route('topup.check',['id'=> $topup->id])}}">
+                                  @if($purchase->status == 'pending')
+                                  <form  method="POST" action="{{route('payment.check',['id'=> $purchase->id])}}">
                                     @csrf  
-                                    <button class="btn btn btn-primary me-2" type="submit">Cek Topup</button>
-                                  </form>
-                                  <form  method="POST" action="{{route('topup.cancel')}}">
-                                    @csrf
-                                    <button class="btn btn-danger" type="submit">Batalkan Topup</button>
+                                    <button class="btn btn btn-primary me-2" type="submit">Cek Pembayaran</button>
                                   </form>
                                   @else 
-                                    <a href="{{route('topup')}}" class="btn btn-secondary"  type="button">Kembali</a>
+                                    <a href="{{route('payment')}}" class="btn btn-secondary"  type="button">Kembali</a>
                                   @endif
                                 </div>
                                 @endif

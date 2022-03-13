@@ -18,6 +18,9 @@ class ChatController extends Controller
     public function index($id)
     {
         $purchase = Purchase::findOrFail($id);
+        if($purchase->status !== 'success'){
+            return redirect()->route('pembelian')->with('error', 'Silahkan lakukan pembayaran terlebih dahulu!');
+        }
         return view('chat', [
             'purchase' => $purchase,
             'messages' => $purchase->messages

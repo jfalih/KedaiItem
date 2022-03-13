@@ -95,7 +95,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
     Route::post('/payment/{id}', [CartController::class,'purchase'])->name('purchase');
-    Route::post('/payment/check/{id}',[CartController::class,'check_payment'])->name('payment.check');
+    Route::post('/payment/check/{id}',[CartController::class,'payment_check'])->name('payment.check');
     Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
     Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');

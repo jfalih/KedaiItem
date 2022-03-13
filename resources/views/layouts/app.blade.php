@@ -47,6 +47,9 @@
 									<div class="header__cart">
 										<a href="{{route('cart')}}" class="header__link">
 											<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><circle cx='176' cy='416' r='16' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><circle cx='400' cy='416' r='16' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><polyline points='48 80 112 80 160 352 416 352' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><path d='M160,288H409.44a8,8,0,0,0,7.85-6.43l28.8-144a8,8,0,0,0-7.85-9.57H128' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
+											@php
+												for
+											@endphp
 											<span id="total_cart">Rp{{number_format(Cart::getTotal(),0,',','.')}}</span>
 										</a>
 									</div>
@@ -213,7 +216,21 @@
 					style: 'currency',
 					currency: "IDR" 
 				});
-				$('#total_cart').html(`${format.format(data.quantity)}`);
+				const cartData = JSON.parse(JSON.stringify(data.data));
+				let total = 0;
+				for (var seller in cartData) {
+					// skip loop if the property is from prototype
+					if (!cartData.hasOwnProperty(seller)) continue;
+
+					var obj = cartData[seller];
+					for (var prop in obj) {
+						// skip loop if the property is from prototype
+						if (!obj.hasOwnProperty(prop)) continue;
+						total += (obj[prop].price * obj[prop].quantity)
+					}
+				}
+				$('#total_cart').html(`${format.format(total)}`);
+					
 			  }
 			});
 		  });

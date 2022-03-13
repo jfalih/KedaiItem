@@ -84,8 +84,7 @@ class CartController extends Controller
                 foreach($cartVal as $itemKey => $itemVal){
                     $item = Item::find($itemVal['id']);
                     $total_cart +=  $options[$itemKey] == "premium" ? ($item->price * $itemVal['quantity']) + $setting->harga : ($item->price * $itemVal['quantity']);
-                    $purchaserelation[] = $item->id;
-                    Purchase::create([
+                    $purchase = Purchase::create([
                         'item_id' => $item->id,
                         'user_id' => Auth::user()->id,
                         'quantity' => $itemVal['quantity'],
@@ -94,6 +93,7 @@ class CartController extends Controller
                         'options' => $options[$itemKey],
                         'status' => 'pending'
                     ]);
+                    $purchaserelation[] = $purchase->id;
                 }
             }
             $kode = 'KEDAIITEM-'.Str::random(30);
@@ -137,12 +137,12 @@ class CartController extends Controller
                 'sku' => 'ITEM-'.$purchase->item->id,
                 'name' => $purchase->item->name,
                 'price' => $purchase->item->price,
-                'quantity' => $purchase->quantity
+                'quantity' => $purchase->quantity,
             ];
             if($purchase->options == 'premium'){
                 $arr_barang[] = [
                     'sku' => 'ADDONS-'.$purchase->item->id,
-                    'name' => 'Premium Delivery',
+                    'name' => 'Pengiriman Premium '.$purchase->item->id,
                     'price' => $setting->harga,
                     'quantity' => 1,
                 ];
@@ -183,9 +183,9 @@ class CartController extends Controller
             $res = json_decode($response, true);
             $payment->references = $res['data']['reference'];
             $payment->save();
-            return dd($res);   
+            return redirect()->route('payment', ['id' => $id]);
         } else {
-            return dd($res);
+            return redirect()->route('payment', ['id' => $id])->with('error', 'Gagal menambah metode pembayaran!');
         }
     }
 
@@ -212,7 +212,7 @@ class CartController extends Controller
             $error = curl_error($curl);
             curl_close($curl);
             if (empty($error)){
-                $res = json_decode($response, true);    
+                $res = json_decode($response, true);
                 return view('payment',[
                     'payment' => $payment, 
                     'purchases' => $purchases,
