@@ -36,11 +36,17 @@ class AuthController extends Controller
             'password' => ['required','min:6','max:255'],
             'c_password' => ['required','same:password']
         ], [
-            'required' => 'Silahkan isi :attribute masih kosong.',
-            'min' => 'Minimal jumlah karakter pada :attribute adalah :min',
-            'max' => 'Maximal jumlah karakter pada :attribute adalah :max',
-            'unique' => ':attribute sudah digunakan.',
-            'same' => ':attribute tidak sama dengan :same'
+            'name.required' => 'Silahkan isi nama masih kosong.',
+            'nomorhp.required' => 'Silahkan isi nomor handphone masih kosong.',
+            'email.required' => 'Silahkan isi email masih kosong.',
+            'password.required' => 'Silahkan isi password masih kosong.',
+            'c_password.required' => 'Silahkan isi konfirmasi password masih kosong.',
+            'password.min' => 'Minimal jumlah karakter pada password adalah :min',
+            'password.max' => 'Maximal jumlah karakter pada password adalah :max',
+            'name.max' => 'Maximal jumlah karakter pada nama adalah :max',
+            'email.email' => 'Silahkan gunakan alamat email yang valid',
+            'email.unique' => 'Alamat email sudah pernah digunakan',
+            'c_password.same' => 'Konfirmasi password tidak sama dengan password'
         ]);
         if($validator->fails()){
             return redirect()->back()->withErrors($validator)->withInput();

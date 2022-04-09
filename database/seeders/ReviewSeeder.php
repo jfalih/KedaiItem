@@ -14,11 +14,5 @@ class ReviewSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('reviews')->insert([
-            'comment' => 'Halooooo',
-            'rating' => rand(0,4),
-            'user_id' => User::first()->id,
-            'item_id' => Item::first()->id
-        ]);
     }
 }

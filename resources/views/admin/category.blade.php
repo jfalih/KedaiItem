@@ -45,12 +45,19 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mt-4">
-                                    <form method="POST" action="{{route('admin.kategori.store')}}">
+                                    <form method="POST"enctype="multipart/form-data"  action="{{route('admin.kategori.store')}}">
                                         @csrf
                                         <div class="mb-3">
                                             <label class="form-label" for="name">Nama Category</label>
                                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name">
                                             @error('name')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="image">Gambar</label>
+                                            <input class="form-control" type="file" name="image">
+                                            @error('image')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>

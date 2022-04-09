@@ -17,6 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->foreignId('img_id');
+            $table->foreign('img_id')->references('id')->on('images')->onDelete('cascade');
             $table->foreignId('status_id');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->softDeletes();

@@ -93,13 +93,17 @@ Route::middleware('auth')->group(function(){
     Route::post('/topup/cancel', [TopupController::class,'cancel'])->name('topup.cancel');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
-    Route::post('/payment/{id}', [CartController::class,'purchase'])->name('purchase');
-    Route::post('/payment/check/{id}',[CartController::class,'payment_check'])->name('payment.check');
     Route::post('/cart', [CartController::class, 'checkout'])->name('checkout');
     Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove', [CartController::class, 'destroy'])->name('cart.remove');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+
+    Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
+    Route::post('/payment/{id}', [CartController::class,'purchase'])->name('purchase');
+    Route::post('/payment/check/{id}',[CartController::class,'payment_check'])->name('payment.check');
+    
+    Route::get('/review/{id}', [ReviewController::class, 'index'])->name('review');
+    Route::post('/review/{id}/add',[ReviewController::class, 'add'])->name('review.add');
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -145,5 +149,6 @@ Route::middleware('auth')->group(function(){
 
 //User
 Route::post('/item/{id}/review/store',[ReviewController::class,'store'])->name('review.store');
+Route::get('/category/{slug}',[CategoryController::class,'index'])->name('category.index');
 Route::get('/category/{cat}/subcategory/{subcat}',[CategoryController::class,'indexSubcategory'])->name('category.subcategory');
 Route::post('/category/{category}/subcategory',[CategoryController::class,'subcategories'])->name('category.subcategory');

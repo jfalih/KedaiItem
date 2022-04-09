@@ -233,6 +233,9 @@ class CartController extends Controller
 
     public function payment_check($id){
         $payment = Payment::findOrFail($id);
+        $purchases = Purchase::whereHas('payments', function($q) use($payment){
+            $q->where('payment_id', $payment->id);
+        });
         $apiKey = 'DEV-rroiOjKiTLhDfH0zs5P3R4vDoWHLr9stBlLsBYxa';
         $payload = ['reference'	=> $payment->references];
         $curl = curl_init();
@@ -254,6 +257,11 @@ class CartController extends Controller
             } else if($payment->status == 'success') {
                 return redirect()->back()->with('error', 'Pembayaran sudah pernah dilakukan!');
             } else {
+                $payment->status = 'success';
+                $purchases->update([
+                    'status' => 'waiting'
+                ]);
+                $payment->save();
                 return redirect()->back()->with('success', 'Pembayaran berhasil dibayarkan!');            
             } 
         } else {

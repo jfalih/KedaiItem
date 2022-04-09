@@ -238,7 +238,7 @@
                                     <button class="btn btn btn-primary me-2" type="submit">Cek Pembayaran</button>
                                   </form>
                                   @else 
-                                    <a href="{{route('payment')}}" class="btn btn-secondary"  type="button">Kembali</a>
+                                    <a href="{{route('pembelian')}}" class="btn btn-secondary"  type="button">Kembali</a>
                                   @endif
                                 </div>
                                 @endif

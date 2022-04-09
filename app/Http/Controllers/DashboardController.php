@@ -132,7 +132,7 @@ class DashboardController extends Controller
             ->addIndexColumn()
             ->addColumn('image', function (Purchase $purchase) {
                 return view('components.items.tableImage', [
-                    'images' => $purchase->item->images()->first()->name
+                    'images' => 'lalalaa'
                 ]);
             })
             ->addColumn('name', function (Purchase $purchase) {

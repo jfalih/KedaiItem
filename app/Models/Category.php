@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'slug', 'status_id'
+        'name', 'slug', 'status_id','img_id'
     ];
     /**
      * The subcategories that belong to the Category

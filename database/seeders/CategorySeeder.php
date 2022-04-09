@@ -18,6 +18,7 @@ class CategorySeeder extends Seeder
         $name = Str::random(10);
         DB::table('categories')->insert([
             'name' => $name,
+            'img_id'=> 1,
             'slug'=> Str::slug($name,'-'),
             'status_id' => Status::first()->id
         ]);

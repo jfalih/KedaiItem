@@ -19,8 +19,8 @@ class CreateReviewsTable extends Migration
             $table->decimal('rating', 2, 1)->default(0);
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('item_id');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreignId('purchase_id');
+            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
             $table->timestamps();
         });
     }

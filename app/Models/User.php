@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'nomorhp',
         'status_id',
         'profile_id',
+        'open',
         'password',
     ];
 
